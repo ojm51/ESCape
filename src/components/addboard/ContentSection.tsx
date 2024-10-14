@@ -48,7 +48,7 @@ export default function ContentSection() {
           className="h-[240px] bg-[#252530] w-full rounded-xl border-[1px] border-solid border-[#353542] py-4 px-6 text-[#f1f1f5] mt-6"
           value={text}
           onChange={handleChange}
-          maxLength={300}
+          maxLength={299}
         />
         <p className="absolute bottom-4 right-4 text-[#f1f1f5]">
           {text.length} / 300

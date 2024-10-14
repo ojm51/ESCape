@@ -1,6 +1,6 @@
 export interface BoardData {
   totalCount: number;
-  list: Article[]
+  list: Article[];
 }
 
 export interface Article {
@@ -13,5 +13,28 @@ export interface Article {
   }
   image: string,
   title: string,
+  id: number,
+}
+
+export interface ArticleDetail extends Article {
+  commentCount: number,
+  isLiked: boolean,
+  content: string,
+}
+
+export interface CommentData {
+  nextCursor: number;
+  list: ArticleComment[];
+}
+
+export interface ArticleComment {
+  writer: {
+    image: string,
+    nickname: string,
+    id: number,
+  },
+  updatedAt: string,
+  createdAt: string,
+  content: string,
   id: number,
 }
