@@ -7,7 +7,7 @@ export default function BoardsPage() {
   return (
     <>
       <div className="bg-[#17171C] min-h-screen">
-        <div className="mx-auto w-[1200px] pt-[100px]">
+        <div className="mx-auto w-[1200px] py-[100px]">
           <SearchSection />
           <BestBoardSection />
           <BoardSection />

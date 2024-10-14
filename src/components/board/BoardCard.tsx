@@ -4,7 +4,7 @@ import KebabIcon from "../../../public/icons/kebab_icon.svg"
 import ProfileIcon from "../../../public/icons/profile_icon.svg"
 import HeartIcon from "../../../public/icons/heart_icon.svg"
 import Image from "next/image";
-import timeAgo from "@/utils/TimeAgo";
+import timeAgo from "@/utils/timeAgo";
 import Dropdown from "@/components/@shared/DropDown";
 
 export interface BoardCardProps {
@@ -46,9 +46,9 @@ export default function BoardCard({ router, data }: BoardCardProps) {
             {timeAgo(data?.createdAt)}
           </p>
         </div>
-        <p className="text-[14px] leading-[17px] font-medium text-[#6e6e82]">
+        <div className="text-[14px] leading-[17px] font-medium text-[#6e6e82]">
           {data?.likeCount ? (<div className="flex gap-1"><Image src={HeartIcon} alt="heart" />{data.likeCount}</div>) : (<div className="flex gap-1"><Image src={HeartIcon} alt="heart" />{"0"}</div>)}
-        </p>
+        </div>
       </div>
     </div>
   )

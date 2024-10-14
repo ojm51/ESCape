@@ -4,7 +4,7 @@ import MedalIcon from "../../../public/icons/medal_icon.svg"
 import ProfileIcon from "../../../public/icons/profile_icon.svg"
 import HeartIcon from "../../../public/icons/heart_icon.svg"
 import Image from "next/image";
-import timeAgo from "@/utils/TimeAgo";
+import timeAgo from "@/utils/timeAgo";
 
 export interface BoardCardProps {
   router?: Router;
