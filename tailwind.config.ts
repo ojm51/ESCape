@@ -12,6 +12,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        "body-bg": "#1c1c22",
+        unactive: "#353542",
         brand: {
           black: {
             dark: "#17171c",
