@@ -46,9 +46,9 @@ export default function BoardCard({ router, data }: BoardCardProps) {
             {timeAgo(data?.createdAt)}
           </p>
         </div>
-        <p className="text-[14px] leading-[17px] font-medium text-[#6e6e82]">
+        <div className="text-[14px] leading-[17px] font-medium text-[#6e6e82]">
           {data?.likeCount ? (<div className="flex gap-1"><Image src={HeartIcon} alt="heart" />{data.likeCount}</div>) : (<div className="flex gap-1"><Image src={HeartIcon} alt="heart" />{"0"}</div>)}
-        </p>
+        </div>
       </div>
     </div>
   )
