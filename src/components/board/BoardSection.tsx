@@ -10,11 +10,11 @@ export default function BoardSection() {
   return (
     <>
       <div className="flex justify-between items-center mt-10">
-        <h2 className="font-bold text-[20px] leading-6 text-[#f1f1f5]">
+        <h2 className="font-bold text-[20px] leading-6 text-brand-white">
           게시글
         </h2>
         <Dropdown width="w-[120px]" buttonChildren={<div
-          className="w-[120px] bg-[#252530] rounded-xl border-[1px] border-solid border-[#353542] text-[#f1f1f5] py-2.5 px-[14px] flex justify-between items-center">{selectedOption}<Image
+          className="w-[120px] bg-brand-black-medium rounded-xl border-[1px] border-solid border-brand-black-light text-brand-white py-2.5 px-[14px] flex justify-between items-center">{selectedOption}<Image
           src={ToggleIcon} alt="메뉴 열기"/></div>}>
           <button onClick={() => setSelectedOptions("최신순")}>
             최신순

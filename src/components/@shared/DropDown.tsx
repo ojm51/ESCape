@@ -59,7 +59,7 @@ export default function Dropdown({
       </button>
       {isVisible && (
         <button
-          className={`absolute right-0 top-[calc(100%+6px)] z-40 m-0 flex flex-col items-center justify-center rounded-2xl border border-solid border-[#353542] bg-[#252530] px-1 py-1 ${width}`}
+          className={`absolute right-0 top-[calc(100%+6px)] z-40 m-0 flex flex-col items-center justify-center rounded-2xl border border-solid border-brand-black-light bg-brand-black-medium px-1 py-1 ${width}`}
           onClick={() => setIsVisible()}
         >
           {React.Children.map(children, (child) => {
@@ -67,8 +67,8 @@ export default function Dropdown({
               return React.cloneElement(child as ReactElement, {
                 className:
                   childType === "menu"
-                    ? `flex w-full items-center justify-center rounded-xl py-2 text-[14px] font-normal text-[#f1f1f5] hover:bg-[#17171C]`
-                    : `flex w-full items-center rounded-xl px-4 py-2 text-[14px] font-normal text-[#f1f1f5]`,
+                    ? `flex w-full items-center justify-center rounded-xl py-2 text-[14px] font-normal text-brand-white hover:bg-brand-black-dark`
+                    : `flex w-full items-center rounded-xl px-4 py-2 text-[14px] font-normal text-brand-white`,
               });
             }
             return child;

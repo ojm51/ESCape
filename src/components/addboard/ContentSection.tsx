@@ -31,31 +31,31 @@ export default function ContentSection() {
 
   return (
     <div className="pt-6">
-      <h2 className="flex gap-1.5 font-medium text-[16px] text-[#f1f1f5] leading-[19px]">
-        <span className="text-[#5363ff]">*</span>제목
+      <h2 className="flex gap-1.5 font-medium text-[16px] text-brand-white leading-[19px]">
+        <span className="text-brand-indigo">*</span>제목
       </h2>
       <input
         type="text"
         placeholder="제목을 입력해주세요."
-        className="bg-[#252530] w-full rounded-xl border-[1px] border-solid border-[#353542] py-4 px-6 text-[#f1f1f5] mt-6"
+        className="bg-brand-black-medium w-full rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 text-brand-white mt-6"
       />
-      <h2 className="flex gap-1.5 font-medium text-[16px] text-[#f1f1f5] leading-[19px] mt-10">
-        <span className="text-[#5363ff]">*</span>내용
+      <h2 className="flex gap-1.5 font-medium text-[16px] text-brand-white leading-[19px] mt-10">
+        <span className="text-brand-indigo">*</span>내용
       </h2>
       <div className="relative">
         <textarea
           placeholder="내용을 입력해주세요."
-          className="h-[240px] bg-[#252530] w-full rounded-xl border-[1px] border-solid border-[#353542] py-4 px-6 text-[#f1f1f5] mt-6"
+          className="h-[240px] bg-brand-black-medium w-full rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 text-brand-white mt-6"
           value={text}
           onChange={handleChange}
           maxLength={299}
         />
-        <p className="absolute bottom-4 right-4 text-[#f1f1f5]">
+        <p className="absolute bottom-4 right-4 text-brand-white">
           {text.length} / 300
         </p>
       </div>
-      <h2 className="flex gap-1.5 font-medium text-[16px] text-[#f1f1f5] leading-[19px] mt-10">
-        <span className="text-[#5363ff]">*</span>이미지
+      <h2 className="flex gap-1.5 font-medium text-[16px] text-brand-white leading-[19px] mt-10">
+        <span className="text-brand-indigo">*</span>이미지
       </h2>
       <div className="relative">
         <input
@@ -65,7 +65,7 @@ export default function ContentSection() {
           onChange={handleImageChange}
           className="hidden"
         />
-        <button onClick={handleImageClick} className="text-gray-400 flex justify-center items-center flex-col gap-3 w-[240px] h-[240px] bg-[#252530] rounded-xl border-[1px] border-solid border-[#353542] py-4 px-6 mt-6">
+        <button onClick={handleImageClick} className="text-brand-gray-dark flex justify-center items-center flex-col gap-3 w-[240px] h-[240px] bg-brand-black-medium rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 mt-6">
           <Image src={PlusIcon} alt="이미지 등록" />
           이미지 등록
         </button>
