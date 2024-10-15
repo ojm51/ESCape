@@ -86,3 +86,22 @@ input[type="radio"] {
   -moz-appearance: none; /* 모질라 브라우저에서 기본 스타일 제거 */
   appearance: none; /* 기본 브라우저에서 기본 스타일 제거 */
 }
+
+[type="text"]:focus,
+[type="email"]:focus,
+[type="url"]:focus,
+[type="password"]:focus,
+[type="number"]:focus,
+[type="date"]:focus,
+[type="datetime-local"]:focus,
+[type="month"]:focus,
+[type="search"]:focus,
+[type="tel"]:focus,
+[type="time"]:focus,
+[type="week"]:focus,
+[multiple]:focus,
+textarea:focus,
+select:focus {
+  outline: 1px solid transparent;
+  outline-offset: 1px;
+}
