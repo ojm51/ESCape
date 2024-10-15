@@ -24,7 +24,9 @@ export default function BoardSection() {
           </button>
         </Dropdown>
       </div>
-      <div className="relative py-9">
+      <div className="relative py-9 grid gap-4 grid-cols-1 xl:grid-cols-2">
+        <BoardCard />
+        <BoardCard />
         <BoardCard />
       </div>
     </>

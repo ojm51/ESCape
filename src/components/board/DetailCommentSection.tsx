@@ -10,6 +10,8 @@ export default function DetailCommentSection({ data }: DetailCommentProps) {
     <div className="mt-10">
       <div className="flex flex-col gap-4">
         <CommentCard />
+        <CommentCard />
+        <CommentCard />
       </div>
     </div>
   )

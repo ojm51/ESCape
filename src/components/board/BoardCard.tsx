@@ -19,7 +19,7 @@ export default function BoardCard({ router, data }: BoardCardProps) {
   }
 
   return (
-    <div className="w-[590px] h-[176px] bg-brand-black-medium rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 cursor-pointer" onClick={handleDetailPage}>
+    <div className="h-[176px] bg-brand-black-medium rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 cursor-pointer" onClick={handleDetailPage}>
       <div className="flex gap-2.5 justify-between">
         <p className="max-w-[360px] text-[18px] leading-7 font-medium text-brand-white w-full break-words line-clamp-2">
           {data?.title ? data.title : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}

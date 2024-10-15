@@ -18,7 +18,7 @@ export default function BestBoardCard({ router, data }: BoardCardProps) {
   }
 
   return (
-    <div className="w-[387px] h-[220px] bg-brand-black-medium rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 cursor-pointer" onClick={handleDetailPage}>
+    <div className="h-[220px] bg-brand-black-medium rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 cursor-pointer" onClick={handleDetailPage}>
       <div className="flex gap-1">
         <Image src={MedalIcon} alt="Best" />
         <p className="font-semibold text-[16px] leading-4 text-brand-white">

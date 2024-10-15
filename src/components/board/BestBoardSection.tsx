@@ -11,7 +11,9 @@ export default function BestBoardSection() {
           더보기 {'>'}
         </button>
       </div>
-      <div className="relative py-10 border-b-[1px] border-solid border-brand-black-light">
+      <div className="relative py-10 border-b-[1px] border-solid border-brand-black-light grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+        <BestBoardCard />
+        <BestBoardCard />
         <BestBoardCard />
       </div>
     </>

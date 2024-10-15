@@ -4,7 +4,7 @@ import DetailCommentSection from "@/components/board/DetailCommentSection";
 
 export default function BoardDetailPage() {
   return (
-    <div className="mx-auto w-[1200px] py-[100px]">
+    <div className="mx-4 md:6 xl:mx-auto xl:w-[1200px] py-[100px]">
       <DetailContentSection />
       <DetailPostCommentSection />
       <DetailCommentSection />

@@ -14,10 +14,10 @@ export default function DetailContentSection({ data }: DetailContentProps) {
   return (
     <>
       <div className="flex justify-between items-center pb-6 border-b-[1px] border-solid border-brand-black-light">
-        <h1 className="font-medium text-[18px] text-brand-white leading-[21px] break-words line-clamp-1 max-w-[1000px]">
+        <h1 className="font-medium text-[18px] text-brand-white leading-[21px] break-words">
           {data?.title ? data.title : "긴 글 테스트 긴 글 테스트 긴 글 테스트 긴 글 테스트 긴 글 테스트 긴 글 테스트 긴 글 테스트 긴 글 테스트 긴 글 테스트 긴 글 테스트 긴 글 테스트 "}
         </h1>
-        <Dropdown width="w-[120px]" buttonChildren={<div><Image src={KebabIcon} alt="수정 & 삭제하기" width={24} height={24}/></div>}>
+        <Dropdown width="w-[120px]" buttonChildren={<div className="w-6 h-6 ml-4"><Image src={KebabIcon} alt="수정 & 삭제하기" width={24} height={24}/></div>}>
           <button>
             수정하기
           </button>
