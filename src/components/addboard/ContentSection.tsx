@@ -1,16 +1,23 @@
 import { ChangeEvent, useRef, useState } from "react";
 import Image from "next/image";
 import PlusIcon from "../../../public/icons/plus_icon.svg"
+import {UseFormRegister} from "react-hook-form";
 
-export default function ContentSection() {
+interface ContentSectionProps {
+  register: UseFormRegister<any>;
+}
+
+export default function ContentSection({register}: ContentSectionProps) {
   const [text, setText] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // 300자가 넘는지 확인하기 위한 이벤트 핸들러
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
   };
 
+  // 이미지 파일 첨부를 위한 이벤트 핸들러
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -25,6 +32,7 @@ export default function ContentSection() {
     }
   };
 
+  // 이미지 첨부 이후에 보여지는 이미지를 클릭해도 수정할 수 있도록 해주기 위한 이벤트 핸들러
   const handleImageClick = () => {
     fileInputRef.current?.click();
   }
@@ -35,6 +43,9 @@ export default function ContentSection() {
         <span className="text-brand-indigo">*</span>제목
       </h2>
       <input
+        {...register("title", {
+          required: {value: true, message: "제목을 입력해주세요."},
+        })}
         type="text"
         placeholder="제목을 입력해주세요."
         className="bg-brand-black-medium w-full rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 text-brand-white mt-6"
@@ -44,6 +55,9 @@ export default function ContentSection() {
       </h2>
       <div className="relative">
         <textarea
+          {...register("content", {
+            required: {value: true, message: "내용을 입력해주세요."},
+          })}
           placeholder="내용을 입력해주세요."
           className="h-[240px] bg-brand-black-medium w-full rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 text-brand-white mt-6"
           value={text}
