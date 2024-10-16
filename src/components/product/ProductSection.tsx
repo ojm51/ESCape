@@ -10,9 +10,12 @@ export default function ProductSection({
   productList,
 }: PropsWithChildren<ProductSectionProps>) {
   return (
-    <div className="flex flex-col">
-      {productList.length > 0 &&
-        productList.map((product) => <ProductCard product={product} />)}
-    </div>
+    <section className="flex flex-col gap-[30px]">
+      <div className="text-2xl font-semibold">{children}</div>
+      <div className="grid grid-cols-2 md:grid-cols-3">
+        {productList.length > 0 &&
+          productList.map((product) => <ProductCard product={product} />)}
+      </div>
+    </section>
   );
 }
