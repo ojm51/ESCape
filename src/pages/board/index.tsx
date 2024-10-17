@@ -5,15 +5,11 @@ import AddBoardButton from "@/components/board/AddBoardButton";
 
 export default function BoardsPage() {
   return (
-    <>
-      <div className="bg-[#17171C] min-h-screen">
-        <div className="mx-auto w-[1200px] py-[100px]">
-          <SearchSection />
-          <BestBoardSection />
-          <BoardSection />
-          <AddBoardButton />
-        </div>
+      <div className="mx-4 md:6 xl:mx-auto xl:w-[1200px] py-[100px]">
+        <SearchSection />
+        <BestBoardSection />
+        <BoardSection />
+        <AddBoardButton />
       </div>
-    </>
   );
 }
