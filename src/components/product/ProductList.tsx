@@ -15,9 +15,12 @@ export default function ProductList({
       <div className="grid grid-cols-2 gap-[15px] xl:gap-5 md:grid-cols-3">
         {productList.length > 0 &&
           productList.map((product) => <ProductCard product={product} />)}
-        <div className="xl:w-[300px] xl:h-[300px]"></div>
-        <div className="xl:w-[300px] xl:h-[300px]"></div>
-        <div className="xl:w-[300px] xl:h-[300px]"></div>
+        <div className="min-w-[150px] min-h-[150px] xl:w-[300px] xl:h-[300px]"></div>
+        <div className="min-w-[150px] min-h-[150px] xl:w-[300px] xl:h-[300px]"></div>
+        <div className="min-w-[150px] min-h-[150px] xl:w-[300px] xl:h-[300px]"></div>
+        <div className="min-w-[150px] min-h-[150px] xl:w-[300px] xl:h-[300px]"></div>
+        <div className="min-w-[150px] min-h-[150px] xl:w-[300px] xl:h-[300px]"></div>
+        <div className="min-w-[150px] min-h-[150px] xl:w-[300px] xl:h-[300px]"></div>
       </div>
     </section>
   );

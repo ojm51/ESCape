@@ -2,7 +2,7 @@ import ProductList from "./ProductList";
 
 export default function ProductMain() {
   return (
-    <div className="flex flex-col w-full  xl:pt-[60px] xl:max-w-[940px] bg-slate-700">
+    <div className="flex flex-col w-full gap-[60px] xl:gap-[80px]  xl:pt-[60px] xl:max-w-[940px] ">
       <ProductList productList={[]}>
         <div>
           지금 핫한 테마

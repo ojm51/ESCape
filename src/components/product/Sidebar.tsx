@@ -10,7 +10,7 @@ export default function Sidebar() {
   });
 
   return (
-    <div className="md:flex hidden flex-col pt-[45px] pl-[30px] xl:w-[220px] md:w-[180px]  gap-[35px] justify-center">
+    <div className="md:flex hidden flex-col pt-[45px] pl-[30px] xl:w-[220px] md:w-[180px]  gap-[35px]">
       <span>카테고리</span>
       {categoryData &&
         !!categoryData.length &&
