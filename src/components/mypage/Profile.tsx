@@ -1,32 +1,40 @@
 import Image from 'next/image'
 import React from 'react'
-import profileImage from '@images/profile_image.png'
+import defaultImage from '@images/default_image.png'
 import PrimaryButton from '../@shared/button/PrimaryButton'
 import TertiaryButton from '../@shared/button/TertiaryButton'
+import { UserTypes } from '@/dtos/UserDto'
 
-export default function Profile() {
+interface ProfileProps {
+  data: UserTypes,
+}
+
+export default function Profile({ data }: ProfileProps) {
   // TertiaryButton을 위한 임시 onClick 함수
   const temp = () => {
     return
   }
 
+  const { image, nickname, description, followersCount, followeesCount } = data;
+  const profileImage = !!image ? image : defaultImage;
+
   return (
     <div className="flex w-full flex-col content-center items-center gap-[30px] rounded-xl border-unactive bg-[#252530] px-5 py-[30px] xl:w-[340px]">
       <Image className="rounded-full" src={profileImage} alt="프로필 이미지" width={120} height={120} />
       <div className="flex w-full flex-col gap-[10px]">
-        <h3 className="text-center text-xl font-semibold leading-7 text-brand-white">User name</h3>
-        <p className="text-sm font-normal leading-tight text-brand-gray-dark">User description</p>
+        <h3 className="text-center text-xl font-semibold leading-7 text-brand-white">{nickname}</h3>
+        <p className="text-sm font-normal leading-tight text-brand-gray-dark">{description}</p>
       </div>
 
       <div className="flex w-full content-between items-center">
-        <div className="flex w-full flex-col content-center items-center gap-[10px] border-r border-r-unactive">
-          <h4 className="text-center text-lg font-semibold text-brand-white">follower</h4>
+        <button className="flex w-full flex-col content-center items-center gap-[10px] border-r border-r-unactive">
+          <h4 className="text-center text-lg font-semibold text-brand-white">{followersCount}</h4>
           <p className="text-center text-sm font-normal text-brand-gray-light">팔로워</p>
-        </div>
-        <div className="flex w-full flex-col content-center items-center gap-[10px]">
-          <h4 className="text-center text-lg font-semibold text-brand-white">following</h4>
+        </button>
+        <button className="flex w-full flex-col content-center items-center gap-[10px]">
+          <h4 className="text-center text-lg font-semibold text-brand-white">{followeesCount}</h4>
           <p className="text-center text-sm font-normal text-brand-gray-light">팔로잉</p>
-        </div>
+        </button>
       </div>
 
       <div className="flex w-full flex-col gap-[10px]">
