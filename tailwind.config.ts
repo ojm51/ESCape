@@ -91,6 +91,7 @@ const config: Config = {
           700: "#1d4ed8",
           800: "#1e40af",
           900: "#1e3a8a",
+          gradation: "linear-gradient(to right, #5097fa 0%, #5363ff 100%)",
         },
         indigo: {
           50: "#eef2ff",

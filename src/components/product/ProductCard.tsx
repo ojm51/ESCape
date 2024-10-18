@@ -1,6 +1,8 @@
+import { ProductTypes } from '@/dtos/ProductDto'
+
 interface ProductCardProps {
-  product: ProductListType;
+  product: ProductTypes
 }
 export default function ProductCard({ product }: ProductCardProps) {
-  return <div key={product.id}>ProductCard</div>;
+  return <div key={product.id}>ProductCard</div>
 }

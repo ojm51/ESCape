@@ -1,45 +1,75 @@
-interface ProductListType {
-  updatedAt: string;
-  createdAt: string;
-  writerId: number;
-  categoryId: number;
-  favoriteCount: number;
-  reviewCount: number;
-  rating: number;
-  image: string;
-  name: string;
-  id: number;
+export interface ProductTypes {
+  updatedAt: string
+  createdAt: string
+  writerId: number
+  categoryId: number
+  favoriteCount: number
+  reviewCount: number
+  rating: string
+  image: string
+  name: string
+  id: number
 }
 
-interface CursorBasedPaginationResponse_ProductListType {
-  nextCursor?: number | null;
-  list: ProductListType[];
+export interface ProductListTypes {
+  nextCursor: number
+  list: ProductTypes[]
 }
 
-interface CategoryMetric {
-  reviewCount: number;
-  favoriteCount: number;
-  rating: number;
+export interface CategoryTypes {
+  id: number
+  name: string
 }
 
-interface Category {
-  name: string;
-  id: number;
+export interface CategoryMetricTypes {
+  rating: string
+  favoriteCount: number
+  reviewCount: number
 }
 
-interface ProductDetailType {
-  updatedAt: string;
-  createdAt: string;
-  writerId: number;
-  categoryId: number;
-  favoriteCount: number;
-  reviewCount: number;
-  rating: number;
-  image: string;
-  name: string;
-  id: number;
-  categoryMetric: CategoryMetric;
-  category: Category;
-  isFavorite: boolean;
-  description: string;
+export interface ProductDetailTypes {
+  id: number
+  name: string
+  description: string
+  image: string
+  rating: string
+  reviewCount: number
+  favoriteCount: number
+  categoryId: number
+  createdAt: string
+  updatedAt: string
+  writerId: number
+  isFavorite: boolean
+  category: CategoryTypes
+  categoryMetric: CategoryMetricTypes
+}
+
+export interface UserTypes {
+  image: string
+  nickname: string
+  id: number
+}
+
+export interface ReviewImageTypes {
+  source: string
+  id: number
+}
+
+export interface ProductReviewListTypes {
+  user: UserTypes
+  reviewImages: ReviewImageTypes[]
+  productId: number
+  userId: number
+  updatedAt: string
+  createdAt: string
+  isLiked: true
+  likeCount: number
+  content: string
+  rating: string
+  id: number
+}
+
+export interface ProductReviewsResponseTypes {
+  nextCursor: number
+  list: []
 }
