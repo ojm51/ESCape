@@ -22,7 +22,7 @@ export default function BoardCard({ article }: BoardCardProps) {
               {article?.title ? article.title : "제목이 들어가는 영역입니다."}
             </p>
           </Link>
-            {article?.image && article?.image !== "string" && article?.image !== "image test" ? (
+            {article?.image && article?.image !== "string" && article?.image !== "image test" && article?.image !== "null" ? (
               <Image className="w-[72px] h-[72px] rounded-lg border-[1px] border-solid border-brand-black-light]" src={article.image} alt="게시물 이미지" width={72} height={72}/>) : null}
             <Dropdown width="w-[120px]" buttonChildren={<div className="w-6 h-6"><Image src={KebabIcon} alt="수정 & 삭제하기" width={24} height={24}/></div>}>
               <button>
@@ -41,7 +41,7 @@ export default function BoardCard({ article }: BoardCardProps) {
               {article?.writer.nickname ? article.writer.nickname : "알 수 없음"}
             </p>
             <p
-              className="text-[14px] leading-[17px] font-medium text-[#6e6e82] pl-4 border-l-[1px] border-solid border-[#353542]">
+              className="text-[14px] leading-[17px] font-medium text-brand-gray-dark pl-4 border-l-[1px] border-solid border-brand-black-light">
               {timeAgo(article?.createdAt)}
             </p>
           </div>

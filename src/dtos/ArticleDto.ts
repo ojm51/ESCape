@@ -1,4 +1,5 @@
 export interface BoardData {
+  page: number;
   totalCount: number;
   articleList: Article[];
 }
@@ -14,6 +15,13 @@ export interface Article {
   image: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ArticleFormData {
+  image: string;
+  content: string;
+  title: string;
+  userId: number;
 }
 
 export interface ArticleDetail extends Article {

@@ -6,12 +6,12 @@ import BoardCard from "@/components/board/BoardCard";
 import {Article} from "@/dtos/ArticleDto";
 
 interface BoardSectionProps {
-  articles: Article[] | undefined;
+  data: Article[] | undefined;
   selectedOption: string;
   setSelectedOption: (option: string) => void;
 }
 
-export default function BoardSection({ articles, selectedOption, setSelectedOption }: BoardSectionProps) {
+export default function BoardSection({ data, selectedOption, setSelectedOption }: BoardSectionProps) {
   const [localSelectedOption, setLocalSelectedOptions] = useState(selectedOption);
 
   const handleOptionChange = (option: string) => {
@@ -37,9 +37,9 @@ export default function BoardSection({ articles, selectedOption, setSelectedOpti
         </Dropdown>
       </div>
       <div className="relative py-9 grid gap-4 grid-cols-1 xl:grid-cols-2">
-        {articles && articles.length > 0 ? (
-          articles?.map((article) => (
-            <BoardCard key={article.id} article={article} />
+        {data && data.length > 0 ? (
+          data?.map((data) => (
+            <BoardCard key={data.id} article={data} />
           ))
           ) : (
             // 임시 예외 처리

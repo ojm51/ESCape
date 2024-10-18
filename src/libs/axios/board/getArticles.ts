@@ -6,9 +6,10 @@ const Base_URL = "http://rave-dev.ddns.net:8080";
 interface getArticlesParams {
   selectedOption: string;
   searchValue: string;
+  currentPage: number;
 }
 
-export async function getArticles({selectedOption, searchValue}: getArticlesParams): Promise<BoardData> {
+export async function getArticles({selectedOption, searchValue, currentPage}: getArticlesParams): Promise<BoardData> {
   try {
     let orderBy = '';
     if (selectedOption === "최신순") {
@@ -18,8 +19,8 @@ export async function getArticles({selectedOption, searchValue}: getArticlesPara
     }
 
     const url = searchValue
-      ? `${Base_URL}/articles?orderBy=${orderBy}&keyword=${searchValue}`
-      : `${Base_URL}/articles?orderBy=${orderBy}`
+      ? `${Base_URL}/articles?page=${currentPage}&pageSize=4&orderBy=${orderBy}&keyword=${searchValue}`
+      : `${Base_URL}/articles?page=${currentPage}&pageSize=4&orderBy=${orderBy}`
 
     const response = await Axios.get(url);
     return response.data as BoardData;

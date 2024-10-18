@@ -3,12 +3,12 @@ import {Article} from "@/dtos/ArticleDto";
 import React from "react";
 
 interface BestBoardSectionProps {
-  likes: Article[] | undefined;
+  data: Article[] | undefined;
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   disabled: boolean;
 }
 
-export default function BestBoardSection({ likes, onClick, disabled }: BestBoardSectionProps) {
+export default function BestBoardSection({ data, onClick, disabled }: BestBoardSectionProps) {
   return (
     <>
       <div className="flex justify-between items-center mt-10">
@@ -20,9 +20,9 @@ export default function BestBoardSection({ likes, onClick, disabled }: BestBoard
         </button>
       </div>
       <div className="relative py-10 border-b-[1px] border-solid border-brand-black-light grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-        {likes && likes.length > 0 ? (
-          likes?.map((like) => (
-            <BestBoardCard key={like.id} like={like} />
+        {data && data.length > 0 ?  (
+          data?.map((data) => (
+            <BestBoardCard key={data.id} like={data} />
           ))
         ) : (
           // 임시 예외 처리

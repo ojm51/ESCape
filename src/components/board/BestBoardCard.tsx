@@ -27,7 +27,7 @@ export default function BestBoardCard({like }: BoardCardProps) {
               className="h-[56px] text-[18px] leading-7 font-medium text-brand-white w-full break-words line-clamp-2 mt-3">
               {like?.title ? like.title : "제목이 들어가는 영역입니다."}
             </p>
-            {like?.image && like?.image !== "string" && like?.image !== "image test" ? (
+            {like?.image && like?.image !== "string" && like?.image !== "image test" && like?.image !== "null" ? (
               <Image className="w-[72px] h-[72px] rounded-lg border-[1px] border-solid border-brand-black-light"
                      src={like.image} alt="게시물 이미지" width={72} height={72}/>) : null}
           </div>
