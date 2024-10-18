@@ -1,13 +1,13 @@
-import { getCategories } from "@/libs/axios/product/category";
-import { useQuery } from "@tanstack/react-query";
+import { getCategories } from '@/libs/axios/product/category'
+import { useQuery } from '@tanstack/react-query'
 
 interface SidebarProps {}
 
 export default function Sidebar() {
   const { data: categoryData } = useQuery({
-    queryKey: ["category"],
+    queryKey: ['category'],
     queryFn: getCategories,
-  });
+  })
 
   return (
     <div className="md:flex hidden flex-col pt-[45px] pl-[30px] xl:w-[220px] md:w-[180px]  gap-[35px]">
@@ -20,5 +20,5 @@ export default function Sidebar() {
           </span>
         ))}
     </div>
-  );
+  )
 }
