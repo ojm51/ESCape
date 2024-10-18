@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
-import profileImage from '../../../public/images/profile_image.png'
+import profileImage from '@images/profile_image.png'
 import PrimaryButton from '../@shared/button/PrimaryButton'
 import TertiaryButton from '../@shared/button/TertiaryButton'
 
@@ -30,7 +30,7 @@ export default function Profile() {
       </div>
 
       <div className="flex w-full flex-col gap-[10px]">
-        <PrimaryButton active={true}>프로필 편집</PrimaryButton>
+        <PrimaryButton type='button' active={true}>프로필 편집</PrimaryButton>
         <TertiaryButton active={true} onClick={temp}>
           로그아웃
         </TertiaryButton>

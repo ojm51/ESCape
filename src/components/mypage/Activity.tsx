@@ -1,7 +1,7 @@
 import React from 'react'
 import ActivityDetail from './ActivityDetail'
-import starIcon from '../../../public/icons/star_icon.svg'
-import commentIcon from '../../../public/icons/comment_icon.svg'
+import starIcon from '@icons/star_icon.svg'
+import commentIcon from '@icons/comment_icon.svg'
 
 /** @todo SSR? */
 const activityDetailContents = [
