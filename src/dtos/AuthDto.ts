@@ -1,4 +1,4 @@
-export type OAuthProviders = "GOOGLE" | "KAKAO";
+export type OAuthProviders = "google" | "kakao";
 
 export interface AuthTokens {
   accessToken: string;
@@ -10,9 +10,17 @@ export interface SignInForm {
 }
 
 export interface OAuthSignInForm {
-  token: string;
-  state?: string;
+  nickname: string;
   redirectUri?: string;
+  token: string;
+}
+export interface OAuthSignUpForm {
+  redirectUri?: string;
+  token: string;
+}
+export interface OAuthApp {
+  appKey: string;
+  provider: OAuthProviders;
 }
 
 export interface SignUpForm {
@@ -32,5 +40,6 @@ export interface SignInReturn {
     updatedAt: string;
     createdAt: string;
     image: string | null;
+    description: "string";
   };
 }

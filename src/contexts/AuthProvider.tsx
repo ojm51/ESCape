@@ -1,5 +1,12 @@
 import { signIn } from "@/libs/axios/auth/auth";
-import { SignInForm, SignInReturn } from "@/dtos/AuthDto";
+import oAuthSignIn from "@/libs/axios/oauth/oAuthSignIn";
+import oAuthSignUp from "@/libs/axios/oauth/oAuthSignUp";
+import {
+  OAuthProviders,
+  OAuthSignInForm,
+  SignInForm,
+  SignInReturn,
+} from "@/dtos/AuthDto";
 import { removeTokens } from "@/utils/authTokenStorage";
 import { useRouter } from "next/router";
 import {
@@ -16,6 +23,10 @@ interface AuthValues {
   isPending: boolean;
   login: (formData: SignInForm) => Promise<boolean>;
   logout: () => void;
+  oAuthLogin: (
+    formData: OAuthSignInForm,
+    provider: OAuthProviders
+  ) => Promise<SignInReturn | null>;
 }
 
 const INITIAL_CONTEXT_VALUES: AuthValues = {
@@ -23,6 +34,7 @@ const INITIAL_CONTEXT_VALUES: AuthValues = {
   isPending: true,
   login: () => Promise.reject(),
   logout: () => {},
+  oAuthLogin: () => Promise.reject(),
 };
 
 const AuthContext = createContext<AuthValues>(INITIAL_CONTEXT_VALUES);
@@ -43,6 +55,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return false;
     }
     return true;
+  };
+
+  const oAuthLogin = async (
+    formData: OAuthSignInForm,
+    provider: OAuthProviders
+  ) => {
+    const user = await oAuthSignIn(formData, provider);
+    if (!user) {
+      const newUser = await oAuthSignUp(formData, provider);
+      return newUser;
+    }
+    return user;
   };
 
   const logout = () => {
@@ -68,6 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isPending: authState.isPending,
       login,
       logout,
+      oAuthLogin,
     }),
     [authState.user, authState.isPending]
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signUp } from "@/libs/axios/auth/auth";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -22,7 +22,13 @@ export default function SignupPage() {
   });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, isPending } = useAuth();
+
+  useEffect(() => {
+    if (!isPending) {
+      router.replace("/");
+    }
+  }, [isPending, router]);
 
   const onSubmit = async (data) => {
     setLoading(true);

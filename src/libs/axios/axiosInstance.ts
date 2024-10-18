@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 
 const axiosInstance = axios.create({
   // baseURL: process.env.NEXT_PUBLIC_API_URL,
-  baseURL: "https://mogazoa-api.vercel.app/4-5/",
+  baseURL: "https://mogazoa-api.vercel.app/8-5/",
 });
 
 axiosInstance.interceptors.request.use((config) => {

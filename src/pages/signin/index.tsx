@@ -4,10 +4,12 @@ import { useAuth } from "@/contexts/AuthProvider";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../../public/images/logo.svg";
-import KakaoIcon from "../../../public/icons/icon_kakao.svg";
-import GoogleIcon from "../../../public/icons/icon_google.svg";
+
 import EyesShowIcon from "../../../public/icons/icon_eyes_show.svg";
 import EyesHiddenIcon from "../../../public/icons/icon_eyes_hidden.svg";
+
+import GoogleOauthButton from "@/components/auth/GoogleOauthButton";
+import KakoOauthButton from "@/components/auth/KakoOauthButton";
 import PrimaryButton from "@/components/@shared/button/PrimaryButton";
 import { Spinner } from "flowbite-react";
 import { useForm } from "react-hook-form";
@@ -35,7 +37,6 @@ export default function SignInPage() {
       router.push(redirectionPath);
     }
   };
-
   useEffect(() => {
     const storedPath = localStorage.getItem("redirectionPath");
     if (storedPath) {
@@ -122,18 +123,8 @@ export default function SignInPage() {
         </p>
         <p className="text-brand-gray-dark my-3">SNS로 바로 시작하기</p>
         <div className="flex justify-center gap-4">
-          <button
-            title="구글 로그인"
-            className="border-solid rounded-full border-brand-black-light"
-          >
-            <Image width={56} src={GoogleIcon} alt="구글 로고" />
-          </button>
-          <button
-            title="카카오 로그인"
-            className="border-solid rounded-full border-brand-black-light"
-          >
-            <Image width={56} src={KakaoIcon} alt="카카오 로고" />
-          </button>
+          <GoogleOauthButton />
+          <KakoOauthButton />
         </div>
       </div>
     </div>
