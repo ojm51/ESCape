@@ -2,19 +2,20 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Logo from '../../../public/images/logo.svg'
 import PrimaryButton from '@/components/@shared/button/PrimaryButton'
-import { OAuthProviders } from '@/dtos/AuthDto'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/router'
 import { Spinner } from 'flowbite-react'
-import axios from '@/libs/axios/axiosInstance'
+import { useRouter } from 'next/router'
+import { useState, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import oAuthSignUp from '@/libs/axios/oauth/oAuthSignUp'
 
 interface NicknameForm {
   nickname: string
 }
-export default function NicknamePage({ provider }: { provider?: OAuthProviders }) {
+
+export default function KakaoSignupPage() {
+  const provider = 'kakao'
   const router = useRouter()
-  const { token } = router.query
+  const { code } = router.query // 'code'를 가져옴
   const [loading, setLoading] = useState(false)
 
   const {
@@ -24,38 +25,34 @@ export default function NicknamePage({ provider }: { provider?: OAuthProviders }
     formState: { errors },
   } = useForm<NicknameForm>()
 
+  useEffect(() => {
+    if (!code || typeof code !== 'string') return
+    localStorage.setItem('authCode', code) // 인증 코드 저장
+    window.close() // 팝업에서만 닫기
+  }, [code])
+
   const onSubmit = async (data: NicknameForm) => {
+    const token = localStorage.getItem('authCode') // localStorage에서 인증 코드 가져오기
+
+    if (!token) {
+      alert('인증 코드가 없습니다. 다시 로그인 해주세요.')
+      return
+    }
+
     const formData = {
       nickname: data.nickname,
       redirectUri: `http://localhost:3000/oauth/${provider}`,
       token,
     }
-    console.log('입력한 token:', formData)
+    console.log(formData)
     setLoading(true)
 
-    const response = await fetch(`https://mogazoa-api.vercel.app/8-5/auth/signUp/${provider}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-
-    const result = await response.json()
-    console.log(result)
-
     try {
-      const response = await axios.post(`/auth/signUp/${provider}`, formData)
-      const result = response.data
-      console.log(result)
-
-      if (!provider || !token) {
-        alert('잘못된 접근입니다.')
-        return
-      }
+      const user = await oAuthSignUp(formData, provider)
+      const result = user.data
 
       if (result) {
-        router.push('/')
+        router.push('/') // 성공 시 메인 페이지로 리디렉션
       } else {
         alert('회원가입 실패')
       }

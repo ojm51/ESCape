@@ -1,33 +1,23 @@
-import { signIn } from "@/libs/axios/auth/auth";
-import oAuthSignIn from "@/libs/axios/oauth/oAuthSignIn";
-import oAuthSignUp from "@/libs/axios/oauth/oAuthSignUp";
-import {
-  OAuthProviders,
-  OAuthSignInForm,
-  SignInForm,
-  SignInReturn,
-} from "@/dtos/AuthDto";
-import { removeTokens } from "@/utils/authTokenStorage";
-import { useRouter } from "next/router";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { signIn } from '@/libs/axios/auth/auth'
+import oAuthSignIn from '@/libs/axios/oauth/oAuthSignIn'
+import OAuthApps from '@/libs/axios/oauth/oAuthApps'
+import { OAuthProviders, OAuthSignInForm, SignInForm, SignInReturn, oauthAppsReturn } from '@/dtos/AuthDto'
+import { CommonUserTypes } from '@/dtos/UserDto'
+import { removeTokens } from '@/utils/authTokenStorage'
+import { useRouter } from 'next/router'
+import getUser from '@/libs/axios/user/getUser'
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 
 interface AuthValues {
-  user: any; //@todo: 추후 프로필 하시는 분 수정 바람
-  isPending: boolean;
-  login: (formData: SignInForm) => Promise<boolean>;
-  logout: () => void;
-  oAuthLogin: (
-    formData: OAuthSignInForm,
-    provider: OAuthProviders
-  ) => Promise<SignInReturn | null>;
+  user: CommonUserTypes | null
+  isPending: boolean
+  login: (formData: SignInForm) => Promise<boolean>
+  logout: () => void
+  oAuthLogin: (formData: OAuthSignInForm, provider: OAuthProviders) => Promise<SignInReturn | null>
+  oAuthSignUp: (appKey: string, provider: OAuthProviders) => Promise<oauthAppsReturn | null>
 }
+
+type UserValue = CommonUserTypes | null
 
 const INITIAL_CONTEXT_VALUES: AuthValues = {
   user: null,
@@ -35,56 +25,79 @@ const INITIAL_CONTEXT_VALUES: AuthValues = {
   login: () => Promise.reject(),
   logout: () => {},
   oAuthLogin: () => Promise.reject(),
-};
+  oAuthSignUp: () => Promise.reject(),
+}
 
-const AuthContext = createContext<AuthValues>(INITIAL_CONTEXT_VALUES);
+const AuthContext = createContext<AuthValues>(INITIAL_CONTEXT_VALUES)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [authState, setAuthState] = useState<{
-    user: any;
-    isPending: boolean;
+    user: UserValue
+    isPending: boolean
   }>({
     user: null,
     isPending: true,
-  });
+  })
+
+  const handleAuthChange = (key: string, value: UserValue | boolean) => {
+    setAuthState((prev) => ({
+      ...prev,
+      [key]: value,
+    }))
+  }
+
+  const getMe = async () => {
+    handleAuthChange('isPending', true)
+    let nextUser: UserValue
+    try {
+      nextUser = await getUser()
+    } catch {
+      return
+    }
+
+    setAuthState({
+      user: nextUser,
+      isPending: false,
+    })
+  }
 
   const login = async (formData: SignInForm) => {
-    const isSignInSuccess = await signIn(formData);
+    const isSignInSuccess = await signIn(formData)
     if (!isSignInSuccess) {
-      alert("로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.");
-      return false;
+      alert('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.')
+      return false
     }
-    return true;
-  };
+    return true
+  }
 
-  const oAuthLogin = async (
-    formData: OAuthSignInForm,
-    provider: OAuthProviders
-  ) => {
-    const user = await oAuthSignIn(formData, provider);
-    if (!user) {
-      const newUser = await oAuthSignUp(formData, provider);
-      return newUser;
-    }
-    return user;
-  };
+  const oAuthSignUp = async (appKey: string, provider: string) => {
+    await OAuthApps(appKey, provider)
+  }
+
+  const oAuthLogin = async (formData: OAuthSignInForm, provider: OAuthProviders) => {
+    const user = await oAuthSignIn(formData, provider)
+    if (!user) return user
+    await getMe()
+    return user
+  }
 
   const logout = () => {
-    removeTokens();
-    alert("로그아웃이 되었습니다.");
-  };
+    handleAuthChange('user', null)
+    removeTokens()
+    alert('로그아웃이 되었습니다.')
+  }
 
   useEffect(() => {
-    if (localStorage.getItem("accessToken")) {
-      // accessToken이 있을 경우 사용자 정보를 가져오는 로직 추가 가능
-      // 예시: fetchUserInfo();
+    if (localStorage.getItem('accessToken')) {
+      getMe()
+      return
     } else {
       setAuthState({
         user: null,
         isPending: false,
-      });
+      })
     }
-  }, []);
+  }, [])
 
   const providerValueProp = useMemo(
     () => ({
@@ -93,31 +106,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       logout,
       oAuthLogin,
+      oAuthSignUp,
     }),
-    [authState.user, authState.isPending]
-  );
+    [authState.user, authState.isPending],
+  )
 
-  return (
-    <AuthContext.Provider value={providerValueProp}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={providerValueProp}>{children}</AuthContext.Provider>
 }
 
 export function useAuth(required?: boolean) {
-  const context = useContext(AuthContext);
-  if (!context)
-    throw new Error(
-      "useAuth는 반드시 AuthProvider 노드 안에서 사용돼야 합니다."
-    );
+  const context = useContext(AuthContext)
+  if (!context) throw new Error('useAuth는 반드시 AuthProvider 노드 안에서 사용돼야 합니다.')
 
-  const router = useRouter();
+  const router = useRouter()
   useEffect(() => {
     if (required && !context.user && !context.isPending) {
-      alert("로그인이 필요한 페이지입니다.");
-      router.push("/signin");
+      alert('로그인이 필요한 페이지입니다.')
+      router.push('/signin')
     }
-  }, [required, context.user, context.isPending]);
+  }, [required, context.user, context.isPending])
 
-  return context;
+  return context
 }
