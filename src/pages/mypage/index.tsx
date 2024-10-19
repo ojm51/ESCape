@@ -46,7 +46,7 @@ export default function MyPage() {
           {/* {!!data ? <ActivityCardList data={data} /> : <p>failed..</p>} */}
           <ActivityCardList data={data ?? defaultUserData} />
         </section>
-        <ThemeCardList />
+        <ThemeCardList data={data ?? defaultUserData} />
         {/* <Modal>수리수리마수리님을 팔로우하는 유저</Modal> */}
       </div>
     </>

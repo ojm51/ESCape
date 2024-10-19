@@ -10,7 +10,7 @@ interface ActivityCardListProps {
 
 export default function ActivityCardList({ data }: ActivityCardListProps) {
   const { averageRating, reviewCount, mostFavoriteCategory } = data;
-  const activityDetailContents = [
+  const activityCardContents = [
     {
       title: '남긴 별점 평균',
       icon: starIcon,
@@ -33,14 +33,14 @@ export default function ActivityCardList({ data }: ActivityCardListProps) {
 
   return (
     <div className="w-full">
-      <h3 className="mb-[30px] text-lg font-semibold text-brand-white">활동 내역</h3>
+      <h3 className="mb-[30px] text-lg font-semibold text-brand-white xl:text-xl">활동 내역</h3>
       <div className="grid grid-cols-3 gap-[10px] xl:gap-5">
-        {activityDetailContents.map((activityDetailContent) => (
+        {activityCardContents.map((activityCardContent) => (
           <ActivityCard
-            title={activityDetailContent.title}
-            icon={activityDetailContent.icon}
-            value={activityDetailContent.value}
-            isCategory={activityDetailContent.isCategory}
+            title={activityCardContent.title}
+            icon={activityCardContent.icon}
+            value={activityCardContent.value}
+            isCategory={activityCardContent.isCategory}
           />
         ))}
       </div>
