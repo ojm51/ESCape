@@ -1,7 +1,7 @@
-import { UserTypes } from "@/dtos/UserDto"
+import { FollowResponseTypes, UserTypes } from "@/dtos/UserDto"
 import axiosInstance from "../axiosInstance"
 import { API_PATH } from "../config/path"
-import { getUserInfoParams, getUserProductsParams } from "./types";
+import { getUserFollowsParams, getUserInfoParams, getUserProductsParams } from "./types";
 import { ProductListTypes } from "@/dtos/ProductDto";
 
 export const getMyInfo = async () => {
@@ -18,4 +18,10 @@ export const getUserProducts = async ({ userId, type }: getUserProductsParams) =
   const url = (type === 'reviewed') ? API_PATH.user.reviewedProducts(userId) : API_PATH.user.favoriteProducts(userId)
   const response = await axiosInstance.get<ProductListTypes>(url);
   return response.data.list ?? [];
+}
+
+export const getUserFollows = async ({ userId, type }: getUserFollowsParams) => {
+  const url = (type === '팔로워') ? API_PATH.user.followers(userId) : API_PATH.user.followees(userId)
+  const response = await axiosInstance.get<FollowResponseTypes>(url);
+  return response.data ?? [];
 }
