@@ -4,7 +4,6 @@ import { Spinner } from 'flowbite-react'
 import Profile from '@/components/mypage/Profile'
 import ActivityCardList from '@/components/mypage/ActivityCardList'
 import ThemeCardList from '@/components/mypage/ThemeCardList'
-import Modal from '@/components/@shared/modal/Modal'
 import { UserTypes } from '@/dtos/UserDto'
 
 const defaultUserData: UserTypes = {
@@ -47,7 +46,6 @@ export default function MyPage() {
           <ActivityCardList data={data ?? defaultUserData} />
         </section>
         <ThemeCardList data={data ?? defaultUserData} />
-        {/* <Modal>수리수리마수리님을 팔로우하는 유저</Modal> */}
       </div>
     </>
   )
