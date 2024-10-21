@@ -1,12 +1,11 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
-import defaultImage from '@images/default_image.png'
-import PrimaryButton from '../@shared/button/PrimaryButton'
-import TertiaryButton from '../@shared/button/TertiaryButton'
-import Modal from '@/components/@shared/modal/Modal'
-import FollowUserList from '@/components/@shared/modal/FollowUserList'
-import { FollowListTypes, FollowResponseTypes, UserTypes } from '@/dtos/UserDto'
 import { useQuery } from '@tanstack/react-query'
+import defaultImage from '@images/default_image.png'
+import Modal from '../@shared/modal/Modal'
+import FollowUserList from '../@shared/modal/FollowUserList'
+import CustomButton from '../@shared/button/CustomButton'
+import { FollowListTypes, FollowResponseTypes, UserTypes } from '@/dtos/UserDto'
 import { getUserFollows } from '@/libs/axios/mypage/apis'
 
 interface ProfileProps {
@@ -66,10 +65,10 @@ export default function Profile({ data: userData }: ProfileProps) {
       </div>
 
       <div className="flex w-full flex-col gap-[10px]">
-        <PrimaryButton type='button' active={true}>프로필 편집</PrimaryButton>
-        <TertiaryButton active={true} onClick={temp}>
+        <CustomButton active={true}>프로필 편집</CustomButton>
+        <CustomButton style="tertiary" active={true} onClick={temp}>
           로그아웃
-        </TertiaryButton>
+        </CustomButton>
       </div>
 
       {isModalOpen && (
