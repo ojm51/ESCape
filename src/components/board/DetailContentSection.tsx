@@ -1,9 +1,9 @@
 import {ArticleDetail} from "@/dtos/ArticleDto";
 import Dropdown from "@/components/@shared/DropDown";
 import Image from "next/image";
-import KebabIcon from "../../../public/icons/kebab_icon.svg";
-import CommentIcon from "../../../public/icons/comment_icon.svg"
-import HeartIcon from "../../../public/icons/heart_icon.svg"
+import KebabIcon from "@icons/kebab_icon.svg";
+import CommentIcon from "@icons/comment_icon.svg"
+import HeartIcon from "@icons/heart_icon.svg"
 import timeAgo from "@/utils/timeAgo";
 
 export interface DetailContentProps {

@@ -1,7 +1,7 @@
 import Axios from "axios";
 import {ArticleDetail} from "@/dtos/ArticleDto";
 
-const Base_URL = "http://rave-dev.ddns.net:8080";
+const Base_URL = process.env.NEXT_PUBLIC_BOARD_API_URL;
 
 export async function getArticleDetail(id: string | string[] | undefined): Promise<ArticleDetail> {
   try {

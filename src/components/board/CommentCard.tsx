@@ -30,7 +30,7 @@ export default function CommentCard({ data }: DetailCommentProps) {
       </div>
       <div className="flex mt-12 items-center justify-between">
         <div className="flex gap-3 items-center">
-          <Image src={data?.writer.image ? data.writer.image : ProfileIcon} alt="작성자 이미지"/>
+          <Image src={data?.writer.image && data?.writer.image !== "string" ? data.writer.image : ProfileIcon} alt="작성자 이미지"/>
           <p className="max-w-[260px] text-[14px] leading-[17px] text-brand-white font-medium break-words line-clamp-1 pr-1">
             {data?.writer.nickname ? data.writer.nickname : "알 수 없음"}
           </p>
