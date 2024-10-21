@@ -5,11 +5,11 @@ import commentIcon from '@icons/comment_icon.svg'
 import { UserTypes } from '@/dtos/UserDto'
 
 interface ActivityCardListProps {
-  data: UserTypes,
+  data: UserTypes
 }
 
 export default function ActivityCardList({ data }: ActivityCardListProps) {
-  const { averageRating, reviewCount, mostFavoriteCategory } = data;
+  const { averageRating, reviewCount, mostFavoriteCategory } = data
   const activityCardContents = [
     {
       title: '남긴 별점 평균',
@@ -29,7 +29,7 @@ export default function ActivityCardList({ data }: ActivityCardListProps) {
       value: mostFavoriteCategory.name,
       isCategory: true,
     },
-  ];
+  ]
 
   return (
     <div className="w-full">

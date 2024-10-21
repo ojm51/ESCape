@@ -23,15 +23,15 @@ const defaultUserData: UserTypes = {
   followeesCount: 0,
   followersCount: 0,
   isFollowing: false,
-};
+}
 
 export default function MyPage() {
   const { isPending, isError, data } = useQuery({
     queryKey: ['myInfo'],
     queryFn: getMyInfo,
-  });
+  })
 
-  if(isPending) return <Spinner aria-label='로딩 중...' size='xl' />
+  if (isPending) return <Spinner aria-label="로딩 중..." size="xl" />
   // if(isError) return <p>failed..</p>
 
   return (

@@ -1,12 +1,9 @@
-import React from 'react';
+import React from 'react'
 
 interface ModalProviderProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export function ModalProvider({ children }: ModalProviderProps) {
-  
-  return (
-    <div>ModalProvider</div>
-  )
+  return <div>ModalProvider</div>
 }
