@@ -1,15 +1,15 @@
 import { ChangeEvent, useRef, useState } from "react";
 import Image from "next/image";
-import PlusIcon from "../../../public/icons/plus_icon.svg";
+import PlusIcon from "@icons/plus_icon.svg";
 
 interface ContentSectionProps {
+  title: string;
+  content: string;
   onFormDataChange: (value: { image: File | null; title: string; content: string }) => void;
 }
 
-export default function ContentSection({ onFormDataChange }: ContentSectionProps) {
+export default function ContentSection({ title, content, onFormDataChange }: ContentSectionProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,13 +25,11 @@ export default function ContentSection({ onFormDataChange }: ContentSectionProps
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const result = e.target.value;
-    setTitle(result);
     onFormDataChange({ title: result, content, image: null });
   };
 
   const handleContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const result = e.target.value;
-    setContent(result);
     onFormDataChange({ title, content: result, image: null });
   };
 
@@ -56,7 +54,7 @@ export default function ContentSection({ onFormDataChange }: ContentSectionProps
           className="h-[240px] bg-brand-black-medium w-full rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 text-brand-white mt-6"
           value={content}
           onChange={handleContentChange}
-          maxLength={299}
+          maxLength={300}
         />
         <p className="absolute bottom-4 right-4 text-brand-white">
           {content.length} / 300

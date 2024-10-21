@@ -1,6 +1,6 @@
 import HeaderSection from "@/components/addboard/HeaderSection";
 import ContentSection from "@/components/addboard/ContentSection";
-import React, {useState} from "react";
+import {FormEvent, useState} from "react";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {postArticles} from "@/libs/axios/addboard/postArticles";
 import {useRouter} from "next/router";
@@ -13,6 +13,7 @@ export default function AddBoardsPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
+  // ContentSection 컴포넌트에서 받아온 value 값들을 적용하기 위한 이벤트 핸들러
   const handleFormDataChange = (value: {image: File | null; title: string; content: string}) => {
     setImage(value.image);
     setTitle(value.title);
@@ -34,7 +35,10 @@ export default function AddBoardsPage() {
     }
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // 작성을 완료한 value 를 formData 에 담아 보내기 위한 이벤트 핸들러
+  // formData 를 활용한 이유는 이미지 파일이 JSON 형태로 전송할 수 없는 문제가 있어서 임시 사용
+  // URL 로 받아와서 string 형태로 처리할 수 있는 방법이 있으면 개선 예정
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     const formData = new FormData();
@@ -54,7 +58,7 @@ export default function AddBoardsPage() {
     <div className="relative mx-4 md:6 xl:mx-auto xl:w-[1200px] py-[100px]">
       <form onSubmit={handleSubmit}>
         <HeaderSection />
-        <ContentSection onFormDataChange={handleFormDataChange} />
+        <ContentSection title={title} content={content} onFormDataChange={handleFormDataChange} />
       </form>
     </div>
   );

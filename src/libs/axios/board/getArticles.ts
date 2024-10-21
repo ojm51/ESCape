@@ -1,7 +1,7 @@
 import Axios from "axios";
 import {BoardData} from "@/dtos/ArticleDto";
 
-const Base_URL = "http://rave-dev.ddns.net:8080";
+const Base_URL = process.env.NEXT_PUBLIC_BOARD_API_URL;
 
 interface getArticlesParams {
   selectedOption: string;

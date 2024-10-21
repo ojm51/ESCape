@@ -1,6 +1,6 @@
 import Dropdown from "@/components/@shared/DropDown";
 import Image from "next/image";
-import ToggleIcon from "../../../public/icons/toggle_icon.svg"
+import ToggleIcon from "@icons/toggle_icon.svg"
 import {useState} from "react";
 import BoardCard from "@/components/board/BoardCard";
 import {Article} from "@/dtos/ArticleDto";

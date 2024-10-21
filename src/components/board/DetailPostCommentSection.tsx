@@ -1,10 +1,14 @@
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent} from "react";
 
-export default function DetailPostCommentSection() {
-  const [text, setText] = useState<string>('');
+interface DetailPostCommentSectionProps {
+  comment: string;
+  setComment: (value: string) => void;
+}
 
-  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setText(event.target.value);
+export default function DetailPostCommentSection({ comment, setComment }: DetailPostCommentSectionProps) {
+
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(e.target.value);
   };
 
   return (
@@ -16,12 +20,12 @@ export default function DetailPostCommentSection() {
         <textarea
           placeholder="댓글을 입력해주세요."
           className="h-[180px] bg-brand-black-medium w-full rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 text-brand-white mt-6"
-          value={text}
+          value={comment}
           onChange={handleChange}
-          maxLength={299}
+          maxLength={300}
         />
         <p className="absolute bottom-4 right-4 text-brand-white">
-          {text.length} / 300
+          {comment.length} / 300
         </p>
       </div>
       <button

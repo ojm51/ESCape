@@ -7,7 +7,6 @@ import {getArticles} from "@/libs/axios/board/getArticles";
 import {getArticlesByLike} from "@/libs/axios/board/getArticlesByLike";
 import React, {useEffect, useState} from "react";
 import BoardStatusScreen from "@/components/board/BoardStatusScreen";
-import BoardPaginationButton from "@/components/board/BoardPaginationButton";
 import PaginationSection from "@/components/board/PaginationSection";
 
 export default function BoardsPage() {
@@ -40,7 +39,7 @@ export default function BoardsPage() {
     }
   }, []);
 
-  // 페이지네이션을 위한 useInfiniteQuery
+  // 더보기를 위한 useInfiniteQuery
   // API Responses 로 오는 값들 중 총 리스트 갯수인 totalCount 를 활용
   // 더보기 버튼을 클릭 시 3개씩 불러오도록 설정, 마지막 페이지 이후에는 버튼 비활성화
   const { data: likeArticlesData, fetchNextPage, hasNextPage, isFetchingNextPage} = useInfiniteQuery({
@@ -62,7 +61,7 @@ export default function BoardsPage() {
     fetchNextPage().catch(() => alert("다음 데이터를 가져오는데 오류가 있습니다."));
   };
 
-  // 검색 및 정렬을 위한 useQuery
+  // 페이지네이션, 검색 및 정렬을 위한 useQuery
   // placeholderData 속성을 활용하여 데이터 수정 시 화면이 깜빡이는 문제 해결
   const { data: articlesData, isLoading, isError } = useQuery({
     queryKey: ['articles', selectedOption, searchValue, currentPage],
@@ -75,37 +74,21 @@ export default function BoardsPage() {
     setCurrentPage(page);
   }
 
-  // 전체 페이지 갯수에서 4개씩 나눠 동적으로 페이지 갯수를 표현하기 위한 함수
-  const renderPagination = () => {
-    const pages = [];
-    const totalPageCount = Math.ceil((articlesData?.totalCount || 1) / 4)
-    for (let i = 1; i <= totalPageCount; i++) {
-      pages.push(
-        <BoardPaginationButton key={i} onClick={() => handlePageClick(i)} isActive={currentPage === i}>
-          {i}
-        </BoardPaginationButton>
-      );
-    }
-    return pages;
-  }
-
   // 임시 로딩 & 에러 처리
   if (isLoading) return <BoardStatusScreen>Loading...</BoardStatusScreen>;
   if (isError) return <BoardStatusScreen>Error!</BoardStatusScreen>;
 
-  // 받아온 likeArticlesData 의 pages 가 객체 형태이기 때문에 1차원 배열로 변경
+  // 받아온 likeArticlesData 의 pages 가 이중 배열일 수 있기 때문에, 1차원 배열로 변경
   const likesList = likeArticlesData?.pages?.flatMap(page => page.articleList)
 
   return (
-      <div className="relative mx-4 md:6 xl:mx-auto xl:w-[1200px] py-[100px]">
+      <div className="relative mx-4 md:mx-6 xl:mx-auto xl:w-[1200px] py-[100px]">
         <SearchSection onSearchChange={handleSearchChange} />
         <div className={`${searchValue !== "" ? "hidden" : "" }`}>
           <BestBoardSection data={likesList} onClick={handleLoadMore} disabled={!hasNextPage || isFetchingNextPage} />
         </div>
         <BoardSection data={articlesData?.articleList} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
-        <PaginationSection>
-          {renderPagination()}
-        </PaginationSection>
+        <PaginationSection totalPageCount={articlesData?.totalCount} currentPage={currentPage} onPageClick={handlePageClick} />
         <AddBoardButton/>
       </div>
   );

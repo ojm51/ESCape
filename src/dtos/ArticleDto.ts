@@ -31,8 +31,8 @@ export interface ArticleDetail extends Article {
 }
 
 export interface CommentData {
-  nextCursor: number;
-  list: ArticleComment[];
+  totalCount: number;
+  articleComments: ArticleComment[];
 }
 
 export interface ArticleComment {
@@ -45,4 +45,9 @@ export interface ArticleComment {
   createdAt: string,
   content: string,
   id: number,
+}
+
+export interface CommentFormData {
+  userId: number;
+  content: string;
 }

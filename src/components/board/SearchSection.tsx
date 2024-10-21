@@ -1,5 +1,5 @@
 import Image from "next/image";
-import SearchIcon from "../../../public/icons/search_icon.svg"
+import SearchIcon from "@icons/search_icon.svg"
 import React, {ChangeEvent, useState} from "react";
 
 interface searchSectionProps {
