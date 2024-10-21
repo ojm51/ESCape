@@ -44,11 +44,11 @@ export default function ThemeCardList({ data }: ThemeCardListProps) {
           <button key={themeMenuContent.id} className={`text-lg xl:text-xl ${(activeMenu === themeMenuContent.id) ? "font-semibold text-brand-white" : "font-normal text-brand-gray-dark"}`} onClick={() => handleThemeMenuClicked(themeMenuContent.id)}>{themeMenuContent.title}</button>
         ))}
       </div>
-      {themeList && themeList.length > 0 ? <div className="grid grid-cols-2 gap-[15px] xl:grid-cols-3 xl:gap-5">
+      {themeList && themeList.length > 0 ? (<div className="grid grid-cols-2 gap-[15px] xl:grid-cols-3 xl:gap-5">
         {themeList.map((theme) => (
           <ThemeCard data={theme} />
         ))}
-      </div> : (
+      </div>) : (
           <p>아직 {themeMenuContents[activeMenu].title}가 없습니다</p>
         )}
     </section>
