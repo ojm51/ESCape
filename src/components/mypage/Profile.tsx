@@ -8,6 +8,7 @@ import CustomButton from '../@shared/button/CustomButton'
 import { FollowListTypes, FollowResponseTypes, UserTypes } from '@/dtos/UserDto'
 import { getUserFollows } from '@/libs/axios/mypage/apis'
 import { useRouter } from 'next/router'
+import EditProfile from '../user/EditProfile'
 
 interface ProfileProps {
   data: UserTypes
@@ -16,8 +17,10 @@ interface ProfileProps {
 export default function Profile({ data: userData }: ProfileProps) {
   const [followData, setFollowData] = useState<FollowResponseTypes>()
   const [modalType, setModalType] = useState<string>('팔로워')
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const toggleModal = () => setIsModalOpen((prev) => !prev)
+  const [isFollowModalOpen, setIsFollowModalOpen] = useState<boolean>(false)
+  const [isEditProfileModalOpen, setEditProfileModalOpen] = useState<boolean>(false)
+  const toggleFollowModal = () => setIsFollowModalOpen((prev) => !prev)
+  const toggleEditProfileModal = () => setEditProfileModalOpen((prev) => !prev)
 
   const { id, image, nickname, description, followersCount, followeesCount, isFollowing } = userData
   const profileImage = !!image ? image : defaultImage
@@ -47,7 +50,11 @@ export default function Profile({ data: userData }: ProfileProps) {
   const handleFollowListClick = (type: string) => {
     setModalType(type)
     modalType === '팔로워' ? setFollowData(followerList) : setFollowData(followeeList)
-    toggleModal()
+    toggleFollowModal()
+  }
+
+  const handleEditProfileButtonClick = () => {
+    toggleEditProfileModal()
   }
 
   // 로그아웃을 위한 임시 onClick 함수
@@ -86,9 +93,11 @@ export default function Profile({ data: userData }: ProfileProps) {
          * accessToken이 없으면 ->
          *  팔로우 중일 땐 '팔로우 취소'
          *  팔로우 중이 아닐 땐 '팔로우'*/}
-        {pathname === 'mypage' ? (
+        {pathname === '/mypage' ? (
           <div className="flex w-full flex-col gap-[10px]">
-            <CustomButton active={true}>프로필 편집</CustomButton>
+            <CustomButton active={true} onClick={handleEditProfileButtonClick}>
+              프로필 편집
+            </CustomButton>
             <CustomButton style="tertiary" active={true} onClick={temp}>
               로그아웃
             </CustomButton>
@@ -102,9 +111,9 @@ export default function Profile({ data: userData }: ProfileProps) {
         )}
       </div>
 
-      {isModalOpen && (
+      {isFollowModalOpen && (
         <Modal
-          onClick={toggleModal}
+          onClick={toggleFollowModal}
           classNames="max-h-[550px] w-[335px] overflow-auto scrollbar-hide md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
         >
           <FollowUserList
@@ -112,6 +121,15 @@ export default function Profile({ data: userData }: ProfileProps) {
             title={`${modalType === '팔로워' ? '을 팔로우' : '이 팔로잉'}`}
             followData={followData?.list}
           />
+        </Modal>
+      )}
+
+      {isEditProfileModalOpen && (
+        <Modal
+          onClick={toggleEditProfileModal}
+          classNames="max-h-[550px] w-[335px] overflow-auto scrollbar-hide md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
+        >
+          <EditProfile />
         </Modal>
       )}
     </>
