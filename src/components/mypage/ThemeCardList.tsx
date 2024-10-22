@@ -61,7 +61,7 @@ export default function ThemeCardList({ data }: ThemeCardListProps) {
           ))}
         </div>
       ) : (
-        <p>아직 {themeMenuContents[activeMenu].title}가 없습니다</p>
+        <p className="font-normal text-brand-gray-dark">아직 {themeMenuContents[activeMenu].title}가 없습니다</p>
       )}
     </section>
   )
