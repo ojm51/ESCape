@@ -39,7 +39,6 @@ export default function HomePage() {
           </>
         )}
       </div>
-      <div>홈 화면</div>
     </>
   )
 }

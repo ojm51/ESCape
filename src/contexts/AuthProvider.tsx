@@ -13,16 +13,6 @@ interface AuthValues {
   login: (formData: SignInForm) => Promise<boolean>
   logout: () => void
   oAuthLogin: (formData: OAuthSignInForm, provider: OAuthProviders) => Promise<SignInReturn | null>
-import { SignInForm, SignInReturn } from '@/dtos/AuthDto'
-import { removeTokens } from '@/utils/authTokenStorage'
-import { useRouter } from 'next/router'
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
-
-interface AuthValues {
-  user: any //@todo: 추후 프로필 하시는 분 수정 바람
-  isPending: boolean
-  login: (formData: SignInForm) => Promise<boolean>
-  logout: () => void
 }
 
 type UserValue = CommonUserTypes | null
@@ -40,7 +30,6 @@ const AuthContext = createContext<AuthValues>(INITIAL_CONTEXT_VALUES)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [authState, setAuthState] = useState<{
     user: UserValue
-    user: any
     isPending: boolean
   }>({
     user: null,
@@ -87,10 +76,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     handleAuthChange('user', null)
-    return true
-  }
-
-  const logout = () => {
     removeTokens()
     alert('로그아웃이 되었습니다.')
   }
@@ -101,14 +86,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       getMe()
     } else {
       handleAuthChange('isPending', false)
-    if (localStorage.getItem('accessToken')) {
-      // accessToken이 있을 경우 사용자 정보를 가져오는 로직 추가 가능
-      // 예시: fetchUserInfo();
-    } else {
-      setAuthState({
-        user: null,
-        isPending: false,
-      })
     }
   }, [])
 

@@ -11,11 +11,6 @@ import EyesHiddenIcon from '../../../public/icons/icon_eyes_hidden.svg'
 import GoogleOauthButton from '@/components/auth/GoogleOauthButton'
 import KakoOauthButton from '@/components/auth/KakoOauthButton'
 import PrimaryButton from '@/components/@shared/button/CustomButton'
-import KakaoIcon from '../../../public/icons/icon_kakao.svg'
-import GoogleIcon from '../../../public/icons/icon_google.svg'
-import EyesShowIcon from '../../../public/icons/icon_eyes_show.svg'
-import EyesHiddenIcon from '../../../public/icons/icon_eyes_hidden.svg'
-import CustomButton from '@/components/@shared/button/CustomButton'
 import { Spinner } from 'flowbite-react'
 import { useForm } from 'react-hook-form'
 
@@ -27,7 +22,6 @@ export default function SignInPage() {
   } = useForm()
   const [loading, setLoading] = useState(false)
   const [loginErrorMessage, setLoginErrorMessage] = useState('')
-<<<<<<< HEAD
   const router = useRouter()
   const { login, user } = useAuth() // user 상태 추가
   const [showPassword, setShowPassword] = useState(false)
@@ -48,31 +42,6 @@ export default function SignInPage() {
       router.push('/')
     }
   }
-=======
-  const [redirectionPath, setRedirectionPath] = useState('/')
-  const router = useRouter()
-  const { login } = useAuth()
-  const [showPassword, setShowPassword] = useState(false)
-
-  const onSubmit = async (data: { email: string; password: string }) => {
-    setLoading(true)
-    const isLoginSuccess = await login(data)
-    if (!isLoginSuccess) {
-      setLoginErrorMessage('이메일 혹은 비밀번호를 확인해주세요.')
-      setLoading(false)
-    } else {
-      router.push(redirectionPath)
-    }
-  }
-
-  useEffect(() => {
-    const storedPath = localStorage.getItem('redirectionPath')
-    if (storedPath) {
-      setRedirectionPath(storedPath)
-      localStorage.removeItem('redirectionPath')
-    }
-  }, [])
->>>>>>> dev
 
   return (
     <div className="mx-auto mt-[200px] max-w-[640px] p-3 text-white">
@@ -86,11 +55,7 @@ export default function SignInPage() {
           <label className="block pb-1">이메일</label>
           <input
             type="text"
-<<<<<<< HEAD
             className={`bg-brand-black-medium w-full rounded-xl border-solid border-brand-black-light py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation ${
-=======
-            className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
->>>>>>> dev
               errors.email ? 'border-red-500' : ''
             }`}
             placeholder="이메일을 입력해주세요"
@@ -102,22 +67,14 @@ export default function SignInPage() {
               },
             })}
           />
-<<<<<<< HEAD
           {errors.email && <p className="text-red-500 mt-1">{errors.email.message}</p>}
-=======
-          {errors.email && <p className="mt-1 text-red-500">{errors.email.message}</p>}
->>>>>>> dev
         </div>
         <div className="mb-5">
           <label className="block pb-1">비밀번호</label>
           <div className="relative">
             <input
               type={showPassword ? 'text' : 'password'}
-<<<<<<< HEAD
               className={`bg-brand-black-medium w-full rounded-xl border-solid border-brand-black-light py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation ${
-=======
-              className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
->>>>>>> dev
                 errors.password ? 'border-red-500' : ''
               }`}
               placeholder="비밀번호를 입력해주세요"
@@ -138,21 +95,12 @@ export default function SignInPage() {
               />
             </button>
           </div>
-<<<<<<< HEAD
           {errors.password && <p className="text-red-500 mt-1">{errors.password.message}</p>}
         </div>
         <div className="pt-2">
           <PrimaryButton style="primary" type="submit" active={true}>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '로그인'}
           </PrimaryButton>
-=======
-          {errors.password && <p className="mt-1 text-red-500">{errors.password.message}</p>}
-        </div>
-        <div className="pt-2">
-          <CustomButton type="submit" onClick={() => {}} active={true}>
-            {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '로그인'}
-          </CustomButton>
->>>>>>> dev
         </div>
       </form>
       <div className="mt-10 text-center">
@@ -165,17 +113,8 @@ export default function SignInPage() {
         </p>
         <p className="my-3 text-brand-gray-dark">SNS로 바로 시작하기</p>
         <div className="flex justify-center gap-4">
-<<<<<<< HEAD
           <GoogleOauthButton />
           <KakoOauthButton />
-=======
-          <button title="구글 로그인" className="rounded-full border-solid border-brand-black-light">
-            <Image width={56} src={GoogleIcon} alt="구글 로고" />
-          </button>
-          <button title="카카오 로그인" className="rounded-full border-solid border-brand-black-light">
-            <Image width={56} src={KakaoIcon} alt="카카오 로고" />
-          </button>
->>>>>>> dev
         </div>
       </div>
     </div>

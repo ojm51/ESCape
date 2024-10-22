@@ -7,7 +7,6 @@ export async function signIn(formData: SignInForm) {
   let res: AxiosResponse<SignInReturn>
   try {
     res = await axios.post('/auth/signIn', formData)
-    res = await axios.post('auth/signIn', formData)
   } catch (error: unknown) {
     const e = error as AxiosError
     console.log(`${e.response?.status} error from signIn: ${e.message}`)
@@ -23,7 +22,6 @@ export async function signIn(formData: SignInForm) {
 export async function signUp(formData: SignUpForm) {
   try {
     await axios.post('/auth/signUp', formData)
-    await axios.post('auth/signUp', formData)
   } catch (error: unknown) {
     const e = error as AxiosError
     console.log(`${e.response?.status} error from signUp: ${e.message}`)
