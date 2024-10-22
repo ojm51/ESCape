@@ -8,8 +8,9 @@ export default function KakaoOauthButton() {
   const { oAuthLogin } = useAuth()
   const router = useRouter()
 
+  const KAKAO_REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY
   const redirectUri = `http://localhost:3000/oauth/kakao`
-  const kakaoOauthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${redirectUri}`
+  const kakaoOauthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_REST_API_KEY}&redirect_uri=${redirectUri}`
 
   const handleKakaoClick = () => {
     const width = 480
@@ -30,16 +31,16 @@ export default function KakaoOauthButton() {
   }
 
   const handleSubmit = async (token: string) => {
-    const oAuthRes = await oAuthLogin({ redirectUri, token }, 'KAKAO')
-    if (!oAuthRes) {
-      router.push(`/oauth/kakao`)
-    }
+    await oAuthLogin({ redirectUri, token }, 'kakao')
+    router.push(`/`)
   }
 
   const handleAuthCode = () => {
     const token = localStorage.getItem('authCode')
-    console.log('토큰:', token)
-    if (!token) return
+    if (!token) {
+      router.push(`/oauth/kakao`)
+      return
+    }
     handleSubmit(token)
   }
 

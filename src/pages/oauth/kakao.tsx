@@ -1,3 +1,4 @@
+import { useAuth } from '@/contexts/AuthProvider'
 import Link from 'next/link'
 import Image from 'next/image'
 import Logo from '../../../public/images/logo.svg'
@@ -13,9 +14,11 @@ interface NicknameForm {
 }
 
 export default function KakaoSignupPage() {
+  const { oAuthLogin } = useAuth()
+
   const provider = 'kakao'
   const router = useRouter()
-  const { code } = router.query // 'code'를 가져옴
+  const { code } = router.query
   const [loading, setLoading] = useState(false)
 
   const {
@@ -26,13 +29,16 @@ export default function KakaoSignupPage() {
   } = useForm<NicknameForm>()
 
   useEffect(() => {
-    if (!code || typeof code !== 'string') return
-    localStorage.setItem('authCode', code) // 인증 코드 저장
-    window.close() // 팝업에서만 닫기
+    if (!code || typeof code !== 'string') {
+      router.replace('/error')
+      return
+    }
+    localStorage.setItem('authCode', code)
+    window.close()
   }, [code])
 
   const onSubmit = async (data: NicknameForm) => {
-    const token = localStorage.getItem('authCode') // localStorage에서 인증 코드 가져오기
+    const token = localStorage.getItem('authCode')
 
     if (!token) {
       alert('인증 코드가 없습니다. 다시 로그인 해주세요.')
@@ -44,17 +50,22 @@ export default function KakaoSignupPage() {
       redirectUri: `http://localhost:3000/oauth/${provider}`,
       token,
     }
-    console.log(formData)
     setLoading(true)
 
     try {
-      const user = await oAuthSignUp(formData, provider)
-      const result = user.data
+      const isSignUpSuccess = await oAuthSignUp(formData, provider)
+      const result = await isSignUpSuccess.json()
+      console.log('API Response:', result)
 
-      if (result) {
-        router.push('/') // 성공 시 메인 페이지로 리디렉션
+      if (isSignUpSuccess) {
+        await oAuthLogin({ token }, provider)
+        localStorage.removeItem('authCode')
+        router.push('/')
       } else {
-        alert('회원가입 실패')
+        setError('nickname', {
+          type: 'server',
+          message: result.message || '회원가입 실패. 다시 시도해 주세요.',
+        })
       }
     } catch (err) {
       setError('nickname', {

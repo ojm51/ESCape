@@ -1,6 +1,5 @@
 import { signIn } from '@/libs/axios/auth/auth'
 import oAuthSignIn from '@/libs/axios/oauth/oAuthSignIn'
-import OAuthApps from '@/libs/axios/oauth/oAuthApps'
 import { OAuthProviders, OAuthSignInForm, SignInForm, SignInReturn, oauthAppsReturn } from '@/dtos/AuthDto'
 import { CommonUserTypes } from '@/dtos/UserDto'
 import { removeTokens } from '@/utils/authTokenStorage'
@@ -14,7 +13,6 @@ interface AuthValues {
   login: (formData: SignInForm) => Promise<boolean>
   logout: () => void
   oAuthLogin: (formData: OAuthSignInForm, provider: OAuthProviders) => Promise<SignInReturn | null>
-  oAuthSignUp: (appKey: string, provider: OAuthProviders) => Promise<oauthAppsReturn | null>
 }
 
 type UserValue = CommonUserTypes | null
@@ -25,7 +23,6 @@ const INITIAL_CONTEXT_VALUES: AuthValues = {
   login: () => Promise.reject(),
   logout: () => {},
   oAuthLogin: () => Promise.reject(),
-  oAuthSignUp: () => Promise.reject(),
 }
 
 const AuthContext = createContext<AuthValues>(INITIAL_CONTEXT_VALUES)
@@ -51,14 +48,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let nextUser: UserValue
     try {
       nextUser = await getUser()
-    } catch {
-      return
+      handleAuthChange('user', nextUser)
+    } catch (error) {
+      console.error('사용자 정보를 불러오지 못했습니다:', error)
+      handleAuthChange('user', null)
+    } finally {
+      handleAuthChange('isPending', false)
     }
-
-    setAuthState({
-      user: nextUser,
-      isPending: false,
-    })
   }
 
   const login = async (formData: SignInForm) => {
@@ -67,11 +63,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       alert('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.')
       return false
     }
+    await getMe()
     return true
-  }
-
-  const oAuthSignUp = async (appKey: string, provider: string) => {
-    await OAuthApps(appKey, provider)
   }
 
   const oAuthLogin = async (formData: OAuthSignInForm, provider: OAuthProviders) => {
@@ -88,14 +81,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    if (localStorage.getItem('accessToken')) {
+    const token = localStorage.getItem('accessToken')
+    if (token) {
       getMe()
-      return
     } else {
-      setAuthState({
-        user: null,
-        isPending: false,
-      })
+      handleAuthChange('isPending', false)
     }
   }, [])
 
@@ -106,7 +96,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       logout,
       oAuthLogin,
-      oAuthSignUp,
     }),
     [authState.user, authState.isPending],
   )

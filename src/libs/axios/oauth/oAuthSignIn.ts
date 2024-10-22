@@ -5,15 +5,22 @@ import axios from '../axiosInstance'
 
 export default async function oAuthSignIn(formData: OAuthSignInForm, provider: OAuthProviders) {
   const path = `/auth/signIn/${provider}`
-  const res = await axios.post(path, formData).catch((e: AxiosError) => {
-    console.error(e.response)
+
+  try {
+    const res = await axios.post(path, formData)
+    const result: SignInReturn | null = res.data as SignInReturn
+
+    if (!result || !result.accessToken) {
+      console.error('No access token received:', result)
+      return null
+    }
+
+    const { accessToken } = result
+    saveTokens({ accessToken })
+    return result
+  } catch (error) {
+    const axiosError = error as AxiosError
+    console.error(axiosError.response?.data || 'API 호출 중 오류 발생')
     return null
-  })
-
-  const result: SignInReturn | null = res ? (res.data as SignInReturn) : null
-  if (!result) return result
-
-  const { accessToken } = result
-  saveTokens({ accessToken })
-  return result
+  }
 }

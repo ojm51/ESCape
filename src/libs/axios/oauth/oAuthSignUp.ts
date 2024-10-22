@@ -2,7 +2,7 @@ import { AxiosError } from 'axios'
 import { OAuthProviders, OAuthSignUpForm } from '@/dtos/AuthDto'
 import axios from '../axiosInstance'
 
-export default async function oAuthSignUn(formData: OAuthSignUpForm, provider: OAuthProviders) {
+export default async function oAuthSignUp(formData: OAuthSignUpForm, provider: OAuthProviders) {
   const path = `/auth/signUp/${provider}`
   try {
     await axios.post(path, formData)

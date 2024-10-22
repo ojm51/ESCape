@@ -1,25 +1,19 @@
 import { useAuth } from '@/contexts/AuthProvider'
 import Image from 'next/image'
-import { MutableRefObject, useRef } from 'react'
 import GoogleIcon from '../../../public/icons/icon_google.svg'
 import { useRouter } from 'next/router'
+import { useState, useEffect } from 'react'
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+const GOOGLE_CLIENT_SECRET = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET
 const REDIRECT_URI = `http://localhost:3000/oauth/google`
 
-const APP_KEY = GOOGLE_CLIENT_ID
-const PROVIDER = 'google'
-
 export default function GoogleOauthButton() {
-  const googleWrapperRef: MutableRefObject<HTMLButtonElement | null> = useRef(null)
   const { oAuthLogin } = useAuth()
   const router = useRouter()
-  const handleGoogleWrapperClick = () => {
-    const wrapperContent: HTMLButtonElement | undefined | null =
-      googleWrapperRef.current?.querySelector('div[role=button]')
-    if (!wrapperContent) return
-    wrapperContent.click()
-  }
+  const [code, setCode] = useState('')
+
+  // 팝업 열기
   const handleGoogleClick = () => {
     const width = 480
     const height = 702
@@ -28,7 +22,7 @@ export default function GoogleOauthButton() {
 
     const googleOauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
       REDIRECT_URI,
-    )}&response_type=token&scope=openid email profile`
+    )}&response_type=code&scope=openid email profile`
 
     const googleWindow = window.open(
       googleOauthUrl,
@@ -41,63 +35,83 @@ export default function GoogleOauthButton() {
       return
     }
 
-    const checkPopup = setInterval(async () => {
+    // 팝업에서 인증 코드 가져오기
+    const checkPopup = setInterval(() => {
       try {
         if (googleWindow.closed) {
           clearInterval(checkPopup)
-          return
-        }
+        } else {
+          const popupUrl = googleWindow.location.href
+          if (popupUrl.includes('code=')) {
+            const urlParams = new URL(popupUrl)
+            const codeParam = urlParams.searchParams.get('code')
 
-        const popupUrl = googleWindow.location.href
-        console.log(popupUrl)
-        if (popupUrl.includes('access_token')) {
-          const token = new URL(popupUrl).hash.match(/access_token=([^&]*)/)?.[1]
-          if (token) {
-            googleWindow.close()
-            clearInterval(checkPopup)
-            const user = await oAuthLogin({ token }, 'google')
-            if (!user) {
-              router.push(`/oauth/signup/google?token=${token}`)
+            if (codeParam) {
+              googleWindow.close()
+              clearInterval(checkPopup)
+              setCode(codeParam)
             }
           }
         }
-      } catch (e) {
-        // Same-origin policy로 인해 발생할 수 있는 에러 무시
-      }
-    }, 500)
+      } catch (e) {}
+    }, 1000)
   }
 
+  const fetchTokens = async (authCode: string) => {
+    const data = {
+      code: authCode,
+      client_id: GOOGLE_CLIENT_ID,
+      client_secret: GOOGLE_CLIENT_SECRET,
+      redirect_uri: REDIRECT_URI,
+      grant_type: 'authorization_code',
+    }
+
+    const response = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(data),
+    })
+
+    const tokenData = await response.json()
+
+    if (tokenData.id_token) {
+      localStorage.setItem('authCode', tokenData.id_token)
+      try {
+        const isSignInSuccess = await oAuthLogin({ redirectUri: REDIRECT_URI, token: tokenData.id_token }, 'google')
+        if (isSignInSuccess?.accessToken) {
+          alert('로그인 성공')
+          localStorage.removeItem('authCode')
+          router.push('/')
+        } else {
+          router.push('/oauth/google')
+        }
+      } catch (error) {
+        console.error('로그인 실패:', error)
+        alert('로그인에 실패했습니다. 다시 시도해 주세요.')
+        router.push('/oauth/google')
+      }
+    } else {
+      console.error('ID 토큰을 가져오는 데 실패했습니다:', tokenData)
+      alert('ID 토큰을 가져오지 못했습니다.')
+    }
+  }
+
+  useEffect(() => {
+    if (code) {
+      fetchTokens(code)
+    }
+  }, [code])
+
   return (
-    <>
-      <button
-        type="button"
-        title="구글 로그인"
-        className="border-solid rounded-full border-brand-black-light"
-        onClick={handleGoogleClick}
-      >
-        <Image width={56} src={GoogleIcon} alt="구글 로고" />
-      </button>
-      <button className="hidden" ref={googleWrapperRef} onClick={handleGoogleWrapperClick} type="button">
-        This button is hidden.
-        <div
-          id="g_id_onload"
-          className="hidden"
-          data-client_id={GOOGLE_CLIENT_ID}
-          data-context="signin"
-          data-ux_mode="popup"
-          data-auto_prompt="false"
-          data-callback="handleCredentialResponse"
-        />
-        <div
-          className="g_id_signin"
-          data-type="standard"
-          data-shape="pill"
-          data-theme="outline"
-          data-text="signin_with"
-          data-size="large"
-          data-logo_alignment="center"
-        />
-      </button>
-    </>
+    <button
+      type="button"
+      title="구글 로그인"
+      className="border-solid rounded-full border-brand-black-light"
+      onClick={handleGoogleClick}
+    >
+      <Image width={56} src={GoogleIcon} alt="구글 로고" />
+    </button>
   )
 }
