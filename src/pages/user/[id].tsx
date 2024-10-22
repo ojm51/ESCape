@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getMyInfo } from '@/libs/axios/mypage/apis'
+import { getUserInfo } from '@/libs/axios/mypage/apis'
 import { Spinner } from 'flowbite-react'
 import Profile from '@/components/mypage/Profile'
 import ActivityCardList from '@/components/mypage/ActivityCardList'
@@ -30,7 +30,7 @@ export default function UserPage() {
   const { pathname } = useRouter()
   const { isPending, isError, data } = useQuery({
     queryKey: [`userInfo${pathname}`],
-    queryFn: getMyInfo,
+    queryFn: () => getUserInfo({ userId: pathname }),
   })
 
   if (isPending) return <Spinner aria-label="로딩 중..." size="xl" />
