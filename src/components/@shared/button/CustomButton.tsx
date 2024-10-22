@@ -12,6 +12,7 @@ interface CustomButtonProps {
   onClick?: () => void
   type?: 'button' | 'submit' | 'reset' // 버튼 타입 정의
   style?: 'primary' | 'secondary' | 'tertiary'
+  secondaryBg?: string
 }
 
 export default function CustomButton({
@@ -20,58 +21,44 @@ export default function CustomButton({
   onClick,
   type = 'button',
   style = 'primary',
+  secondaryBg = 'bg-body-bg',
 }: PropsWithChildren<CustomButtonProps>) {
   /**active에 boolean값을 넣어주세요
-   *기본 style은 "primary"
+기본 style은 "primary"
+secondary 스타일을 사용할 때 버튼 색상이 body의 색상과 다르면 tailwind속성을 넣어주세요
    */
   return (
-    <>
-      <Button
-        type={type}
-        onClick={active ? onClick : undefined} // active가 true일 때만 실행
-        disabled={!active}
-        className={classNames(
-          'h-[50px] w-full focus:ring-0 md:h-[55px] xl:h-[65px]',
-          active ? 'bg-gradation' : 'cursor-not-allowed bg-unactive enabled:hover:bg-unactive',
-        )}
-      >
-        {style === 'primary' && <span className="flex h-full items-center text-lg font-semibold">{children}</span>}
-        {style === 'secondary' && (
-          <span
-            className={classNames(
-              'absolute inset-0.5 flex items-center justify-center rounded-lg bg-body-bg text-transparent',
-              active ? 'hover:bg-transparent hover:text-white' : '',
-            )}
-          >
-            <span
-              className={classNames(
-                'text-lg font-semibold',
-                active ? 'bg-gradation bg-clip-text' : 'text-brand-gray-dark',
-              )}
-            >
-              {children}
-            </span>
-          </span>
-        )}
-      </Button>
-      {style === 'tertiary' && (
-        <Button
-          onClick={active ? onClick : undefined}
+    <button
+      type={type}
+      onClick={active ? onClick : undefined}
+      className={classNames(
+        'relative flex h-[50px] w-full items-center justify-center rounded-lg border text-lg font-semibold md:h-[55px] xl:h-[65px]',
+        style === 'primary'
+          ? active
+            ? 'bg-gradation text-white'
+            : 'bg-unactive text-brand-gray-dark'
+          : style === 'secondary'
+            ? active
+              ? 'bg-gradation'
+              : 'border-solid border-unactive text-brand-gray-dark'
+            : active // style === "tertiary"일 때
+              ? 'border-solid border-brand-gray-light'
+              : 'border-solid border-unactive text-brand-gray-dark',
+        !active && 'cursor-not-allowed',
+      )}
+    >
+      {style === 'secondary' && active ? (
+        <span
           className={classNames(
-            'xl-[65px] relative h-[50px] w-full focus:ring-0 md:h-[55px]',
-            active ? 'bg-brand-gray-light enabled:hover:bg-brand-gray-light' : 'bg-unactive enabled:hover:bg-unactive',
+            secondaryBg,
+            'absolute bottom-[1px] left-[1px] right-[1px] top-[1px] flex items-center justify-center rounded-lg',
           )}
         >
-          <span
-            className={classNames(
-              'absolute inset-0.5 flex items-center justify-center rounded-lg bg-body-bg text-lg font-semibold text-brand-gray-light',
-              active ? 'hover:bg-brand-gray-light hover:text-white' : 'text-brand-gray-dark',
-            )}
-          >
-            {children}
-          </span>
-        </Button>
+          <span className="bg-gradation bg-clip-text text-transparent">{children}</span>
+        </span>
+      ) : (
+        <>{children}</>
       )}
-    </>
+    </button>
   )
 }
