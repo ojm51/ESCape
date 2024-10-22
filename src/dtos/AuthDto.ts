@@ -37,7 +37,6 @@ export interface SignInReturn {
     updatedAt: string
     createdAt: string
     image: string | null
-<<<<<<< HEAD
     description: 'string'
   }
 }
@@ -48,11 +47,4 @@ export interface oauthAppsReturn {
   provider: OAuthProviders
   teamId: string
   id: number
-<<<<<<< Updated upstream
-  }
-=======
-=======
-  }
->>>>>>> dev
->>>>>>> Stashed changes
 }
