@@ -1,8 +1,7 @@
 import Image from 'next/image'
-import { PropsWithChildren, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, PropsWithChildren, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import classNames from 'classnames'
 
 import iconHamburger from '@icons/icon_hamburger.svg'
 import logoBig from '@images/logo_big_image.png'
@@ -11,6 +10,17 @@ import iconSignin from '@icons/icon_signin.svg'
 
 export default function Header({ children }: PropsWithChildren) {
   const [isLogin, setIsLogin] = useState(false)
+  const [searchInputValue, setSearchInputValue] = useState('')
+
+  const router = useRouter()
+  const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInputValue(e.target.value)
+  }
+  const onSubmitSearchInput = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    router.push({ pathname: '/product', query: { keyword: searchInputValue } })
+  }
+
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken')
     if (accessToken) {
@@ -37,7 +47,9 @@ export default function Header({ children }: PropsWithChildren) {
           <div className="hidden items-center gap-[30px] md:flex">
             <div className="flex h-[50px] w-[300px] items-center gap-1.5 rounded-[28px] bg-[#252530] px-6">
               <Image src={iconGlass} alt="테마검색" width={18.38} height={18.38} className="hidden md:block" />
-              <input placeholder="테마를 검색해 보세요" />
+              <form onSubmit={onSubmitSearchInput}>
+                <input value={searchInputValue} onChange={handleSearchInput} placeholder="테마를 검색해 보세요" />
+              </form>
             </div>
             {isLogin ? (
               <Link href="/mypage">내 프로필</Link>

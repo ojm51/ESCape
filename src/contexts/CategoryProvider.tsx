@@ -1,7 +1,5 @@
-import { CategoryType } from '@/dtos/CategoryDto'
-import { CategoryTypes } from '@/dtos/ProductDto'
-import { getCategories } from '@/libs/axios/product/category'
-import { CATEGORY_MAPPING } from '@/libs/constants/cartegory'
+import { getCategories } from '@/libs/axios/product/categoryApi'
+import { CATEGORY_MAPPING } from '@/libs/constants/category'
 import { useQuery } from '@tanstack/react-query'
 import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
 

@@ -32,8 +32,8 @@ export default function ThemeCard({ data, productId }: ThemeCardProps) {
   ]
 
   return (
-    <Link href={`product/${productId}`}>
-      <div className="flex h-full max-w-[300px] flex-col items-start justify-start gap-[10px] rounded-lg border border-unactive bg-[#252530] p-[10px] md:p-[20px]">
+    <Link href={`product/${productId}`} className="h-full w-full">
+      <div className="flex h-full w-full flex-col items-start justify-start gap-[10px] rounded-lg border border-unactive bg-[#252530] p-[10px] md:p-[20px] xl:max-w-[300px]">
         <Image className="m-auto" src={image} alt={`${name} 이미지`} width={140} height={98} />
         <div className="flex flex-col items-start justify-start gap-[5px]">
           <h4 className="text-sm font-medium text-brand-white">{name}</h4>
