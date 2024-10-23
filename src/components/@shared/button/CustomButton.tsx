@@ -1,11 +1,6 @@
+import { match } from 'ts-pattern'
 import classNames from 'classnames'
-import { Button } from 'flowbite-react'
 import { PropsWithChildren } from 'react'
-
-type ButtonType =
-  | { primary: true; secondary?: never; tertiary?: never }
-  | { secondary: true; primary?: never; tertiary?: never }
-  | { tertiary: true; primary?: never; secondary?: never }
 
 interface CustomButtonProps {
   active: boolean
@@ -15,6 +10,10 @@ interface CustomButtonProps {
   secondaryBg?: string
 }
 
+/**active에 boolean값을 넣어주세요
+기본 style은 "primary"
+secondary 스타일을 사용할 때 버튼 색상이 body의 색상과 다르면 tailwind속성을 넣어주세요
+ */
 export default function CustomButton({
   children,
   active,
@@ -23,28 +22,24 @@ export default function CustomButton({
   style = 'primary',
   secondaryBg = 'bg-body-bg',
 }: PropsWithChildren<CustomButtonProps>) {
-  /**active에 boolean값을 넣어주세요
-기본 style은 "primary"
-secondary 스타일을 사용할 때 버튼 색상이 body의 색상과 다르면 tailwind속성을 넣어주세요
-   */
+  const btnClass = () =>
+    match({ style, active })
+      .with({ style: 'primary', active: true }, () => 'bg-gradation text-white')
+      .with({ style: 'primary', active: false }, () => 'bg-unactive text-brand-gray-dark')
+      .with({ style: 'secondary', active: true }, () => 'bg-gradation')
+      .with({ style: 'secondary', active: false }, () => 'border-solid border-unactive text-brand-gray-dark')
+      .with({ style: 'tertiary', active: true }, () => 'border-solid border-brand-gray-light')
+      .with({ style: 'tertiary', active: false }, () => 'border-solid border-unactive text-brand-gray-dark')
+      .otherwise(() => '')
+
   return (
     <button
       type={type}
       onClick={active ? onClick : undefined}
       className={classNames(
         'relative flex h-[50px] w-full items-center justify-center rounded-lg border text-lg font-semibold md:h-[55px] xl:h-[65px]',
-        style === 'primary'
-          ? active
-            ? 'bg-gradation text-white'
-            : 'bg-unactive text-brand-gray-dark'
-          : style === 'secondary'
-            ? active
-              ? 'bg-gradation'
-              : 'border-solid border-unactive text-brand-gray-dark'
-            : active // style === "tertiary"일 때
-              ? 'border-solid border-brand-gray-light'
-              : 'border-solid border-unactive text-brand-gray-dark',
         !active && 'cursor-not-allowed',
+        btnClass(),
       )}
     >
       {style === 'secondary' && active ? (
