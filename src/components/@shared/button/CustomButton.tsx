@@ -1,11 +1,7 @@
 import classNames from 'classnames'
 import { Button } from 'flowbite-react'
-import { PropsWithChildren } from 'react'
-
-type ButtonType =
-  | { primary: true; secondary?: never; tertiary?: never }
-  | { secondary: true; primary?: never; tertiary?: never }
-  | { tertiary: true; primary?: never; secondary?: never }
+import { act, PropsWithChildren } from 'react'
+import { match } from 'ts-pattern'
 
 interface CustomButtonProps {
   active: boolean
@@ -14,6 +10,9 @@ interface CustomButtonProps {
   style?: 'primary' | 'secondary' | 'tertiary'
 }
 
+/**active에 boolean값을 넣어주세요
+ *기본 style은 "primary"
+ */
 export default function CustomButton({
   children,
   active,
@@ -21,9 +20,8 @@ export default function CustomButton({
   type = 'button',
   style = 'primary',
 }: PropsWithChildren<CustomButtonProps>) {
-  /**active에 boolean값을 넣어주세요
-   *기본 style은 "primary"
-   */
+  const btnClass = () => match({ style, active }).with({ style: 'primary', active: true }, () => '')
+
   return (
     <>
       <Button

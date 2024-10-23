@@ -1,21 +1,21 @@
-import { AxiosResponse } from 'axios'
 import axiosInstance from '../axiosInstance'
-import { ProductListTypes } from '@/dtos/ProductDto'
+import { ResponseProductListTypes } from '@/dtos/ProductDto'
 
-interface QueryParams {
+export interface ProductQueryParams {
   keyword?: string
   categoryId?: number
   order?: 'rating' | 'recent' | 'reviewCount'
   cursor?: number
 }
 
-interface ApiResponse {
-  data: ProductListTypes[]
-}
-
-export const getProduct = async ({ keyword, categoryId, order, cursor }: QueryParams) => {
+export const getProduct = async ({
+  keyword,
+  categoryId,
+  order,
+  cursor,
+}: ProductQueryParams): Promise<ResponseProductListTypes | null> => {
   try {
-    const res: AxiosResponse<ApiResponse> = await axiosInstance.get('products', {
+    const res = await axiosInstance.get('products', {
       params: {
         keyword: keyword,
         categoryId: categoryId,
@@ -23,9 +23,9 @@ export const getProduct = async ({ keyword, categoryId, order, cursor }: QueryPa
         cursor: cursor,
       },
     })
-    console.log(res.data)
     return res.data
   } catch (err) {
     console.log(err)
+    return null
   }
 }
