@@ -19,7 +19,7 @@ export default function ReviewerRanking() {
       <div className="flex flex-col">
         <div className="flex flex-col gap-5 xl:gap-[30px]">
           <div className="text-sm xl:text-base">리뷰어 랭킹</div>
-          <div className="w-100vw-sm flex gap-[15px] overflow-scroll pr-5 md:gap-5 xl:flex-col xl:gap-[30px]">
+          <div className="w-100vw-sm scroll-hidden flex gap-[15px] pr-5 md:w-auto md:gap-5 xl:flex-col xl:gap-[30px]">
             {rankData?.slice(0, 5).map((user, index) => (
               <Link href={`user/${user.id}`} key={user.id} className="flex shrink-0 items-center gap-2.5">
                 <span className="relative h-[36px] w-[36px] overflow-hidden rounded-full">
