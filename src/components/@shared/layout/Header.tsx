@@ -38,7 +38,7 @@ export default function Header({ children }: PropsWithChildren) {
   }, [])
   return (
     <>
-      <div className="relative">
+      <div className="relative z-10">
         <div className="fixed flex h-[70px] w-full items-center justify-between border-b border-[#252530] bg-body-bg px-5 md:h-[80px] md:px-[30px] xl:h-[100px] xl:px-[120px]">
           <button className="relative h-[11.27px] w-[17px] md:hidden">
             <Image src={iconHamburger} alt="카테고리 보기" fill />

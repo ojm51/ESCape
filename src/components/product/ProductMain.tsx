@@ -35,7 +35,7 @@ export default function ProductMain() {
   const ratingProducts = ratingData?.list.slice(0, 6) || null
   const allProducts = productData?.pages.flatMap((page) => page.list)
   return (
-    <div className="xl:h-100vh-xl scroll-hidden flex w-full max-w-[940px] flex-col gap-[60px] xl:min-w-[940px] xl:gap-[80px] xl:pt-[60px]">
+    <div className="xl:h-100vh-xl xl:scroll-hidden flex w-full max-w-[940px] flex-col gap-[60px] xl:min-w-[940px] xl:gap-[80px] xl:pt-[60px]">
       {productQueries.categoryId && (
         <>
           <ProductList productList={allProducts}>
@@ -54,13 +54,13 @@ export default function ProductMain() {
       )}
       {!productQueries.categoryId && !productQueries.keyword && (
         <>
-          <ProductList productList={hotProducts}>
+          <ProductList keyValue={1} productList={hotProducts}>
             <div>
               지금 핫한 테마
               <span className="bg-gradation bg-clip-text text-transparent">TOP 6</span>
             </div>
           </ProductList>
-          <ProductList productList={ratingProducts}>
+          <ProductList keyValue={100} productList={ratingProducts}>
             <div>별점이 높은 테마</div>
           </ProductList>
         </>
