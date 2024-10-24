@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { PropsWithChildren, useEffect, useState } from 'react'
+import { PropsWithChildren } from 'react'
 import Link from 'next/link'
 import iconHamburger from '@icons/icon_hamburger.svg'
 import logoBig from '@images/logo.svg'
@@ -11,26 +11,21 @@ import { useAuth } from '@/contexts/AuthProvider'
 
 export default function Header({ children }: PropsWithChildren) {
   const { user, logout } = useAuth()
-  const [isLogin, setIsLogin] = useState(false)
   const { pathname } = useRouter()
 
   const handleLogout = () => {
     logout()
   }
 
-  // 엑세스 토큰이 있으면 내프로필, 없으면 로그인
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken')
-    if (accessToken) {
-      setIsLogin(true)
-    } else {
-      setIsLogin(false)
-    }
-  }, [user])
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = defaultProfileImage.src
+  }
+
+  const isSignPath = pathname.includes('sign')
 
   return (
     <>
-      {!pathname.includes('sign') && (
+      {!isSignPath && (
         <div className="relative">
           <div className="fixed flex h-[70px] w-full items-center justify-between border-b border-[#252530] bg-body-bg px-5 md:h-[80px] md:px-[30px] xl:h-[100px] xl:px-[120px]">
             <button className="relative h-[11.27px] w-[17px] md:hidden">
@@ -38,12 +33,7 @@ export default function Header({ children }: PropsWithChildren) {
             </button>
             <div className="flex items-center gap-10">
               <Link href="/" className="relative h-[24px] w-[120px] md:h-[28px] md:w-[140px] xl:h-[34px] xl:w-[170px]">
-                <Image
-                  src={logoBig}
-                  alt="로고"
-                  layout="fill"
-                  objectFit="cover" 
-                />
+                <Image src={logoBig} alt="로고" width={120} height={24} />
               </Link>
               <Link href="/board" className="hidden md:block">
                 자유게시판
@@ -61,9 +51,9 @@ export default function Header({ children }: PropsWithChildren) {
                       <Image
                         src={user.image || defaultProfileImage}
                         alt="프로필 이미지"
-                        width={42} 
-                        height={42} 
-                        onError={(e) => (e.currentTarget.src = defaultProfileImage.src)} 
+                        width={42}
+                        height={42}
+                        onError={handleImageError}
                       />
                     </div>
                     {user.nickname}
@@ -83,7 +73,7 @@ export default function Header({ children }: PropsWithChildren) {
           </div>
         </div>
       )}
-      <div className={classNames(pathname.includes('sign') ? '' : 'pt-[70px] md:pt-[80px] xl:pt-[100px]')}>
+      <div className={classNames({ 'pt-[70px] md:pt-[80px] xl:pt-[100px]': !isSignPath })}>
         {children}
       </div>
     </>
