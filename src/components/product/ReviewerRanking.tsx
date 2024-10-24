@@ -2,9 +2,17 @@ import { getUsersRanking } from '@/libs/axios/product/reviewRankingApi'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import defaultProfile from '@images/logo_small_image.png'
+import { match } from 'ts-pattern'
+import classNames from 'classnames'
 
 export default function ReviewerRanking() {
   const { data: rankData } = useQuery({ queryKey: ['userRank'], queryFn: getUsersRanking })
+
+  const rankingColor = ({ rank }: { rank: number }) =>
+    match({ rank })
+      .with({ rank: 1 }, () => 'text-brand-pink bg-brand-pink ')
+      .with({ rank: 2 }, () => 'text-brand-green bg-brand-green ')
+      .otherwise(() => 'text-brand-gray-light bg-brand-gray-light')
   return (
     <div className="flex shrink-0 grow gap-5 border-l border-[#282530] pl-2 xl:gap-[30px] xl:pt-[45px]">
       <div className="flex w-full flex-col xl:items-center">
@@ -18,7 +26,12 @@ export default function ReviewerRanking() {
                 </span>
                 <div className="flex flex-col gap-[5.5px]">
                   <div className="flex items-center gap-[5px]">
-                    <span className="flex h-[16px] w-[26px] shrink-0 items-center justify-center rounded-[50px] bg-purple-400 text-[10px]">
+                    <span
+                      className={classNames(
+                        'flex h-[16px] w-[26px] shrink-0 items-center justify-center rounded-[50px] bg-opacity-10 text-[10px]',
+                        rankingColor({ rank: index + 1 }),
+                      )}
+                    >
                       {index + 1}등
                     </span>
                     <span>{user.nickname}</span>
