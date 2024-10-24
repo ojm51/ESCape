@@ -114,12 +114,12 @@ export default function Profile({ data: userData }: ProfileProps) {
       {isFollowModalOpen && (
         <Modal
           onClick={toggleFollowModal}
-          classNames="max-h-[550px] w-[335px] overflow-auto scrollbar-hide md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
+          modalFrameClassNames="max-h-[550px] w-[335px] overflow-auto scrollbar-hide md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
         >
           <FollowUserList
             name={nickname}
             title={`${modalType === '팔로워' ? '을 팔로우' : '이 팔로잉'}`}
-            followData={followData?.list}
+            followUserData={followData?.list}
           />
         </Modal>
       )}
@@ -127,7 +127,7 @@ export default function Profile({ data: userData }: ProfileProps) {
       {isEditProfileModalOpen && (
         <Modal
           onClick={toggleEditProfileModal}
-          classNames="max-h-[550px] w-[335px] overflow-auto scrollbar-hide md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
+          modalFrameClassNames="max-h-[550px] w-[335px] overflow-auto scrollbar-hide md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
         >
           <EditProfile />
         </Modal>
