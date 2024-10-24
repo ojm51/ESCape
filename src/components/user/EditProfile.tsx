@@ -4,7 +4,8 @@ import imageIcon from '@icons/image_icon.svg'
 import deleteIcon from '@icons/close_icon.svg'
 import CustomButton from '../@shared/button/CustomButton'
 
-const MAX_LENGTH = 300
+const INPUT_MAX_LENGTH = 10
+const TEXTAREA_MAX_LENGTH = 300
 
 interface EditProfileProps {
   onEdit: () => void
@@ -20,7 +21,7 @@ export default function EditProfile({ onEdit, image = '', nickname, description 
     description: description,
   })
   const [previewImage, setPreviewImage] = useState<string>(image)
-  const [inputCount, setInputCount] = useState<number>(0)
+  const [inputCount, setInputCount] = useState<number>(description.length)
 
   const isFormComplete = useMemo(() => {
     const { image, ...restValues } = formValues
@@ -35,20 +36,27 @@ export default function EditProfile({ onEdit, image = '', nickname, description 
     setPreviewImage(selectedImage)
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let inputValue = e.target.value
+    if (inputValue.length > INPUT_MAX_LENGTH) {
+      inputValue = inputValue.slice(0, INPUT_MAX_LENGTH)
+    }
     setFormValues((prevValues) => ({
       ...prevValues,
-      [e.target.name]: e.target.value,
+      [e.target.name]: inputValue,
     }))
   }
 
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    let inputValue = e.target.value
-    if (inputValue.length > MAX_LENGTH) {
-      inputValue = inputValue.slice(0, MAX_LENGTH)
+    let textareaValue = e.target.value
+    if (textareaValue.length > TEXTAREA_MAX_LENGTH) {
+      textareaValue = textareaValue.slice(0, TEXTAREA_MAX_LENGTH)
     }
-    setInputCount(inputValue.length)
-    handleInputChange(e)
+    setInputCount(textareaValue.length)
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [e.target.name]: textareaValue,
+    }))
   }
 
   const handleFileInputDelete = () => {
@@ -61,10 +69,10 @@ export default function EditProfile({ onEdit, image = '', nickname, description 
   return (
     <div className="flex w-full flex-col content-start items-stretch gap-5 md:gap-10">
       <h3 className="text-xl font-semibold leading-7 xl:text-2xl">프로필 편집</h3>
-      <section className="flex flex-col items-start justify-start gap-[10px]">
+      <section className="flex flex-col items-start justify-start gap-[10px] md:gap-[15px] xl:gap-5">
         <div className="flex content-start items-center">
           <label
-            className="relative inline-block h-[140px] w-[140px] cursor-pointer rounded-lg border border-unactive bg-[#252530]"
+            className="relative inline-block h-[140px] w-[140px] cursor-pointer rounded-lg border border-unactive bg-[#252530] md:h-[135px] md:w-[135px] xl:h-[160px] xl:w-[160px]"
             htmlFor="profileImage"
           >
             <div className="absolute left-1/2 top-1/2 float-left -translate-x-1/2 -translate-y-1/2 transform">
@@ -73,7 +81,7 @@ export default function EditProfile({ onEdit, image = '', nickname, description 
           </label>
           <input
             className="hidden"
-            value={formValues.image}
+            // value={formValues.image}
             id="profileImage"
             name="image"
             type="file"
@@ -109,21 +117,22 @@ export default function EditProfile({ onEdit, image = '', nickname, description 
           name="nickname"
           type="text"
           placeholder="닉네임을 입력해주세요"
+          maxLength={INPUT_MAX_LENGTH}
           onChange={handleInputChange}
         />
 
         <div className="relative w-full">
           <textarea
-            className={inputClassNames}
+            className={`${inputClassNames} scrollbar-hide`}
             value={formValues.description}
             id="description"
             name="description"
             placeholder="소개를 입력해 주세요"
-            maxLength={500}
+            maxLength={TEXTAREA_MAX_LENGTH}
             onChange={handleTextAreaChange}
           />
           <p className="absolute bottom-5 right-5 text-right text-sm font-normal text-brand-gray-dark">
-            <span>{inputCount}</span>/{MAX_LENGTH}
+            <span>{inputCount}</span>/{TEXTAREA_MAX_LENGTH}
           </p>
         </div>
       </section>
