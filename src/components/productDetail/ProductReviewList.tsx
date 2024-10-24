@@ -4,6 +4,7 @@ import StarRating from './StarRating'
 import axios from 'axios'
 import { ProductReviewListTypes } from '@/dtos/ProductDto'
 import DefaultImage from '@images/default-image.png'
+import { FaThumbsUp } from 'react-icons/fa'
 
 const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
   const [reviews, setReviews] = useState<ProductReviewListTypes[]>([]) // 상태에 ReviewListTypes 타입 사용
@@ -41,7 +42,6 @@ const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ pr
 
   return (
     <div className={'mx-auto max-w-[940px]'}>
-      {/* 제목과 드롭다운을 같은 줄에 배치 */}
       <div className="mb-[30px] flex items-center justify-between">
         <h3 className={'text-lg font-semibold text-brand-white'}>{'상품 통계'}</h3>
         <SortDropdown productId={productId} teamId={teamId} order={handleSortChange} />
@@ -54,44 +54,53 @@ const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ pr
       ) : (
         <ul>
           {reviews.map((review) => (
-            <li key={review.id} className="mb-4 rounded-lg bg-gray-800 p-4">
-              {/* 사용자 정보 */}
-              <div className="mb-2 flex items-center">
-                <img
-                  src={review.user.image || DefaultImage.src} // 이미지가 없을 경우 기본 이미지 사용
-                  alt={review.user.nickname}
-                  className="mr-3 h-10 w-10 rounded-full"
-                />
-                <div>
-                  <p className="font-bold">{review.user.nickname}</p>
-                  <p className="text-sm text-gray-400">{new Date(review.createdAt).toLocaleDateString()}</p>
-                </div>
-              </div>
-
-              {/* 리뷰 내용 */}
-              <p className="mb-2">{review.content}</p>
-
-              {/* 리뷰 이미지 */}
-              <div className="mb-2 flex space-x-2">
-                {review.reviewImages.map((image) => (
+            <li key={review.id} className="relative mb-4 rounded-lg bg-gray-800 p-6">
+              <div className="flex justify-between">
+                {/* 왼쪽 영역 - 사용자 정보 */}
+                <div className="flex items-start">
                   <img
-                    key={image.id}
-                    src={image.source}
-                    alt={`Review Image ${image.id}`}
-                    className="h-20 w-20 rounded object-cover"
-                    onError={(e) => {
-                      e.currentTarget.src = DefaultImage.src
-                    }}
+                    src={review.user.image || DefaultImage.src} // 이미지가 없을 경우 기본 이미지 사용
+                    alt={review.user.nickname}
+                    className="mr-4 h-12 w-12 rounded-full object-cover"
                   />
-                ))}
-              </div>
 
-              {/* 좋아요 및 별점 */}
-              <div className="flex items-center justify-between">
-                <StarRating rating={review.rating} color="yellow" />
-                <div className="flex items-center space-x-2">
-                  <span>좋아요: {review.likeCount}</span>
-                  {review.isLiked ? <span className="text-red-500">❤️</span> : <span className="text-gray-400">♡</span>}
+                  {/* 사용자 이름 및 별점 */}
+                  <div className="flex flex-col">
+                    <p className="font-bold text-white">{review.user.nickname}</p>
+                    <StarRating rating={Number(review.rating)} color="#FFD700" />
+                  </div>
+                </div>
+
+                {/* 가운데 영역 - 리뷰 텍스트, 이미지, 작성 날짜 */}
+                <div className="mx-8 flex flex-grow flex-col">
+                  {/* 리뷰 텍스트 */}
+                  <p className="mb-3 text-white">{review.content}</p>
+
+                  {/* 리뷰 이미지 */}
+                  <div className="mb-2 flex space-x-2">
+                    {review.reviewImages.map((image) => (
+                      <img
+                        key={image.id}
+                        src={image.source}
+                        alt={`Review Image ${image.id}`}
+                        className="h-16 w-16 rounded object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = DefaultImage.src
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  {/* 작성 날짜 */}
+                  <p className="text-gray-400">{new Date(review.createdAt).toLocaleDateString()}</p>
+                </div>
+
+                {/* 오른쪽 영역 - 좋아요 */}
+                <div className="flex flex-col items-end">
+                  <div className="mt-auto flex items-center space-x-1">
+                    <FaThumbsUp className="text-blue-500" />
+                    <span className="font-semibold text-blue-500">{review.likeCount}</span>
+                  </div>
                 </div>
               </div>
             </li>
