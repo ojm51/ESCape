@@ -4,6 +4,7 @@ import Image from 'next/image'
 import defaultProfile from '@images/logo_small_image.png'
 import { match } from 'ts-pattern'
 import classNames from 'classnames'
+import Link from 'next/link'
 
 export default function ReviewerRanking() {
   const { data: rankData } = useQuery({ queryKey: ['userRank'], queryFn: getUsersRanking })
@@ -14,13 +15,13 @@ export default function ReviewerRanking() {
       .with({ rank: 2 }, () => 'text-brand-green bg-brand-green ')
       .otherwise(() => 'text-brand-gray-light bg-brand-gray-light')
   return (
-    <div className="flex shrink-0 grow gap-5 border-l border-[#282530] pl-2 xl:gap-[30px] xl:pt-[45px]">
-      <div className="flex w-full flex-col xl:items-center">
+    <div className="scroll-hidden w-100vw-sm flex w-[100vw] shrink-0 grow flex-nowrap gap-5 border-l border-[#282530] md:w-auto xl:gap-[30px] xl:pt-[45px]">
+      <div className="flex flex-col xl:items-center">
         <div className="flex flex-col gap-5 xl:gap-[30px]">
           <div className="text-sm xl:text-base">리뷰어 랭킹</div>
-          <div className="scroll-hidden flex gap-[15px] md:gap-5 xl:flex-col xl:gap-[30px]">
+          <div className="scroll-hidden flex gap-[15px] pr-5 md:gap-5 xl:flex-col xl:gap-[30px]">
             {rankData?.slice(0, 5).map((user, index) => (
-              <div key={user.id} className="flex shrink-0 items-center gap-2.5">
+              <Link href={`user/${user.id}`} key={user.id} className="flex shrink-0 items-center gap-2.5">
                 <span className="relative h-[36px] w-[36px] overflow-hidden rounded-full">
                   <Image fill src={user.image || defaultProfile} alt="프로필이미지" />
                 </span>
@@ -41,7 +42,7 @@ export default function ReviewerRanking() {
                     <span> 리뷰 {user.reviewCount}</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
