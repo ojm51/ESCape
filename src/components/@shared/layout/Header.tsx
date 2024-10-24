@@ -41,8 +41,8 @@ export default function Header({ children }: PropsWithChildren) {
                 <Image
                   src={logoBig}
                   alt="로고"
-                  fill
-                  sizes="(max-width: 768px) 120px, (max-width: 1280px) 140px, 170px"
+                  layout="fill"
+                  objectFit="cover" 
                 />
               </Link>
               <Link href="/board" className="hidden md:block">
@@ -61,7 +61,9 @@ export default function Header({ children }: PropsWithChildren) {
                       <Image
                         src={user.image || defaultProfileImage}
                         alt="프로필 이미지"
-                        onError={(e) => (e.currentTarget.src = defaultProfileImage.src)}
+                        width={42} 
+                        height={42} 
+                        onError={(e) => (e.currentTarget.src = defaultProfileImage.src)} 
                       />
                     </div>
                     {user.nickname}
