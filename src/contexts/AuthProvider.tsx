@@ -62,11 +62,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (formData: SignInForm) => {
     const isSignInSuccess = await signIn(formData)
-    toaster("success", "로그인에 성공하였습니다.");
     if (!isSignInSuccess) { 
-      toaster("success", "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.")
-      return false
+      return { success: false, message: "이메일 혹은 비밀번호를 확인해주세요." }
     }
+    toaster("success", "로그인에 성공하였습니다.");
     await getMe()
     return true
   }
