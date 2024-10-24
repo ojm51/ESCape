@@ -4,7 +4,7 @@ import StarRating from './StarRating'
 import axios from 'axios'
 import { ProductReviewListTypes } from '@/dtos/ProductDto'
 import DefaultImage from '@images/default-image.png'
-import { FaThumbsUp } from 'react-icons/fa'
+import ReviewLikeButton from './ReviewLikeButton'
 
 const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
   const [reviews, setReviews] = useState<ProductReviewListTypes[]>([]) // 상태에 ReviewListTypes 타입 사용
@@ -41,12 +41,13 @@ const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ pr
   }
 
   return (
-    <div className={'mx-auto max-w-[940px]'}>
+    <div className={'relative z-10 mx-auto max-w-[940px]'}>
+      {' '}
+      {/* z-index를 낮게 설정 */}
       <div className="mb-[30px] flex items-center justify-between">
         <h3 className={'text-lg font-semibold text-brand-white'}>{'상품 통계'}</h3>
         <SortDropdown productId={productId} teamId={teamId} order={handleSortChange} />
       </div>
-
       {loading ? (
         <p>로딩 중...</p>
       ) : error ? (
@@ -98,8 +99,13 @@ const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ pr
                 {/* 오른쪽 영역 - 좋아요 */}
                 <div className="flex flex-col items-end">
                   <div className="mt-auto flex items-center space-x-1">
-                    <FaThumbsUp className="text-blue-500" />
-                    <span className="font-semibold text-blue-500">{review.likeCount}</span>
+                    <ReviewLikeButton
+                      reviewId={review.id}
+                      productId={productId} // productId 내려줌
+                      teamId={teamId} // teamId 내려줌
+                      initialIsLiked={review.isLiked}
+                      initialLikeCount={review.likeCount}
+                    />
                   </div>
                 </div>
               </div>
