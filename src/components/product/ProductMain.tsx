@@ -27,6 +27,7 @@ export default function ProductMain() {
   const { keyword } = router.query
 
   useEffect(() => {
+    if (!keyword) handleKeyword('')
     if (keyword) handleKeyword(keyword as string)
   }, [keyword])
 

@@ -4,7 +4,9 @@ interface InfiniteScrollParams {
   loadMore: () => void
   hasMore: boolean
 }
-
+/** 무한스크롤 훅입니다, 반환값 targetRef를 화면 맨 아래요소에 배치하고
+  인자로 loadMore(실행할 콜백), hasMore이 false가 되면 무한스크롤이 종료됩니다.
+*/
 const useInfiniteScroll = ({ loadMore, hasMore }: InfiniteScrollParams) => {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const targetRef = useRef<HTMLDivElement | null>(null)

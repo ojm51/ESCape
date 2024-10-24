@@ -16,9 +16,16 @@ export default function Header({ children }: PropsWithChildren) {
   const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInputValue(e.target.value)
   }
+
+  //헤더에서 검색을 할 경우 Product페이지로 쿼리스트링과 함께 이동합니다.
   const onSubmitSearchInput = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!searchInputValue) {
+      router.push('/product')
+      return
+    }
     router.push({ pathname: '/product', query: { keyword: searchInputValue } })
+    setSearchInputValue('')
   }
 
   useEffect(() => {
