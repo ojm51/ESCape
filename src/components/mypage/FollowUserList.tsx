@@ -22,7 +22,7 @@ export default function FollowUserList({ name, title, followUserData, nextCursor
           ))}
         </div>
       ) : (
-        <p className="font-normal text-brand-gray-dark">아직 아무도 없습니다</p>
+        <p className="font-normal text-brand-gray-dark">아직 없습니다</p>
       )}
     </div>
   )

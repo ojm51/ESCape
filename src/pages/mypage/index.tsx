@@ -3,7 +3,7 @@ import { getMyInfo } from '@/libs/axios/mypage/apis'
 import { Spinner } from 'flowbite-react'
 import Profile from '@/components/mypage/Profile'
 import ActivityCardList from '@/components/mypage/ActivityCardList'
-import ThemeCardList from '@/components/mypage/ThemeCardList'
+import ProductCardList from '@/components/mypage/ProductCardList'
 import { UserTypes } from '@/dtos/UserDto'
 
 const defaultUserData: UserTypes = {
@@ -45,7 +45,7 @@ export default function MyPage() {
           {/* {!!data ? <ActivityCardList data={data} /> : <p>failed..</p>} */}
           <ActivityCardList data={data ?? defaultUserData} />
         </section>
-        <ThemeCardList data={data ?? defaultUserData} />
+        <ProductCardList data={data ?? defaultUserData} />
       </div>
     </>
   )

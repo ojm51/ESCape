@@ -5,11 +5,11 @@ import commentIcon from '@icons/comment_icon.svg'
 import heartIcon from '@icons/heart_icon.svg'
 import { ProductTypes } from '@/dtos/ProductDto'
 
-interface ThemeCardProps {
+interface ProductCardProps {
   data: ProductTypes
 }
 
-export default function ThemeCard({ data }: ThemeCardProps) {
+export default function ProductCard({ data }: ProductCardProps) {
   const { image, name, rating, reviewCount, favoriteCount } = data
   const cardDetailContents = [
     {

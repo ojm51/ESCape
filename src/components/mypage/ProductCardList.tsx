@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
-import ThemeCard from '../@shared/themeCard/ThemeCard'
+import ProductCard from '../@shared/productCard/ProductCard'
 import { ProductDetailTypes } from '@/dtos/ProductDto'
 import { useQuery } from '@tanstack/react-query'
 import { getUserProducts } from '@/libs/axios/mypage/apis'
 import { UserTypes } from '@/dtos/UserDto'
 import { Spinner } from 'flowbite-react'
 
-interface ThemeCardListProps {
+interface ProductCardListProps {
   data: UserTypes
 }
 
-export default function ThemeCardList({ data }: ThemeCardListProps) {
+export default function ProductCardList({ data }: ProductCardListProps) {
   const [activeMenu, setActiveMenu] = useState<number>(0)
-  const themeMenuContents = [
+  const productMenuContents = [
     {
       id: 0,
       title: '리뷰 남긴 테마',
@@ -27,14 +27,14 @@ export default function ThemeCardList({ data }: ThemeCardListProps) {
   const {
     isPending,
     isError,
-    data: themeList,
+    data: productList,
   } = useQuery({
-    queryKey: ['themeType', themeMenuContents[activeMenu].type],
-    queryFn: () => getUserProducts({ userId: data.id, type: themeMenuContents[activeMenu].type }),
+    queryKey: ['productType', productMenuContents[activeMenu].type],
+    queryFn: () => getUserProducts({ userId: data.id, type: productMenuContents[activeMenu].type }),
     enabled: !!data.id,
   })
 
-  const handleThemeMenuClicked = (selectedId: number) => {
+  const handleProductMenuClicked = (selectedId: number) => {
     setActiveMenu(selectedId)
   }
 
@@ -44,24 +44,24 @@ export default function ThemeCardList({ data }: ThemeCardListProps) {
   return (
     <section>
       <div className="mb-[30px] flex items-center justify-normal gap-10">
-        {themeMenuContents.map((themeMenuContent) => (
+        {productMenuContents.map((productMenuContent) => (
           <button
-            key={themeMenuContent.id}
-            className={`text-lg xl:text-xl ${activeMenu === themeMenuContent.id ? 'font-semibold text-brand-white' : 'font-normal text-brand-gray-dark'}`}
-            onClick={() => handleThemeMenuClicked(themeMenuContent.id)}
+            key={productMenuContent.id}
+            className={`text-lg xl:text-xl ${activeMenu === productMenuContent.id ? 'font-semibold text-brand-white' : 'font-normal text-brand-gray-dark'}`}
+            onClick={() => handleProductMenuClicked(productMenuContent.id)}
           >
-            {themeMenuContent.title}
+            {productMenuContent.title}
           </button>
         ))}
       </div>
-      {themeList && themeList.length > 0 ? (
+      {productList && productList.length > 0 ? (
         <div className="grid grid-cols-2 gap-[15px] xl:grid-cols-3 xl:gap-5">
-          {themeList.map((theme) => (
-            <ThemeCard data={theme} />
+          {productList.map((product) => (
+            <ProductCard data={product} />
           ))}
         </div>
       ) : (
-        <p className="font-normal text-brand-gray-dark">아직 {themeMenuContents[activeMenu].title}가 없습니다</p>
+        <p className="font-normal text-brand-gray-dark">아직 {productMenuContents[activeMenu].title}가 없습니다</p>
       )}
     </section>
   )
