@@ -5,20 +5,20 @@ import { FollowListTypes } from '@/dtos/UserDto'
 interface FollowUserListProps {
   name: string
   title: string
-  followData: FollowListTypes[] | undefined
+  followUserData: FollowListTypes[] | undefined
   nextCursor?: number
 }
 
-export default function FollowUserList({ name, title, followData, nextCursor }: FollowUserListProps) {
+export default function FollowUserList({ name, title, followUserData, nextCursor }: FollowUserListProps) {
   return (
     <div>
       <h3 className="mb-5 text-xl font-semibold leading-7 md:mb-8 xl:text-2xl">
         {name}님{title}하는 유저
       </h3>
-      {followData && followData.length > 0 ? (
+      {followUserData && followUserData.length > 0 ? (
         <div className="flex flex-col content-center items-start gap-5">
-          {followData.map((follow) => (
-            <FollowUser key={follow.id} data={follow.follow} />
+          {followUserData.map((followUser) => (
+            <FollowUser key={followUser.id} followUserData={followUser.follow} />
           ))}
         </div>
       ) : (
