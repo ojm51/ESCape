@@ -18,7 +18,7 @@ export default function FollowUserList({ name, title, list: userData, nextCursor
       {userData && userData.length > 0 ? (
         <div className="flex flex-col content-center items-start gap-5">
           {userData.map((user) => (
-            <FollowUser key={user.id} data={user.follow} />
+            <FollowUser key={user.id} followUserData={user.follow} />
           ))}
         </div>
       ) : (
