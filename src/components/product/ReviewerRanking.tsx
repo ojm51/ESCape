@@ -15,11 +15,11 @@ export default function ReviewerRanking() {
       .with({ rank: 2 }, () => 'text-brand-green bg-brand-green ')
       .otherwise(() => 'text-brand-gray-light bg-brand-gray-light')
   return (
-    <div className="scroll-hidden w-100vw-sm flex w-[100vw] shrink-0 grow flex-nowrap gap-5 border-l border-[#282530] md:w-auto xl:gap-[30px] xl:pt-[45px]">
-      <div className="flex flex-col xl:items-center">
+    <div className="w-100vw-sm flex w-[100vw] shrink-0 grow flex-nowrap gap-5 border-l border-[#282530] md:w-auto xl:justify-center xl:gap-[30px] xl:pt-[45px]">
+      <div className="flex flex-col">
         <div className="flex flex-col gap-5 xl:gap-[30px]">
           <div className="text-sm xl:text-base">리뷰어 랭킹</div>
-          <div className="scroll-hidden flex gap-[15px] pr-5 md:gap-5 xl:flex-col xl:gap-[30px]">
+          <div className="w-100vw-sm flex gap-[15px] overflow-scroll pr-5 md:gap-5 xl:flex-col xl:gap-[30px]">
             {rankData?.slice(0, 5).map((user, index) => (
               <Link href={`user/${user.id}`} key={user.id} className="flex shrink-0 items-center gap-2.5">
                 <span className="relative h-[36px] w-[36px] overflow-hidden rounded-full">
