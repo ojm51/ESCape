@@ -1,23 +1,36 @@
 import Image from 'next/image'
 import { ChangeEvent, FormEvent, PropsWithChildren, useEffect, useState } from 'react'
+
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import iconHamburger from '@icons/icon_hamburger.svg'
-import logoBig from '@images/logo_big_image.png'
+import logoBig from '@images/logo.svg'
 import iconGlass from '@icons/icon_glass.svg'
 import iconSignin from '@icons/icon_signin.svg'
+import defaultProfileImage from '@images/user_default.svg'
+import { useRouter } from 'next/router'
+import classNames from 'classnames'
+import { useAuth } from '@/contexts/AuthProvider'
 
 export default function Header({ children }: PropsWithChildren) {
-  const [isLogin, setIsLogin] = useState(false)
-  const [searchInputValue, setSearchInputValue] = useState('')
 
+  const { user, logout } = useAuth()
+  const { pathname } = useRouter()
+  const [searchInputValue, setSearchInputValue] = useState('')
   const router = useRouter()
+  
+  const handleLogout = () => {
+    logout()
+  }
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = defaultProfileImage.src
+  }
+
   const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInputValue(e.target.value)
   }
-
-  //헤더에서 검색을 할 경우 Product페이지로 쿼리스트링과 함께 이동합니다.
   const onSubmitSearchInput = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!searchInputValue) {
@@ -27,15 +40,8 @@ export default function Header({ children }: PropsWithChildren) {
     router.push({ pathname: '/product', query: { keyword: searchInputValue } })
     setSearchInputValue('')
   }
+  }, []
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken')
-    if (accessToken) {
-      setIsLogin(true)
-    } else {
-      setIsLogin(false)
-    }
-  }, [])
   return (
     <>
       <div className="relative z-10">
@@ -58,20 +64,34 @@ export default function Header({ children }: PropsWithChildren) {
                 <input value={searchInputValue} onChange={handleSearchInput} placeholder="테마를 검색해 보세요" />
               </form>
             </div>
-            {isLogin ? (
-              <Link href="/mypage">내 프로필</Link>
-            ) : (
-              <>
-                <Link href="/signin">로그인</Link>
-                <Link href="/signup">회원가입</Link>
-              </>
-            )}
+            {user ? (
+                <>
+                  <Link href="/mypage" className="flex items-center gap-3">
+                    <div className="relative h-[42px] w-[42px] rounded-full overflow-hidden bg-brand-black-light">
+                      <Image
+                        src={user.image || defaultProfileImage}
+                        alt="프로필 이미지"
+                        width={42}
+                        height={42}
+                        onError={handleImageError}
+                      />
+                    </div>
+                    {user.nickname}
+                  </Link>
+                  <button type="button" className="text-white" onClick={handleLogout}>로그아웃</button>
+                </>
+              ) : (
+                <>
+                  <Link href="/signin">로그인</Link>
+                  <Link href="/signup">회원가입</Link>
+                </>
+              )}
           </div>
           <div className="flex items-center gap-5 md:hidden">
             <button className="relative h-[18.38px] w-[18.38px]">
               <Image src={iconGlass} alt="테마검색" fill />
             </button>
-            {isLogin ? (
+            {user ? (
               <span>유저프로필</span>
             ) : (
               <Link href="/signin" className="relative h-[18.38px] w-[18.38px]">
