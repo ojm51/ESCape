@@ -1,9 +1,7 @@
 import Image from 'next/image'
 import { ChangeEvent, FormEvent, PropsWithChildren, useEffect, useState } from 'react'
-
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
 import iconHamburger from '@icons/icon_hamburger.svg'
 import logoBig from '@images/logo.svg'
 import iconGlass from '@icons/icon_glass.svg'
@@ -27,6 +25,7 @@ export default function Header({ children }: PropsWithChildren) {
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = defaultProfileImage.src
   }
+
 
   const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInputValue(e.target.value)
