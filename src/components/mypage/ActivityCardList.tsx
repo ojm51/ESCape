@@ -26,7 +26,7 @@ export default function ActivityCardList({ data }: ActivityCardListProps) {
     {
       title: '관심 지역',
       icon: '',
-      value: mostFavoriteCategory.name,
+      value: !!mostFavoriteCategory ? mostFavoriteCategory.name : '-',
       isCategory: true,
     },
   ]
@@ -37,6 +37,7 @@ export default function ActivityCardList({ data }: ActivityCardListProps) {
       <div className="grid grid-cols-3 gap-[10px] xl:gap-5">
         {activityCardContents.map((activityCardContent) => (
           <ActivityCard
+            key={activityCardContent.title}
             title={activityCardContent.title}
             icon={activityCardContent.icon}
             value={activityCardContent.value}
