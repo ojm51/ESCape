@@ -47,13 +47,13 @@ export default function ProductMain() {
       )}
       {!category && !keyword && (
         <>
-          <ProductList productList={hotProducts}>
+          <ProductList keyValue={1} productList={hotProducts}>
             <div>
               지금 핫한 테마
               <span className="bg-gradation bg-clip-text text-transparent">TOP 6</span>
             </div>
           </ProductList>
-          <ProductList productList={ratingProducts}>
+          <ProductList keyValue={100} productList={ratingProducts}>
             <div>별점이 높은 테마</div>
           </ProductList>
         </>
