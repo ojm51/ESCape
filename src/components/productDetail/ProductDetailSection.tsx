@@ -8,7 +8,7 @@ import CustomButton from '../@shared/button/CustomButton'
 //import EscapePoster from '@images/temp5_image_Escape.png'
 import EscapePoster from '@images/temp4_Image_Escape.jpg'
 
-const EscapeDetailSection: React.FC = () => {
+const ProductDetailSection: React.FC = () => {
   const [FeatureTags] = useState([
     { label: '지역', value: '강남' },
     { label: '시간', value: '60 min' },
@@ -127,4 +127,4 @@ const EscapeDetailSection: React.FC = () => {
   )
 }
 
-export default EscapeDetailSection
+export default ProductDetailSection

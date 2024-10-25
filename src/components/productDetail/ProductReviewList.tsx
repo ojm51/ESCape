@@ -49,9 +49,9 @@ const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ pr
   }
 
   return (
-    <div className={'relative z-10 mx-auto max-w-[940px]'}>
+    <div className={'relative z-0 mx-auto max-w-[940px]'}>
       <div className="mb-[30px] flex items-center justify-between">
-        <h3 className={'text-lg font-semibold text-brand-white'}>{'상품 통계'}</h3>
+        <h3 className={'text-lg font-semibold'}>{'상품 리뷰'}</h3>
         <SortDropdown productId={productId} teamId={teamId} order={handleSortChange} />
       </div>
       {loading ? (
@@ -61,21 +61,26 @@ const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ pr
       ) : (
         <ul>
           {reviews.map((review) => (
-            <li key={review.id} className="relative mb-4 rounded-lg bg-gray-800 p-6">
+            <li key={review.id} className="relative mb-4 rounded-lg border border-unactive bg-[#252530] p-6">
               <div className="flex justify-between">
                 {/* 왼쪽 영역 - 사용자 정보 */}
                 <div className="flex items-start">
-                  {/* 프로필 사진 클릭 시 handleProfileClick 호출 */}
                   <img
-                    src={review.user.image || DefaultImage.src} // 이미지가 없을 경우 기본 이미지 사용
+                    src={review.user.image || DefaultImage.src}
                     alt={review.user.nickname}
-                    className="mr-4 h-12 w-12 cursor-pointer rounded-full object-cover"
-                    onClick={() => handleProfileClick(review.user.id)} // 클릭 시 해당 유저 페이지로 이동
+                    className={`mr-4 h-12 w-12 cursor-pointer rounded-full object-cover ${
+                      review.user.image ? '' : 'border-2 border-unactive'
+                    }`}
+                    onClick={() => handleProfileClick(review.user.id)}
+                    onError={(e) => {
+                      e.currentTarget.src = DefaultImage.src
+                      e.currentTarget.classList.add('border-2', 'border-unactive')
+                    }}
                   />
 
                   {/* 사용자 이름 및 별점 */}
-                  <div className="flex flex-col">
-                    <p className="font-bold text-white">{review.user.nickname}</p>
+                  <div className="flex w-[120px] flex-col">
+                    <p className="truncate font-bold text-white">{review.user.nickname}</p>
                     <StarRating rating={Number(review.rating)} color="#FFD700" />
                   </div>
                 </div>
