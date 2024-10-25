@@ -1,11 +1,10 @@
+import { useEffect } from 'react'
 import useProducts from '@/hooks/useProducts'
 import ProductList from './ProductList'
-import { CATEGORY_MAPPING } from '@/libs/constants/category'
 import useInfiniteProducts from '@/hooks/useInfiniteProduct'
 import useInfiniteScroll from '@/hooks/useInfiniteScroll'
-
-import { useEffect } from 'react'
 import useRouteHandler from '@/hooks/useRouteHandler'
+import { CATEGORY_DATA } from '@/libs/constants/category'
 
 export default function ProductMain() {
   const { keyword, order, category } = useRouteHandler()
@@ -24,7 +23,7 @@ export default function ProductMain() {
   })
 
   useEffect(() => {}, [keyword, order, category])
-
+  const nowCategory = CATEGORY_DATA.find((item) => item.id === Number(category))
   const hotProducts = reviewCountData?.list.slice(0, 6) || null
   const ratingProducts = ratingData?.list.slice(0, 6) || null
   const allProducts = productData?.pages.flatMap((page) => page.list)
@@ -33,7 +32,7 @@ export default function ProductMain() {
       {category && (
         <>
           <ProductList productList={allProducts}>
-            <div>'{CATEGORY_MAPPING[`${category}`]}'의 모든 테마</div>
+            <div>'{nowCategory?.name}'의 모든 테마</div>
           </ProductList>
           <div ref={targetRef} className="mb-4"></div>
         </>
