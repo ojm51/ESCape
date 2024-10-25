@@ -4,8 +4,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ReactNode } from 'react'
 import { AuthProvider } from '@/contexts/AuthProvider'
+
 import ToasterProvider from "@/contexts/ToasterProvider";
-import Header from '@/components/@shared/layout/Header'
+import Layout from '@/components/@shared/layout/Layout'
+
 
 interface ProvidersProps {
   children: ReactNode
@@ -24,11 +26,8 @@ function Providers({ children }: ProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ToasterProvider>
-      <AuthProvider>
-        <Header>
-          {children}
+        <AuthProvider>
           {process.env.NODE_ENV !== 'production' && <ReactQueryDevtools initialIsOpen={false} />}
-        </Header>
         </AuthProvider>
        </ToasterProvider>
     </QueryClientProvider>
@@ -38,7 +37,9 @@ function Providers({ children }: ProvidersProps) {
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Providers>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </Providers>
   )
 }
