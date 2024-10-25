@@ -3,35 +3,26 @@ import { useEffect, useState } from 'react'
 import FeatureTag from './FeatureTag'
 import { IoChatbubbleSharp } from 'react-icons/io5'
 import { IoMdShare } from 'react-icons/io'
-import { FaRegHeart, FaHeart } from 'react-icons/fa'
 import CustomButton from '../@shared/button/CustomButton'
-//import EscapePoster from '@images/temp5_image_Escape.png'
-import EscapePoster from '@images/temp4_Image_Escape.jpg'
+import axios from 'axios'
+import FavoriteButton from './FavoriteButton'
+import { ProductDetailTypes } from '@/dtos/ProductDto'
 
-const ProductDetailSection: React.FC = () => {
-  const [FeatureTags] = useState([
-    { label: '지역', value: '강남' },
-    { label: '시간', value: '60 min' },
-    { label: '난이도', value: 5, isStarRating: true },
-    { label: '공포도', value: 4, isStarRating: true },
-    { label: '활동성', value: 3, isStarRating: true },
-  ])
-  const [viewCount, setViewCount] = useState(0)
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(true) // 로그인 여부 상태, 실제 구현 시 변경 필요
+const EscapeDetailSection: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
+  const [productDetail, setProductDetail] = useState<ProductDetailTypes | null>(null)
 
   useEffect(() => {
-    // 화면에 접근할 때마다 조회수 증가
-    setViewCount((prev) => prev + 1)
-  }, [])
-
-  const handleFavoriteClick = () => {
-    if (!isLoggedIn) {
-      alert('로그인이 필요합니다.')
-      return
+    // productId와 teamId로 제품 세부 정보를 불러오기
+    const fetchProductDetails = async () => {
+      try {
+        const response = await axios.get(`/api/product/${productId}?teamId=${teamId}`)
+        setProductDetail(response.data)
+      } catch (error) {
+        console.error('제품 세부 정보 불러오기에 실패했습니다:', error)
+      }
     }
-    setIsFavorite((prev) => !prev)
-  }
+    fetchProductDetails()
+  }, [productId, teamId])
 
   const handleShareClick = () => {
     const shareUrl = window.location.href
@@ -40,36 +31,29 @@ const ProductDetailSection: React.FC = () => {
   }
 
   const handleReviewClick = () => {
-    if (!isLoggedIn) {
-      alert('로그인이 필요합니다.')
-      return
-    }
     alert('리뷰 작성 모달이 나타납니다.')
   }
 
   const handleKakaoShare = () => {
     alert('카카오톡 공유 기능이 호출되었습니다.')
-    // 카카오톡 공유 기능 구현 부분
+    // 카카오톡 공유 기능 구현
   }
+
+  if (!productDetail) return <div>Loading...</div>
 
   return (
     <div className="mx-auto flex max-w-[940px] flex-col rounded-md pt-6 text-white lg:flex-row">
       <div className="mb-4 flex-shrink-0 lg:mb-0 lg:mr-6">
-        <Image src={EscapePoster} alt="콜러 포스터" className="h-48 w-48 rounded-md object-fill" />
+        <Image src={productDetail.image} alt={productDetail.name} className="h-48 w-48 rounded-md object-fill" />
       </div>
 
-      {/* Escape Information */}
+      {/* Escape 정보 */}
       <div className="flex w-full flex-col justify-between">
-        {/* Escape Title and Favorite Button */}
+        {/* Escape 제목 및 찜하기 버튼 */}
         <div className="mb-2 flex items-center justify-between">
           <div className="flex items-center">
-            <h2 className="text-2xl font-bold">콜러</h2>
-            <button
-              onClick={handleFavoriteClick}
-              className="ml-4 flex items-center justify-center rounded-lg text-red-500 hover:text-red-600"
-            >
-              {isFavorite ? <FaHeart size={24} /> : <FaRegHeart size={24} />}
-            </button>
+            <h2 className="text-2xl font-bold">{productDetail.name}</h2>
+            <FavoriteButton productId={productId} teamId={teamId.toString()} isFavorite={productDetail.isFavorite} />
           </div>
           <div className="flex space-x-4">
             <button
@@ -87,33 +71,23 @@ const ProductDetailSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Escape Location */}
-        <p className="mb-2 text-lg text-[#A0A0A0]">제로월드 강남점</p>
+        {/* Escape 위치 */}
+        <p className="mb-2 text-lg text-[#A0A0A0]">{`${productDetail.description.loc} ${productDetail.description.spot}`}</p>
 
-        {/* Escape Description */}
+        {/* Escape 설명 */}
         <div className="mb-4">
-          <p className="text-white">
-            우연히 당신의 손에 들어온 초대장!
-            <br />
-            그것은 마녀의 집으로 들어갈 수 있는 비밀의 초대장이었다!
-            <br />
-            호기심을 갖고 마녀의 집으로 들어간 순간, 문은 굳게 닫혀버렸다.
-            <br />
-            집을 둘러보던 중, 마녀의 비밀을 알게 되는데..
-            <br />이 초대장은 어떻게 당신에게 오게 되었을까?
-            <br />
-            과연 당신은 마녀의 집에서 탈출할 수 있을까?
-          </p>
+          <p className="text-white">{productDetail.description.des}</p>
         </div>
 
         {/* FeatureTags */}
         <div className="mb-4 flex flex-wrap gap-4">
-          {FeatureTags.map((tag, index) => (
-            <FeatureTag key={index} label={tag.label} value={tag.value} isStarRating={tag.isStarRating} />
-          ))}
+          <FeatureTag label="난이도" value={productDetail.description.lev} isStarRating={true} />
+          <FeatureTag label="시간" value={`${productDetail.description.time} min`} />
+          <FeatureTag label="공포도" value={productDetail.description.hor} isStarRating={true} />
+          <FeatureTag label="활동성" value={productDetail.description.act} isStarRating={true} />
         </div>
 
-        {/* Buttons */}
+        {/* 버튼들 */}
         <div className="flex space-x-4">
           <CustomButton active={true} onClick={handleReviewClick} style="primary">
             리뷰 작성하기
@@ -127,4 +101,4 @@ const ProductDetailSection: React.FC = () => {
   )
 }
 
-export default ProductDetailSection
+export default EscapeDetailSection
