@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import SortDropdown from './SortDropdown'
 import StarRating from './StarRating'
 import axios from 'axios'
@@ -7,9 +8,11 @@ import DefaultImage from '@images/default-image.png'
 import ReviewLikeButton from './ReviewLikeButton'
 
 const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
-  const [reviews, setReviews] = useState<ProductReviewListTypes[]>([]) // 상태에 ReviewListTypes 타입 사용
+  const [reviews, setReviews] = useState<ProductReviewListTypes[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const router = useRouter()
 
   const fetchReviews = async (sortOption: string) => {
     setLoading(true)
@@ -40,10 +43,13 @@ const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ pr
     fetchReviews(sortOption) // 정렬 옵션 변경 시 API 호출
   }
 
+  // 사용자 프로필 사진 클릭 시 /user/{userId}로 이동
+  const handleProfileClick = (userId: number) => {
+    router.push(`/user/${userId}`) // 해당 유저의 프로필 페이지로 이동
+  }
+
   return (
     <div className={'relative z-10 mx-auto max-w-[940px]'}>
-      {' '}
-      {/* z-index를 낮게 설정 */}
       <div className="mb-[30px] flex items-center justify-between">
         <h3 className={'text-lg font-semibold text-brand-white'}>{'상품 통계'}</h3>
         <SortDropdown productId={productId} teamId={teamId} order={handleSortChange} />
@@ -59,10 +65,12 @@ const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ pr
               <div className="flex justify-between">
                 {/* 왼쪽 영역 - 사용자 정보 */}
                 <div className="flex items-start">
+                  {/* 프로필 사진 클릭 시 handleProfileClick 호출 */}
                   <img
                     src={review.user.image || DefaultImage.src} // 이미지가 없을 경우 기본 이미지 사용
                     alt={review.user.nickname}
-                    className="mr-4 h-12 w-12 rounded-full object-cover"
+                    className="mr-4 h-12 w-12 cursor-pointer rounded-full object-cover"
+                    onClick={() => handleProfileClick(review.user.id)} // 클릭 시 해당 유저 페이지로 이동
                   />
 
                   {/* 사용자 이름 및 별점 */}
@@ -72,7 +80,6 @@ const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ pr
                   </div>
                 </div>
 
-                {/* 가운데 영역 - 리뷰 텍스트, 이미지, 작성 날짜 */}
                 <div className="mx-8 flex flex-grow flex-col">
                   {/* 리뷰 텍스트 */}
                   <p className="mb-3 text-white">{review.content}</p>
@@ -101,8 +108,7 @@ const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ pr
                   <div className="mt-auto flex items-center space-x-1">
                     <ReviewLikeButton
                       reviewId={review.id}
-                      productId={productId} // productId 내려줌
-                      teamId={teamId} // teamId 내려줌
+                      teamId={teamId}
                       initialIsLiked={review.isLiked}
                       initialLikeCount={review.likeCount}
                     />
