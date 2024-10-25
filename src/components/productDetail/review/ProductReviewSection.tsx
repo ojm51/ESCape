@@ -7,7 +7,7 @@ import { ProductReviewListTypes } from '@/dtos/ProductDto'
 import DefaultImage from '@images/default-image.png'
 import ReviewLikeButton from './ReviewLikeButton'
 
-const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
+const ProductReviewSection: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
   const [reviews, setReviews] = useState<ProductReviewListTypes[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -128,4 +128,4 @@ const ProductReviewList: React.FC<{ productId: number; teamId: string }> = ({ pr
   )
 }
 
-export default ProductReviewList
+export default ProductReviewSection

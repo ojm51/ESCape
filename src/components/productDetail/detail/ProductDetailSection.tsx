@@ -3,20 +3,26 @@ import { useEffect, useState } from 'react'
 import FeatureTag from './FeatureTag'
 import { IoChatbubbleSharp } from 'react-icons/io5'
 import { IoMdShare } from 'react-icons/io'
-import CustomButton from '../@shared/button/CustomButton'
+import CustomButton from '../../@shared/button/CustomButton'
 import axios from 'axios'
 import FavoriteButton from './FavoriteButton'
-import { ProductDetailTypes } from '@/dtos/ProductDto'
+import { ProductDetailTypes, DescriptionTypes } from '@/dtos/ProductDto'
 
-const EscapeDetailSection: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
+const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
   const [productDetail, setProductDetail] = useState<ProductDetailTypes | null>(null)
+  const [parsedDescription, setParsedDescription] = useState<DescriptionTypes | null>(null)
 
   useEffect(() => {
     // productId와 teamId로 제품 세부 정보를 불러오기
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`/api/product/${productId}?teamId=${teamId}`)
-        setProductDetail(response.data)
+        const response = await axios.get(`https://mogazoa-api.vercel.app/${teamId}/products/${productId}`)
+        const detailData = response.data
+
+        // Parse the description JSON string into an object
+        const parsedDesc = JSON.parse(detailData.description)
+        setParsedDescription(parsedDesc)
+        setProductDetail(detailData)
       } catch (error) {
         console.error('제품 세부 정보 불러오기에 실패했습니다:', error)
       }
@@ -39,12 +45,29 @@ const EscapeDetailSection: React.FC<{ productId: number; teamId: string }> = ({ 
     // 카카오톡 공유 기능 구현
   }
 
-  if (!productDetail) return <div>Loading...</div>
+  const handleReservationClick = () => {
+    if (parsedDescription?.url) {
+      const userConfirmed = confirm('예약 페이지로 이동하시겠습니까?')
+      if (userConfirmed) {
+        window.location.href = parsedDescription.url
+      }
+    } else {
+      alert('예약 URL을 찾을 수 없습니다.')
+    }
+  }
+
+  if (!productDetail || !parsedDescription) return <div>Loading...</div>
 
   return (
     <div className="mx-auto flex max-w-[940px] flex-col rounded-md pt-6 text-white lg:flex-row">
       <div className="mb-4 flex-shrink-0 lg:mb-0 lg:mr-6">
-        <Image src={productDetail.image} alt={productDetail.name} className="h-48 w-48 rounded-md object-fill" />
+        <Image
+          src={productDetail.image}
+          width={128}
+          height={128}
+          alt={productDetail.name}
+          className="h-48 w-48 rounded-md object-fill"
+        />
       </div>
 
       {/* Escape 정보 */}
@@ -53,7 +76,7 @@ const EscapeDetailSection: React.FC<{ productId: number; teamId: string }> = ({ 
         <div className="mb-2 flex items-center justify-between">
           <div className="flex items-center">
             <h2 className="text-2xl font-bold">{productDetail.name}</h2>
-            <FavoriteButton productId={productId} teamId={teamId.toString()} isFavorite={productDetail.isFavorite} />
+            <FavoriteButton productId={productId} teamId={teamId} isFavorite={productDetail.isFavorite} />
           </div>
           <div className="flex space-x-4">
             <button
@@ -72,19 +95,20 @@ const EscapeDetailSection: React.FC<{ productId: number; teamId: string }> = ({ 
         </div>
 
         {/* Escape 위치 */}
-        <p className="mb-2 text-lg text-[#A0A0A0]">{`${productDetail.description.loc} ${productDetail.description.spot}`}</p>
+        <p className="mb-2 text-lg text-[#A0A0A0]">{`${parsedDescription.spot}`}</p>
 
         {/* Escape 설명 */}
         <div className="mb-4">
-          <p className="text-white">{productDetail.description.des}</p>
+          <p className="text-white">{parsedDescription.des}</p>
         </div>
 
         {/* FeatureTags */}
-        <div className="mb-4 flex flex-wrap gap-4">
-          <FeatureTag label="난이도" value={productDetail.description.lev} isStarRating={true} />
-          <FeatureTag label="시간" value={`${productDetail.description.time} min`} />
-          <FeatureTag label="공포도" value={productDetail.description.hor} isStarRating={true} />
-          <FeatureTag label="활동성" value={productDetail.description.act} isStarRating={true} />
+        <div className="mb-4 flex flex-wrap gap-2">
+          <FeatureTag label="지역" value={parsedDescription.loc} />
+          <FeatureTag label="난이도" value={parsedDescription.lev} isStarRating={true} />
+          <FeatureTag label="시간" value={`${parsedDescription.time} min`} />
+          <FeatureTag label="공포도" value={parsedDescription.hor} isStarRating={true} />
+          <FeatureTag label="활동성" value={parsedDescription.act} isStarRating={true} />
         </div>
 
         {/* 버튼들 */}
@@ -92,7 +116,7 @@ const EscapeDetailSection: React.FC<{ productId: number; teamId: string }> = ({ 
           <CustomButton active={true} onClick={handleReviewClick} style="primary">
             리뷰 작성하기
           </CustomButton>
-          <CustomButton active={true} onClick={() => alert('예약하기 클릭')} style="secondary">
+          <CustomButton active={true} onClick={handleReservationClick} style="secondary">
             예약하기
           </CustomButton>
         </div>
@@ -101,4 +125,4 @@ const EscapeDetailSection: React.FC<{ productId: number; teamId: string }> = ({ 
   )
 }
 
-export default EscapeDetailSection
+export default ProductDetailSection
