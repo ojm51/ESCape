@@ -1,9 +1,14 @@
-export const CATEGORY_MAPPING: Record<string, string> = {
-  '1': '경기',
-  '2': '서울 남부',
-  '3': '서울 남서부',
-  '4': '서울 동부',
-  '5': '서울 북부',
-  '6': '서울 북서부',
-  '7': '인천',
+interface Category {
+  id: number
+  name: string
 }
+
+export const CATEGORY_DATA: Category[] = [
+  { id: 1, name: '경기' },
+  { id: 2, name: '서울 남부' },
+  { id: 3, name: '서울 남서부' },
+  { id: 4, name: '서울 동부' },
+  { id: 5, name: '서울 북부' },
+  { id: 6, name: '서울 북서부' },
+  { id: 7, name: '인천' },
+]

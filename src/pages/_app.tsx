@@ -5,7 +5,6 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ReactNode } from 'react'
 import { AuthProvider } from '@/contexts/AuthProvider'
 import Layout from '@/components/@shared/layout/Layout'
-import { CategoryProvider } from '@/contexts/CategoryProvider'
 
 interface ProvidersProps {
   children: ReactNode
@@ -24,10 +23,8 @@ function Providers({ children }: ProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <CategoryProvider>
-          {children}
-          {process.env.NODE_ENV !== 'production' && <ReactQueryDevtools initialIsOpen={false} />}
-        </CategoryProvider>
+        {children}
+        {process.env.NODE_ENV !== 'production' && <ReactQueryDevtools initialIsOpen={false} />}
       </AuthProvider>
     </QueryClientProvider>
   )
