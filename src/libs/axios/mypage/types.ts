@@ -1,7 +1,7 @@
 export interface UpdateMyInfoParams {
-  description: string
-  nickname: string
   image: string
+  nickname: string
+  description: string
 }
 
 export interface GetUserInfoParams {
@@ -16,4 +16,8 @@ export interface GetUserProductsParams {
 export interface GetUserFollowsParams {
   userId: string | number
   type: string
+}
+
+export interface AddImageFileParams {
+  image: File
 }

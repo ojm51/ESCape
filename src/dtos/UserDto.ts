@@ -2,7 +2,7 @@ export interface CommonUserTypes {
   updatedAt: string
   createdAt: string
   teamId: string
-  image: string
+  image: string | File | null
   description: string
   nickname: string
   id: number
