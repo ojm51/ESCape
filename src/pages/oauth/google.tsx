@@ -8,8 +8,7 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { Spinner } from 'flowbite-react'
-import { useToaster } from "@/contexts/ToasterProvider";
-
+import { useToaster } from '@/contexts/ToasterProvider'
 
 interface NicknameForm {
   nickname: string
@@ -20,7 +19,7 @@ export default function GoogleSignupPage() {
   const provider = 'google'
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const toaster = useToaster();
+  const toaster = useToaster()
 
   const redirectUri = `http://localhost:3000/oauth/${provider}`
 
@@ -34,7 +33,7 @@ export default function GoogleSignupPage() {
   const onSubmit = async (data: NicknameForm) => {
     const token = localStorage.getItem('authCode')
     if (!token) {
-      toaster("fail", "인증 코드가 없습니다. 다시 로그인 해주세요.")
+      toaster('fail', '인증 코드가 없습니다. 다시 로그인 해주세요.')
       return
     }
     const formData = {
@@ -58,7 +57,7 @@ export default function GoogleSignupPage() {
 
       if (result.accessToken) {
         await oAuthLogin({ redirectUri, token }, 'google')
-        toaster("success", "로그인이 성공하였습니다.")
+        toaster('success', '로그인이 성공하였습니다.')
         localStorage.removeItem('authCode')
         router.push('/')
       } else {
