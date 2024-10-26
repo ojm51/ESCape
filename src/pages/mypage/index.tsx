@@ -1,11 +1,23 @@
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useQuery } from '@tanstack/react-query'
 import { getMyInfo } from '@/libs/axios/mypage/apis'
+import { useAuth } from '@/contexts/AuthProvider'
 import { Spinner } from 'flowbite-react'
 import Profile from '@/components/mypage/Profile'
 import ActivityCardList from '@/components/mypage/ActivityCardList'
 import ProductCardList from '@/components/mypage/ProductCardList'
 
 export default function MyPage() {
+  const router = useRouter()
+  const { user: myInfo } = useAuth()
+
+  useEffect(() => {
+    if (!myInfo) {
+      router.push('/signin')
+    }
+  }, [myInfo, router])
+
   const { isPending, isError, data } = useQuery({
     queryKey: ['myInfo'],
     queryFn: getMyInfo,
