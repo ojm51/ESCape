@@ -108,7 +108,7 @@ export default function GoogleOauthButton() {
     <button
       type="button"
       title="구글 로그인"
-      className="border-solid rounded-full border-brand-black-light"
+      className="rounded-full border-solid border-brand-black-light"
       onClick={handleGoogleClick}
     >
       <Image width={56} src={GoogleIcon} alt="구글 로고" />

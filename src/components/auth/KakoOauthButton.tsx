@@ -57,7 +57,7 @@ export default function KakaoOauthButton() {
       <button
         type="button"
         title="카카오 로그인"
-        className="border-solid rounded-full border-brand-black-light"
+        className="rounded-full border-solid border-brand-black-light"
         onClick={handleKakaoClick}
       >
         <Image width={56} src={KakaoIcon} alt="카카오 로고" />
