@@ -3,24 +3,29 @@ import Image from 'next/image'
 import imageIcon from '@icons/image_icon.svg'
 import deleteIcon from '@icons/close_icon.svg'
 import CustomButton from '../@shared/button/CustomButton'
+import { Spinner } from 'flowbite-react'
 
 const INPUT_MAX_LENGTH = 10
 const TEXTAREA_MAX_LENGTH = 300
 
-interface EditProfileProps {
-  onEdit: () => void
-  image: string
+type ProfileContentsTypes = {
+  image: string | File | null
   nickname: string
   description: string
 }
 
-export default function EditProfile({ onEdit, image = '', nickname, description }: EditProfileProps) {
+interface EditProfileProps extends ProfileContentsTypes {
+  onEdit: (params: ProfileContentsTypes) => void
+  isPending: boolean
+}
+
+export default function EditProfile({ image, nickname, description, onEdit, isPending }: EditProfileProps) {
   const [formValues, setFormValues] = useState({
-    image: image,
-    nickname: nickname,
-    description: description,
+    image,
+    nickname,
+    description,
   })
-  const [previewImage, setPreviewImage] = useState<string>(image)
+  const [previewImage, setPreviewImage] = useState<string | File | null>(image ?? null)
   const [inputCount, setInputCount] = useState<number>(description.length)
 
   const isFormComplete = useMemo(() => {
@@ -32,15 +37,33 @@ export default function EditProfile({ onEdit, image = '', nickname, description 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
 
-    const selectedImage = URL.createObjectURL(e.target.files[0])
-    setPreviewImage(selectedImage)
+    const selectedImageFile = e.target.files[0]
+
+    if (previewImage && typeof previewImage === 'string') {
+      URL.revokeObjectURL(previewImage)
+    }
+
+    setPreviewImage(URL.createObjectURL(selectedImageFile))
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      image: selectedImageFile,
+    }))
+  }
+
+  const handleFileInputDelete = () => {
+    if (previewImage && typeof previewImage === 'string') {
+      URL.revokeObjectURL(previewImage)
+    }
+
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      image: null,
+    }))
+    setPreviewImage('')
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let inputValue = e.target.value
-    if (inputValue.length > INPUT_MAX_LENGTH) {
-      inputValue = inputValue.slice(0, INPUT_MAX_LENGTH)
-    }
+    const inputValue = e.target.value.slice(0, INPUT_MAX_LENGTH)
     setFormValues((prevValues) => ({
       ...prevValues,
       [e.target.name]: inputValue,
@@ -48,19 +71,12 @@ export default function EditProfile({ onEdit, image = '', nickname, description 
   }
 
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    let textareaValue = e.target.value
-    if (textareaValue.length > TEXTAREA_MAX_LENGTH) {
-      textareaValue = textareaValue.slice(0, TEXTAREA_MAX_LENGTH)
-    }
+    let textareaValue = e.target.value.slice(0, TEXTAREA_MAX_LENGTH)
     setInputCount(textareaValue.length)
     setFormValues((prevValues) => ({
       ...prevValues,
       [e.target.name]: textareaValue,
     }))
-  }
-
-  const handleFileInputDelete = () => {
-    setPreviewImage('')
   }
 
   const inputClassNames =
@@ -79,20 +95,13 @@ export default function EditProfile({ onEdit, image = '', nickname, description 
               <Image src={imageIcon} alt="이미지 아이콘" width={24} height={24} />
             </div>
           </label>
-          <input
-            className="hidden"
-            // value={formValues.image}
-            id="profileImage"
-            name="image"
-            type="file"
-            onChange={handleFileInputChange}
-          />
+          <input className="hidden" id="profileImage" name="image" type="file" onChange={handleFileInputChange} />
 
           {!!previewImage && (
             <div className="relative inline-block">
               <Image
                 className="ml-[10px] inline-block h-[140px] w-[140px] rounded-lg object-cover"
-                src={previewImage}
+                src={typeof previewImage === 'string' ? previewImage : ''}
                 alt="업로드 한 이미지 미리보기"
                 width={140}
                 height={140}
@@ -137,8 +146,8 @@ export default function EditProfile({ onEdit, image = '', nickname, description 
         </div>
       </section>
 
-      <CustomButton style="primary" active={isFormComplete} onClick={onEdit}>
-        저장하기
+      <CustomButton style="primary" active={isFormComplete || isPending} onClick={() => onEdit(formValues)}>
+        {isPending ? <Spinner size="xl" /> : '저장하기'}
       </CustomButton>
     </div>
   )
