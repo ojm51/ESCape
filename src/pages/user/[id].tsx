@@ -7,25 +7,6 @@ import ProductCardList from '@/components/mypage/ProductCardList'
 import { UserTypes } from '@/dtos/UserDto'
 import { useRouter } from 'next/router'
 
-const defaultUserData: UserTypes = {
-  updatedAt: '',
-  createdAt: '',
-  teamId: '',
-  image: '',
-  description: '',
-  nickname: '',
-  id: 0,
-  mostFavoriteCategory: {
-    name: '',
-    id: 0,
-  },
-  averageRating: 0,
-  reviewCount: 0,
-  followeesCount: 0,
-  followersCount: 0,
-  isFollowing: false,
-}
-
 export default function UserPage() {
   const { pathname } = useRouter()
   const { isPending, isError, data } = useQuery({
@@ -34,20 +15,16 @@ export default function UserPage() {
   })
 
   if (isPending) return <Spinner aria-label="로딩 중..." size="xl" />
-  // if(isError) return <p>failed..</p>
+  if (isError) return <p>failed..</p>
 
   return (
     <>
       <div className="m-auto max-w-[335px] md:max-w-[509px] xl:max-w-[1340px]">
         <section className="mb-[60px] xl:float-left xl:mr-[60px]">
-          {/* {!!data ? <Profile data={data} /> : <p>failed..</p>} */}
-          <Profile data={data ?? defaultUserData} />
+          {!!data ? <Profile data={data} /> : <p>failed..</p>}
         </section>
-        <section className="mb-[60px]">
-          {/* {!!data ? <ActivityCardList data={data} /> : <p>failed..</p>} */}
-          <ActivityCardList data={data ?? defaultUserData} />
-        </section>
-        <ProductCardList data={data ?? defaultUserData} />
+        <section className="mb-[60px]">{!!data ? <ActivityCardList data={data} /> : <p>failed..</p>}</section>
+        <ProductCardList data={data} />
       </div>
     </>
   )
