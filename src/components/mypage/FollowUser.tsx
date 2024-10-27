@@ -1,8 +1,8 @@
 import React from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
 import defaultProfileImage from '@images/user_default.svg'
 import { FollowTypes } from '@/dtos/UserDto'
-import Link from 'next/link'
 
 interface FollowUserProps {
   followUserData: FollowTypes
