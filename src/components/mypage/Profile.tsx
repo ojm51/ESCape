@@ -35,7 +35,7 @@ export default function Profile({ data: userData }: ProfileProps) {
 
   const [followData, setFollowData] = useState<FollowResponseTypes>()
 
-  const [modalType, setModalType] = useState<string>('팔로워')
+  const [modalType, setModalType] = useState<string>('follower')
   const [isFollowModalOpen, setIsFollowModalOpen] = useState<boolean>(false)
   const [isEditProfileModalOpen, setEditProfileModalOpen] = useState<boolean>(false)
   const [newProfile, setNewProfile] = useState<ProfileContentsTypes>({
@@ -53,7 +53,7 @@ export default function Profile({ data: userData }: ProfileProps) {
     data: followerList,
   } = useQuery({
     queryKey: [`userFollowers${id}`],
-    queryFn: () => getUserFollows({ userId: id, type: '팔로워' }),
+    queryFn: () => getUserFollows({ userId: id, type: 'follower' }),
     enabled: !!id,
   })
 
@@ -63,13 +63,13 @@ export default function Profile({ data: userData }: ProfileProps) {
     data: followeeList,
   } = useQuery({
     queryKey: [`userFollowees${id}`],
-    queryFn: () => getUserFollows({ userId: id, type: '팔로잉' }),
+    queryFn: () => getUserFollows({ userId: id, type: 'followee' }),
     enabled: !!id,
   })
 
   const handleFollowListClick = (type: string) => {
     setModalType(type)
-    modalType === '팔로워' ? setFollowData(followerList) : setFollowData(followeeList)
+    setFollowData(type === 'follower' ? followerList : followeeList)
     toggleFollowModal()
   }
 
@@ -157,14 +157,14 @@ export default function Profile({ data: userData }: ProfileProps) {
         <div className="flex w-full content-between items-center">
           <button
             className="flex w-full flex-col content-center items-center gap-[10px]"
-            onClick={() => handleFollowListClick('팔로워')}
+            onClick={() => handleFollowListClick('follower')}
           >
             <h4 className="text-center text-lg font-semibold text-brand-white">{followersCount}</h4>
             <p className="text-center text-sm font-normal text-brand-gray-light">팔로워</p>
           </button>
           <button
             className="flex w-full flex-col content-center items-center gap-[10px]"
-            onClick={() => handleFollowListClick('팔로잉')}
+            onClick={() => handleFollowListClick('followee')}
           >
             <h4 className="text-center text-lg font-semibold text-brand-white">{followeesCount}</h4>
             <p className="text-center text-sm font-normal text-brand-gray-light">팔로잉</p>
@@ -197,9 +197,10 @@ export default function Profile({ data: userData }: ProfileProps) {
           modalFrameClassNames="max-h-[550px] w-[335px] overflow-auto scrollbar-hide md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
         >
           <FollowUserList
+            type={modalType}
             name={nickname}
-            title={`${modalType === '팔로워' ? '을 팔로우' : '이 팔로잉'}`}
-            followUserData={followData?.list}
+            title={`${modalType === 'follower' ? '을 팔로우' : '이 팔로잉'}`}
+            followUserList={followData?.list}
           />
         </Modal>
       )}
