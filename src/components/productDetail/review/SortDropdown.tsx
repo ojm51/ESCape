@@ -8,12 +8,11 @@ interface SortDropdownProps {
 }
 
 const SortDropdown: React.FC<SortDropdownProps> = ({ productId, teamId, order }) => {
-  // 기본값을 'recent'로 설정하여 최신순이 기본으로 보이도록 설정
   const [selectedOption, setSelectedOption] = useState('최신순')
 
   const handleSortChange = (sortOption: string, label: string) => {
-    setSelectedOption(label) // 선택한 옵션의 라벨을 설정
-    order(sortOption) // 부모 컴포넌트로 선택된 정렬 옵션을 전달
+    setSelectedOption(label)
+    order(sortOption)
   }
 
   return (

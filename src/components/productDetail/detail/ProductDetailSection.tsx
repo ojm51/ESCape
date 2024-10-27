@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import FeatureTag from './FeatureTag'
 import CustomButton from '../../@shared/button/CustomButton'
 import FavoriteButton from './FavoriteButton'
@@ -7,12 +8,18 @@ import KakaoShareButton from './KakaoShareButton'
 import { IoMdShare } from 'react-icons/io'
 import { fetchProductDetails } from '@/libs/axios/product/productApi'
 import { ProductDetailTypes, DescriptionTypes } from '@/dtos/ProductDto'
+import ReviewModal from '../ReviewModal'
+import { useAuth } from '@/contexts/AuthProvider'
 
 const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
   const { data, isLoading, error } = useQuery<ProductDetailTypes>({
     queryKey: ['productDetail', productId],
     queryFn: () => fetchProductDetails(teamId, productId),
   })
+
+  const { user } = useAuth()
+
+  const [isModalOpen, setModalOpen] = useState(false)
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>제품 세부 정보를 불러오지 못했습니다.</div>
@@ -27,7 +34,12 @@ const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({
   }
 
   const handleReviewClick = () => {
-    alert('리뷰 작성 모달이 나타납니다.')
+    if (!user) {
+      alert('리뷰 작성은 로그인이 필요합니다.')
+      window.location.href = '/signin'
+      return
+    }
+    setModalOpen(true)
   }
 
   const handleReservationClick = () => {
@@ -53,9 +65,7 @@ const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({
         />
       </div>
 
-      {/* Escape 정보 */}
       <div className="flex w-full flex-col justify-between">
-        {/* Escape 제목 및 찜하기 버튼 */}
         <div className="mb-2 flex items-center justify-between">
           <div className="flex items-center">
             <h2 className="text-2xl font-bold">{productDetail.name}</h2>
@@ -63,10 +73,10 @@ const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({
           </div>
           <div className="flex space-x-4">
             <KakaoShareButton
-              url={window.location.href} // 공유할 URL
-              title={productDetail.name} // 공유할 제목
-              description={parsedDescription.des} // 공유할 설명
-              imageUrl={productDetail.image} // 공유할 이미지 URL
+              url={window.location.href}
+              title={productDetail.name}
+              description={parsedDescription.des}
+              imageUrl={productDetail.image}
             />
             <button
               onClick={handleShareClick}
@@ -77,15 +87,12 @@ const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({
           </div>
         </div>
 
-        {/* Escape 위치 */}
         <p className="mb-2 text-lg text-[#A0A0A0]">{`${parsedDescription.spot}`}</p>
 
-        {/* Escape 설명 */}
         <div className="mb-4">
           <p className="text-white">{parsedDescription.des}</p>
         </div>
 
-        {/* FeatureTags */}
         <div className="mb-4 flex flex-wrap gap-2">
           <FeatureTag label="지역" value={parsedDescription.loc} />
           <FeatureTag label="난이도" value={parsedDescription.lev} isStarRating={true} />
@@ -94,7 +101,6 @@ const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({
           <FeatureTag label="활동성" value={parsedDescription.act} isStarRating={true} />
         </div>
 
-        {/* 버튼들 */}
         <div className="flex space-x-4">
           <CustomButton active={true} onClick={handleReviewClick} style="primary">
             리뷰 작성하기
@@ -104,6 +110,16 @@ const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({
           </CustomButton>
         </div>
       </div>
+
+      {isModalOpen && (
+        <ReviewModal
+          isOpen={isModalOpen}
+          onClose={() => setModalOpen(false)}
+          productName={productDetail.name}
+          teamId={teamId}
+          productId={productId}
+        />
+      )}
     </div>
   )
 }

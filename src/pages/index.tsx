@@ -1,19 +1,25 @@
-import React from 'react'
-import ProductDetailSection from '@/components/productDetail/detail/ProductDetailSection'
-import ProductStatisticsSection from '@/components/productDetail/statistic/ProductStatisticsSection'
-import ProductReviewSection from '@/components/productDetail/review/ProductReviewSection'
+import { useAuth } from '@/contexts/AuthProvider'
+import { useState, useEffect } from 'react'
 
-const HomePage: React.FC = () => {
-  const productId = 1053 // 예시로 사용할 productId
-  const teamId = '8-5' // 고정된 teamId
+export default function HomePage() {
+  const { user, logout } = useAuth()
+  const [isLogin, setIsLogin] = useState<boolean>(false)
+
+  const handleLogout = () => {
+    logout()
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('accessToken')) {
+      setIsLogin(true)
+    } else {
+      setIsLogin(false)
+    }
+  }, [user])
 
   return (
-    <div>
-      <ProductDetailSection productId={productId} teamId={teamId} />
-      <ProductStatisticsSection productId={productId} teamId={teamId} />
-      <ProductReviewSection productId={productId} teamId={teamId} />
-    </div>
+    <>
+      <h2 className="p-10 text-center text-white">홈 화면입니다.</h2>
+    </>
   )
 }
-
-export default HomePage

@@ -42,7 +42,6 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Kakao) {
       const kakaoApiKey = process.env.NEXT_PUBLIC_KAKAO_API_KEY
-      // 이미 초기화되었는지 확인 후, 초기화되지 않은 경우에만 Kakao.init 호출
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(kakaoApiKey)
       }
