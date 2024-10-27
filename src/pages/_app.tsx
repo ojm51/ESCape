@@ -5,9 +5,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ReactNode } from 'react'
 import { AuthProvider } from '@/contexts/AuthProvider'
 
-import ToasterProvider from "@/contexts/ToasterProvider";
+import ToasterProvider from '@/contexts/ToasterProvider'
 import Layout from '@/components/@shared/layout/Layout'
-
 
 interface ProvidersProps {
   children: ReactNode
@@ -28,8 +27,9 @@ function Providers({ children }: ProvidersProps) {
       <ToasterProvider>
         <AuthProvider>
           {process.env.NODE_ENV !== 'production' && <ReactQueryDevtools initialIsOpen={false} />}
+          {children}
         </AuthProvider>
-       </ToasterProvider>
+      </ToasterProvider>
     </QueryClientProvider>
   )
 }

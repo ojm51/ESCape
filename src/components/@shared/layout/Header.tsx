@@ -7,17 +7,15 @@ import logoBig from '@images/logo.svg'
 import iconGlass from '@icons/icon_glass.svg'
 import iconSignin from '@icons/icon_signin.svg'
 import defaultProfileImage from '@images/user_default.svg'
-import { useRouter } from 'next/router'
 import classNames from 'classnames'
 import { useAuth } from '@/contexts/AuthProvider'
 
 export default function Header({ children }: PropsWithChildren) {
-
   const { user, logout } = useAuth()
   const { pathname } = useRouter()
   const [searchInputValue, setSearchInputValue] = useState('')
   const router = useRouter()
-  
+
   const handleLogout = () => {
     logout()
   }
@@ -25,7 +23,6 @@ export default function Header({ children }: PropsWithChildren) {
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = defaultProfileImage.src
   }
-
 
   const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInputValue(e.target.value)
@@ -39,7 +36,6 @@ export default function Header({ children }: PropsWithChildren) {
     router.push({ pathname: '/product', query: { keyword: searchInputValue } })
     setSearchInputValue('')
   }
-  }, []
 
   return (
     <>
@@ -64,27 +60,29 @@ export default function Header({ children }: PropsWithChildren) {
               </form>
             </div>
             {user ? (
-                <>
-                  <Link href="/mypage" className="flex items-center gap-3">
-                    <div className="relative h-[42px] w-[42px] rounded-full overflow-hidden bg-brand-black-light">
-                      <Image
-                        src={user.image || defaultProfileImage}
-                        alt="프로필 이미지"
-                        width={42}
-                        height={42}
-                        onError={handleImageError}
-                      />
-                    </div>
-                    {user.nickname}
-                  </Link>
-                  <button type="button" className="text-white" onClick={handleLogout}>로그아웃</button>
-                </>
-              ) : (
-                <>
-                  <Link href="/signin">로그인</Link>
-                  <Link href="/signup">회원가입</Link>
-                </>
-              )}
+              <>
+                <Link href="/mypage" className="flex items-center gap-3">
+                  <div className="relative h-[42px] w-[42px] overflow-hidden rounded-full bg-brand-black-light">
+                    <Image
+                      src={user.image || defaultProfileImage}
+                      alt="프로필 이미지"
+                      width={42}
+                      height={42}
+                      onError={handleImageError}
+                    />
+                  </div>
+                  {user.nickname}
+                </Link>
+                <button type="button" className="text-white" onClick={handleLogout}>
+                  로그아웃
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/signin">로그인</Link>
+                <Link href="/signup">회원가입</Link>
+              </>
+            )}
           </div>
           <div className="flex items-center gap-5 md:hidden">
             <button className="relative h-[18.38px] w-[18.38px]">
