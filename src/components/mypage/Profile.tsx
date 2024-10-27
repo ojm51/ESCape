@@ -12,6 +12,8 @@ import Modal from '../@shared/modal/Modal'
 import CustomButton from '../@shared/button/CustomButton'
 import EditProfile from './EditProfile'
 import FollowUserList from './FollowUserList'
+import { AddFollowParams } from '@/libs/axios/user/types'
+import { addFollow } from '@/libs/axios/user/apis'
 
 type ProfileContentsTypes = {
   image: string | File | null
@@ -50,7 +52,7 @@ export default function Profile({ data: userData }: ProfileProps) {
     isError: isFollowerError,
     data: followerList,
   } = useQuery({
-    queryKey: ['userFollowers'],
+    queryKey: [`userFollowers${id}`],
     queryFn: () => getUserFollows({ userId: id, type: '팔로워' }),
     enabled: !!id,
   })
@@ -60,7 +62,7 @@ export default function Profile({ data: userData }: ProfileProps) {
     isError: isFolloweeError,
     data: followeeList,
   } = useQuery({
-    queryKey: ['userFollowees'],
+    queryKey: [`userFollowees${id}`],
     queryFn: () => getUserFollows({ userId: id, type: '팔로잉' }),
     enabled: !!id,
   })
@@ -119,6 +121,19 @@ export default function Profile({ data: userData }: ProfileProps) {
     })
   }
 
+  const addFollowMutation = useMutation({
+    mutationFn: (userId: AddFollowParams) => addFollow(userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`userInfo${id}`] })
+      queryClient.invalidateQueries({ queryKey: [`userFollowers${id}`] })
+      queryClient.invalidateQueries({ queryKey: [`userFollowees${id}`] })
+    },
+  })
+
+  const handleFollowButtonClick = () => {
+    addFollowMutation.mutate({ userId: id })
+  }
+
   return (
     <>
       <div className="flex w-full flex-col content-center items-center gap-[30px] rounded-xl border-unactive bg-[#252530] px-5 py-[30px] xl:w-[340px]">
@@ -159,7 +174,9 @@ export default function Profile({ data: userData }: ProfileProps) {
             팔로우 취소
           </CustomButton>
         ) : (
-          <CustomButton active={true}>팔로우</CustomButton>
+          <CustomButton active={true} onClick={handleFollowButtonClick}>
+            팔로우
+          </CustomButton>
         )}
       </div>
 
