@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import ProductCard from '../@shared/productCard/ProductCard'
-import { ProductDetailTypes } from '@/dtos/ProductDto'
 import { useQuery } from '@tanstack/react-query'
 import { getUserProducts } from '@/libs/axios/mypage/apis'
+import { ProductTypes } from '@/dtos/ProductDto'
 import { UserTypes } from '@/dtos/UserDto'
 import { Spinner } from 'flowbite-react'
+import ProductCard from '../@shared/productCard/ProductCard'
 
 interface ProductCardListProps {
   data: UserTypes
@@ -24,11 +24,12 @@ export default function ProductCardList({ data }: ProductCardListProps) {
       type: 'favorite',
     },
   ]
+
   const {
     isPending,
     isError,
     data: productList,
-  } = useQuery({
+  } = useQuery<ProductTypes[]>({
     queryKey: ['productType', productMenuContents[activeMenu].type],
     queryFn: () => getUserProducts({ userId: data.id, type: productMenuContents[activeMenu].type }),
     enabled: !!data.id,
@@ -38,7 +39,7 @@ export default function ProductCardList({ data }: ProductCardListProps) {
     setActiveMenu(selectedId)
   }
 
-  // if(isPending) return <Spinner aria-label='로딩 중...' size='xl' />
+  if (isPending) return <Spinner aria-label="로딩 중..." size="xl" />
   // if(isError) return <p>failed..</p>
 
   return (
@@ -57,7 +58,7 @@ export default function ProductCardList({ data }: ProductCardListProps) {
       {productList && productList.length > 0 ? (
         <div className="grid grid-cols-2 gap-[15px] xl:grid-cols-3 xl:gap-5">
           {productList.map((product) => (
-            <ProductCard data={product} />
+            <ProductCard key={product.id} productId={product.id} data={product} />
           ))}
         </div>
       ) : (
