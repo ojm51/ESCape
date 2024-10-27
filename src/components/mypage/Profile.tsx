@@ -12,8 +12,8 @@ import Modal from '../@shared/modal/Modal'
 import CustomButton from '../@shared/button/CustomButton'
 import EditProfile from './EditProfile'
 import FollowUserList from './FollowUserList'
-import { AddFollowParams } from '@/libs/axios/user/types'
-import { addFollow } from '@/libs/axios/user/apis'
+import { AddFollowParams, DeleteFollowParams } from '@/libs/axios/user/types'
+import { addFollow, deleteFollow } from '@/libs/axios/user/apis'
 
 type ProfileContentsTypes = {
   image: string | File | null
@@ -121,17 +121,28 @@ export default function Profile({ data: userData }: ProfileProps) {
     })
   }
 
-  const addFollowMutation = useMutation({
+  const followUserMutation = useMutation({
     mutationFn: (userId: AddFollowParams) => addFollow(userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`userInfo${id}`] })
       queryClient.invalidateQueries({ queryKey: [`userFollowers${id}`] })
-      queryClient.invalidateQueries({ queryKey: [`userFollowees${id}`] })
     },
   })
 
   const handleFollowButtonClick = () => {
-    addFollowMutation.mutate({ userId: id })
+    followUserMutation.mutate({ userId: id })
+  }
+
+  const unfollowUserMutation = useMutation({
+    mutationFn: (userId: DeleteFollowParams) => deleteFollow(userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`userInfo${id}`] })
+      queryClient.invalidateQueries({ queryKey: [`userFollowers${id}`] })
+    },
+  })
+
+  const handleUnfollowButtonClick = () => {
+    unfollowUserMutation.mutate({ userId: id })
   }
 
   return (
@@ -170,7 +181,7 @@ export default function Profile({ data: userData }: ProfileProps) {
             </CustomButton>
           </div>
         ) : isFollowing ? (
-          <CustomButton style="tertiary" active={true}>
+          <CustomButton style="tertiary" active={true} onClick={handleUnfollowButtonClick}>
             팔로우 취소
           </CustomButton>
         ) : (
