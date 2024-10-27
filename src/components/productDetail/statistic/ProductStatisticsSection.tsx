@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { fetchProductDetails } from '@/libs/axios/product/productApi'
 import starIcon from '@icons/star_icon.svg'
 import commentIcon from '@icons/comment_icon.svg'
 import heartIcon from '@icons/heart_icon.svg'
@@ -12,24 +13,20 @@ interface StatisticsProps {
 }
 
 const ProductStatisticsSection: React.FC<StatisticsProps> = ({ teamId, productId }) => {
-  const [productData, setProductData] = useState<ProductDetailTypes | null>(null)
+  // React Query를 사용하여 데이터를 가져옴
+  const {
+    data: productData,
+    isLoading,
+    error,
+  } = useQuery<ProductDetailTypes>({
+    queryKey: ['productDetail', productId],
+    queryFn: () => fetchProductDetails(teamId, productId),
+  })
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`https://mogazoa-api.vercel.app/${teamId}/products/${productId}`)
-        setProductData(response.data) // ProductDetailTypes에 맞는 데이터를 받아옴
-      } catch (error) {
-        console.error('상품 데이터를 가져오는 중 오류 발생:', error)
-      }
-    }
+  if (isLoading) return <div>로딩 중...</div>
+  if (error) return <div>상품 데이터를 가져오는 중 오류 발생: {(error as Error).message}</div>
 
-    fetchData()
-  }, [teamId, productId])
-
-  if (!productData) {
-    return <div>로딩 중...</div>
-  }
+  if (!productData) return null
 
   const { rating, favoriteCount, reviewCount, categoryMetric } = productData
 
@@ -71,7 +68,7 @@ const ProductStatisticsSection: React.FC<StatisticsProps> = ({ teamId, productId
       difference: parseFloat((reviewCount - categoryMetric.reviewCount).toFixed(0)), // 차이 값 반올림
       description: (
         <>
-          {'같은  카테고리의 제품들보다'}
+          {'같은 카테고리의 제품들보다'}
           <br />
           {reviewCount > categoryMetric.reviewCount
             ? `${Math.abs(parseFloat((reviewCount - categoryMetric.reviewCount).toFixed(0)))}개 더 많아요!`
@@ -83,7 +80,6 @@ const ProductStatisticsSection: React.FC<StatisticsProps> = ({ teamId, productId
 
   return (
     <div className={'mx-auto mb-10 max-w-[940px]'}>
-      {' '}
       <h3 className={'mb-[30px] text-lg font-semibold'}>{'상품 통계'}</h3>
       <div className={'grid grid-cols-3 gap-[10px] xl:gap-5'}>
         {statisticsDetailContents.map((statisticsDetailContent) => (

@@ -1,34 +1,24 @@
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import FeatureTag from './FeatureTag'
-import { IoChatbubbleSharp } from 'react-icons/io5'
-import { IoMdShare } from 'react-icons/io'
 import CustomButton from '../../@shared/button/CustomButton'
-import axios from 'axios'
 import FavoriteButton from './FavoriteButton'
+import KakaoShareButton from './KakaoShareButton'
+import { IoMdShare } from 'react-icons/io'
+import { fetchProductDetails } from '@/libs/axios/product/productApi'
 import { ProductDetailTypes, DescriptionTypes } from '@/dtos/ProductDto'
 
 const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
-  const [productDetail, setProductDetail] = useState<ProductDetailTypes | null>(null)
-  const [parsedDescription, setParsedDescription] = useState<DescriptionTypes | null>(null)
+  const { data, isLoading, error } = useQuery<ProductDetailTypes>({
+    queryKey: ['productDetail', productId],
+    queryFn: () => fetchProductDetails(teamId, productId),
+  })
 
-  useEffect(() => {
-    // productId와 teamId로 제품 세부 정보를 불러오기
-    const fetchProductDetails = async () => {
-      try {
-        const response = await axios.get(`https://mogazoa-api.vercel.app/${teamId}/products/${productId}`)
-        const detailData = response.data
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>제품 세부 정보를 불러오지 못했습니다.</div>
 
-        // Parse the description JSON string into an object
-        const parsedDesc = JSON.parse(detailData.description)
-        setParsedDescription(parsedDesc)
-        setProductDetail(detailData)
-      } catch (error) {
-        console.error('제품 세부 정보 불러오기에 실패했습니다:', error)
-      }
-    }
-    fetchProductDetails()
-  }, [productId, teamId])
+  const productDetail = data as ProductDetailTypes
+  const parsedDescription = productDetail?.description as DescriptionTypes
 
   const handleShareClick = () => {
     const shareUrl = window.location.href
@@ -38,11 +28,6 @@ const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({
 
   const handleReviewClick = () => {
     alert('리뷰 작성 모달이 나타납니다.')
-  }
-
-  const handleKakaoShare = () => {
-    alert('카카오톡 공유 기능이 호출되었습니다.')
-    // 카카오톡 공유 기능 구현
   }
 
   const handleReservationClick = () => {
@@ -55,8 +40,6 @@ const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({
       alert('예약 URL을 찾을 수 없습니다.')
     }
   }
-
-  if (!productDetail || !parsedDescription) return <div>Loading...</div>
 
   return (
     <div className="mx-auto flex max-w-[940px] flex-col rounded-md pt-6 text-white lg:flex-row">
@@ -79,12 +62,12 @@ const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({
             <FavoriteButton productId={productId} teamId={teamId} isFavorite={productDetail.isFavorite} />
           </div>
           <div className="flex space-x-4">
-            <button
-              onClick={handleKakaoShare}
-              className="flex items-center justify-center rounded-lg border-unactive bg-[#252530] p-2 text-[#6E6E82] hover:bg-[#252530] hover:text-white"
-            >
-              <IoChatbubbleSharp size={24} />
-            </button>
+            <KakaoShareButton
+              url={window.location.href} // 공유할 URL
+              title={productDetail.name} // 공유할 제목
+              description={parsedDescription.des} // 공유할 설명
+              imageUrl={productDetail.image} // 공유할 이미지 URL
+            />
             <button
               onClick={handleShareClick}
               className="flex items-center justify-center rounded-lg border-unactive bg-[#252530] p-2 text-[#6E6E82] hover:bg-[#252530] hover:text-white"
