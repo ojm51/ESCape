@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
@@ -46,6 +46,19 @@ export default function Profile({ data: userData }: ProfileProps) {
 
   const toggleFollowModal = () => setIsFollowModalOpen((prev) => !prev)
   const toggleEditProfileModal = () => setEditProfileModalOpen((prev) => !prev)
+
+  /** 페이지를 이동하면 열려 있던 모달을 닫는 함수 */
+  useEffect(() => {
+    const handleRouteChange = () => {
+      toggleFollowModal()
+    }
+
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [router])
 
   const {
     isPending: isFollowerPending,
