@@ -11,7 +11,6 @@ interface FollowUserListProps {
 }
 
 export default function FollowUserList({ type, name, title, followUserList, nextCursor }: FollowUserListProps) {
-  console.log('type: ', type)
   return (
     <div>
       <h3 className="mb-5 text-xl font-semibold leading-7 md:mb-8 xl:text-2xl">
