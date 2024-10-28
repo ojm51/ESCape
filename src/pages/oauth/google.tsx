@@ -2,7 +2,7 @@ import { useAuth } from '@/contexts/AuthProvider'
 import Link from 'next/link'
 import Image from 'next/image'
 import Logo from '../../../public/images/logo.svg'
-import PrimaryButton from '@/components/@shared/button/CustomButton'
+import PrimaryButton from '@/components/@shared/ui/CustomButton'
 
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'

@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react'
 import Image from 'next/image'
 import imageIcon from '@icons/image_icon.svg'
 import deleteIcon from '@icons/close_icon.svg'
-import CustomButton from '../@shared/button/CustomButton'
+import CustomButton from '../@shared/ui/CustomButton'
 import { Spinner } from 'flowbite-react'
 
 const INPUT_MAX_LENGTH = 10

@@ -9,7 +9,7 @@ import { AddImageFileParams, UpdateMyInfoParams } from '@/libs/axios/mypage/type
 import { addImageFile, getUserFollows } from '@/libs/axios/mypage/apis'
 import { useAuth } from '@/contexts/AuthProvider'
 import Modal from '../@shared/modal/Modal'
-import CustomButton from '../@shared/button/CustomButton'
+import CustomButton from '../@shared/ui/CustomButton'
 import EditProfile from './EditProfile'
 import FollowUserList from './FollowUserList'
 import { AddFollowParams, DeleteFollowParams } from '@/libs/axios/user/types'
