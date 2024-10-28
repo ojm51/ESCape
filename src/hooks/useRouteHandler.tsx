@@ -10,7 +10,11 @@ const useRouteHandler = () => {
   const handleCategory = (category: number) => {
     router.push({ pathname: '/product', query: { category: category } })
   }
-  return { handleKeyword, handleCategory, category, keyword, order }
+
+  const handleQueryReset = () => {
+    router.push('/product')
+  }
+  return { handleKeyword, handleCategory, handleQueryReset, category, keyword, order }
 }
 
 export default useRouteHandler

@@ -10,12 +10,17 @@ import iconSignin from '@icons/icon_signin.svg'
 import HeaderSidebar from './HeaderSidebar'
 import defaultProfileImage from '@images/user_default.svg'
 import { useAuth } from '@/contexts/AuthProvider'
+import classNames from 'classnames'
 
 export default function Header({ children }: PropsWithChildren) {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const [searchInputValue, setSearchInputValue] = useState('')
-
+  const [isOpenSearchInput, setIsOpenSearchInput] = useState(false)
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
+
+  const toggleSearchInput = () => {
+    setIsOpenSearchInput((prev) => !prev)
+  }
 
   const handleSidebar = (active?: 'open' | 'close') => {
     if (active === 'open') {
@@ -28,10 +33,6 @@ export default function Header({ children }: PropsWithChildren) {
   }
 
   const router = useRouter()
-
-  const handleLogout = () => {
-    logout()
-  }
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = defaultProfileImage.src
@@ -62,9 +63,18 @@ export default function Header({ children }: PropsWithChildren) {
           >
             <Image src={iconHamburger} alt="카테고리 보기" fill />
           </button>
-          <div className="flex items-center gap-10">
-            <Link href="/" className="relative h-[24px] w-[120px] md:h-[28px] md:w-[140px] xl:h-[34px] xl:w-[170px]">
+          <div className="flex items-center gap-4 text-brand-gray-light">
+            <Link
+              href="/"
+              className={classNames(
+                'relative h-[24px] w-[120px] md:h-[28px] md:w-[140px] xl:h-[34px] xl:w-[170px]',
+                isOpenSearchInput && 'hidden md:block',
+              )}
+            >
               <Image src={logoBig} alt="로고" fill sizes="(max-width: 768px) 120px, (max-width: 1280px) 140px, 170px" />
+            </Link>
+            <Link href="/product" className="hidden md:block">
+              지역별 테마
             </Link>
             <Link href="/board" className="hidden md:block">
               자유게시판
@@ -89,11 +99,7 @@ export default function Header({ children }: PropsWithChildren) {
                       onError={handleImageError}
                     />
                   </div>
-                  {user.nickname}
                 </Link>
-                <button type="button" className="text-white" onClick={handleLogout}>
-                  로그아웃
-                </button>
               </>
             ) : (
               <>
@@ -103,11 +109,35 @@ export default function Header({ children }: PropsWithChildren) {
             )}
           </div>
           <div className="flex items-center gap-5 md:hidden">
-            <button className="relative h-[18.38px] w-[18.38px]">
-              <Image src={iconGlass} alt="테마검색" fill />
-            </button>
+            <div
+              className={classNames(
+                isOpenSearchInput
+                  ? 'flex h-[40px] w-[200px] items-center gap-1.5 rounded-[28px] bg-[#252530] px-4'
+                  : '',
+              )}
+            >
+              <button
+                onClick={toggleSearchInput}
+                className="relative flex h-[18.38px] w-[18.38px] shrink-0 items-center"
+              >
+                <Image src={iconGlass} alt="테마검색" fill />
+              </button>
+              <form className={classNames(isOpenSearchInput ? 'block' : 'hidden')} onSubmit={onSubmitSearchInput}>
+                <input value={searchInputValue} onChange={handleSearchInput} placeholder="테마를 검색해 보세요" />
+              </form>
+            </div>
             {user ? (
-              <span>유저프로필</span>
+              <Link href="/mypage" className="flex items-center gap-3">
+                <div className="relative h-[42px] w-[42px] overflow-hidden rounded-full bg-brand-black-light">
+                  <Image
+                    src={user.image || defaultProfileImage}
+                    alt="프로필 이미지"
+                    width={42}
+                    height={42}
+                    onError={handleImageError}
+                  />
+                </div>
+              </Link>
             ) : (
               <Link href="/signin" className="relative h-[18.38px] w-[18.38px]">
                 <Image src={iconSignin} alt="로그인" fill />
