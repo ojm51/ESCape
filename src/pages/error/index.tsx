@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import PrimaryButton from '@/components/@shared/button/CustomButton'
+import PrimaryButton from '@/components/@shared/ui/CustomButton'
 
 export default function ErrorPage() {
   const router = useRouter()

@@ -10,11 +10,12 @@ import iconSignin from '@icons/icon_signin.svg'
 import HeaderSidebar from './HeaderSidebar'
 import defaultProfileImage from '@images/user_default.svg'
 import { useAuth } from '@/contexts/AuthProvider'
+import useRouteHandler from '@/hooks/useRouteHandler'
 
 export default function Header({ children }: PropsWithChildren) {
   const { user, logout } = useAuth()
   const [searchInputValue, setSearchInputValue] = useState('')
-
+  const { handleKeyword } = useRouteHandler()
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
 
   const handleSidebar = (active?: 'open' | 'close') => {
@@ -46,7 +47,7 @@ export default function Header({ children }: PropsWithChildren) {
       router.push('/product')
       return
     }
-    router.push({ pathname: '/product', query: { keyword: searchInputValue } })
+    handleKeyword(searchInputValue)
     setSearchInputValue('')
   }
 
