@@ -3,20 +3,23 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Logo from '../../../public/images/logo.svg'
 import PrimaryButton from '@/components/@shared/button/CustomButton'
-
 import { Spinner } from 'flowbite-react'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, FieldError } from 'react-hook-form'
 import oAuthSignUp from '@/libs/axios/oauth/oAuthSignUp'
 
 interface NicknameForm {
   nickname: string
 }
 
+interface OAuthSignUpResponse {
+  ok: boolean
+  message?: string
+}
+
 export default function KakaoSignupPage() {
   const { oAuthLogin } = useAuth()
-
   const provider = 'kakao'
   const router = useRouter()
   const { code } = router.query
@@ -36,7 +39,7 @@ export default function KakaoSignupPage() {
     }
     localStorage.setItem('authCode', code)
     window.close()
-  }, [code])
+  }, [code, router])
 
   const onSubmit = async (data: NicknameForm) => {
     const token = localStorage.getItem('authCode')
@@ -55,18 +58,25 @@ export default function KakaoSignupPage() {
 
     try {
       const isSignUpSuccess = await oAuthSignUp(formData, provider)
-      const result = await isSignUpSuccess.json()
-      console.log('API Response:', result)
 
-      if (isSignUpSuccess) {
-        await oAuthLogin({ token }, provider)
-        localStorage.removeItem('authCode')
-        router.push('/')
-      } else {
+      if (typeof isSignUpSuccess === 'boolean') {
         setError('nickname', {
           type: 'server',
-          message: result.message || '회원가입 실패. 다시 시도해 주세요.',
+          message: '회원가입 실패. 다시 시도해 주세요.',
         })
+      } else {
+        const { ok, message }: OAuthSignUpResponse = isSignUpSuccess
+
+        if (ok) {
+          await oAuthLogin({ token }, provider)
+          localStorage.removeItem('authCode')
+          router.push('/product')
+        } else {
+          setError('nickname', {
+            type: 'server',
+            message: message || '회원가입 실패. 다시 시도해 주세요.',
+          })
+        }
       }
     } catch (err) {
       setError('nickname', {
@@ -102,7 +112,7 @@ export default function KakaoSignupPage() {
               },
             })}
           />
-          {errors.nickname && <p className="mt-2 text-sm text-red-500">{errors.nickname.message}</p>}
+          {errors.nickname && <p className="mt-2 text-sm text-red-500">{(errors.nickname as FieldError).message}</p>}
         </div>
         <div className="pt-2">
           <PrimaryButton style="primary" type="submit" active={true}>
