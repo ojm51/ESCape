@@ -31,8 +31,8 @@ export const getProduct = async ({
   }
 }
 
-export const fetchProductDetails = async (teamId: string, productId: number): Promise<ProductDetailTypes> => {
-  const response = await axiosInstance.get(`/${teamId}/products/${productId}`)
+export const fetchProductDetails = async (productId: number): Promise<ProductDetailTypes> => {
+  const response = await axiosInstance.get(`/products/${productId}`)
   const productData = response.data
 
   // description이 JSON 문자열일 경우 객체로 변환

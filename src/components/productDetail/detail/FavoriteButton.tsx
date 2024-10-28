@@ -6,11 +6,10 @@ import { useAuth } from '@/contexts/AuthProvider'
 
 interface FavoriteButtonProps {
   productId: number
-  teamId: string
   isFavorite: boolean // 부모 컴포넌트로부터 받을 초기 상태
 }
 
-const FavoriteButton: React.FC<FavoriteButtonProps> = ({ productId, teamId, isFavorite: initialIsFavorite }) => {
+const FavoriteButton: React.FC<FavoriteButtonProps> = ({ productId, isFavorite: initialIsFavorite }) => {
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite)
   const { user, isPending } = useAuth()
   const router = useRouter()
@@ -24,9 +23,9 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ productId, teamId, isFa
 
     try {
       if (isFavorite) {
-        await axios.delete(`https://mogazoa-api.vercel.app/${teamId}/products/${productId}/favorite`)
+        await axios.delete(`/products/${productId}/favorite`)
       } else {
-        await axios.post(`https://mogazoa-api.vercel.app/${teamId}/products/${productId}/favorite`)
+        await axios.post(`/products/${productId}/favorite`)
       }
       setIsFavorite((prevIsFavorite) => !prevIsFavorite)
     } catch (error) {
