@@ -1,18 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import SortDropdown from './SortDropdown'
 import StarRating from '../StarRating'
-import { fetchReviews } from '@/libs/axios/product/reviewApi'
+import { fetchReviews, deleteReview } from '@/libs/axios/product/reviewApi'
 import { ProductReviewListTypes } from '@/dtos/ProductDto'
 import DefaultImage from '@images/default-image.png'
 import ReviewLikeButton from './ReviewLikeButton'
+import ReviewModal from '../ReviewModal'
+import { useAuth } from '@/contexts/AuthProvider'
 
 const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) => {
   const router = useRouter()
-  const [sortOption, setSortOption] = React.useState<string>('recent')
+  const { user } = useAuth()
+  const [sortOption, setSortOption] = useState<string>('recent')
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
+  const [editingReview, setEditingReview] = useState<ProductReviewListTypes | null>(null)
 
-  // React Query의 useQuery 훅을 사용하여 리뷰 데이터를 가져옴
   const {
     data: reviews = [],
     isLoading,
@@ -23,15 +27,39 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
   })
 
   const handleSortChange = (newSortOption: string) => {
-    setSortOption(newSortOption) // 정렬 옵션 변경
+    setSortOption(newSortOption)
   }
 
   const handleProfileClick = (userId: number) => {
-    router.push(`/user/${userId}`) // 해당 유저의 프로필 페이지로 이동
+    router.push(`/user/${userId}`)
+  }
+
+  const handleEditReview = (review: ProductReviewListTypes) => {
+    setEditingReview(review)
+    setIsReviewModalOpen(true) // 리뷰 수정 모달 열기
+  }
+
+  const handleDeleteReview = async (reviewId: number) => {
+    const confirmed = window.confirm('리뷰를 삭제하시겠습니까?')
+
+    if (confirmed) {
+      try {
+        await deleteReview(reviewId)
+        alert('리뷰가 성공적으로 삭제되었습니다.')
+      } catch (error) {
+        console.error('리뷰 삭제 실패:', error)
+        alert('리뷰 삭제에 실패했습니다.')
+      }
+    }
+  }
+
+  const closeModal = () => {
+    setIsReviewModalOpen(false)
+    setEditingReview(null)
   }
 
   return (
-    <div className={'relative z-0 mx-auto max-w-[940px]'}>
+    <div className={'relative mx-auto max-w-[940px]'}>
       <div className="mb-[30px] flex items-center justify-between">
         <h3 className={'text-lg font-semibold'}>{'상품 리뷰'}</h3>
         <SortDropdown productId={productId} order={handleSortChange} />
@@ -39,7 +67,6 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
       {isLoading ? (
         <p>로딩 중...</p>
       ) : error ? (
-        // error가 존재하면 에러 메시지를 출력
         <p>{(error as Error).message}</p>
       ) : (
         <ul>
@@ -81,7 +108,26 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
                       />
                     ))}
                   </div>
-                  <p className="text-gray-400">{new Date(review.createdAt).toLocaleDateString()}</p>
+
+                  {/* 날짜와 수정/삭제 버튼을 같은 줄에 배치 */}
+                  <div className="flex items-center justify-between">
+                    <p className="text-gray-400">{new Date(review.createdAt).toLocaleDateString()}</p>
+
+                    {/* 수정 및 삭제 버튼: 로그인한 사용자가 리뷰 작성자일 때만 표시 */}
+                    {user && user.id === review.user.id && (
+                      <div className="flex space-x-2">
+                        <button className="text-[#9FA6B2] hover:underline" onClick={() => handleEditReview(review)}>
+                          수정
+                        </button>
+                        <button
+                          className="text-[#9FA6B2] hover:underline"
+                          onClick={() => handleDeleteReview(review.id)}
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex flex-col items-end">
@@ -97,6 +143,23 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
             </li>
           ))}
         </ul>
+      )}
+
+      {/* 리뷰 수정 모달 */}
+      {editingReview && (
+        <ReviewModal
+          isOpen={isReviewModalOpen}
+          onClose={closeModal}
+          productName={`상품 이름`}
+          productId={productId}
+          isEdit={true}
+          initialReviewData={{
+            rating: editingReview.rating,
+            content: editingReview.content,
+            images: editingReview.reviewImages.map((image) => image.source),
+            reviewId: editingReview.id,
+          }}
+        />
       )}
     </div>
   )

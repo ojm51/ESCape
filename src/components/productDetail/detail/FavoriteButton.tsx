@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { FaHeart, FaRegHeart } from 'react-icons/fa'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/contexts/AuthProvider'
+import { addFavorite, removeFavorite } from '@/libs/axios/product/productApi'
 
 interface FavoriteButtonProps {
   productId: number
@@ -23,9 +23,9 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ productId, isFavorite: 
 
     try {
       if (isFavorite) {
-        await axios.delete(`/products/${productId}/favorite`)
+        await removeFavorite(productId)
       } else {
-        await axios.post(`/products/${productId}/favorite`)
+        await addFavorite(productId)
       }
       setIsFavorite((prevIsFavorite) => !prevIsFavorite)
     } catch (error) {

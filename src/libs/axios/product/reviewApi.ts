@@ -30,3 +30,34 @@ export const updateReview = async (reviewId: number, reviewData: UpdateReviewReq
 
   return response.data
 }
+
+export const deleteReview = async (reviewId: number) => {
+  const response = await axiosInstance.delete(`/reviews/${reviewId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  return response.data
+}
+
+export const uploadImage = async (imageFile: File) => {
+  const formData = new FormData()
+  formData.append('image', imageFile)
+
+  const response = await axiosInstance.post(`/images/upload`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+
+  return response.data.imageUrl
+}
+
+export const addReviewLike = async (reviewId: number) => {
+  const response = await axiosInstance.post(`/reviews/${reviewId}/like`)
+  return response.data
+}
+
+export const removeReviewLike = async (reviewId: number) => {
+  const response = await axiosInstance.delete(`/reviews/${reviewId}/like`)
+  return response.data
+}
