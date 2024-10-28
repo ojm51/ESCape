@@ -55,7 +55,7 @@ export default function SignInPage() {
           <label className="block pb-1">이메일</label>
           <input
             type="text"
-            className={`bg-brand-black-medium w-full rounded-xl border-solid border-brand-black-light py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation ${
+            className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
               errors.email || loginErrorMessage ? 'border-red-500' : ''
             }`}
             placeholder="이메일을 입력해주세요"
@@ -67,15 +67,15 @@ export default function SignInPage() {
               },
             })}
           />
-          {errors.email && <p className="text-red-500 mt-1">{errors.email.message}</p>}
-          {loginErrorMessage && <p className="text-red-500 mt-1">{loginErrorMessage}</p>}
+          {errors.email && <p className="mt-1 text-red-500">{errors.email.message}</p>}
+          {loginErrorMessage && <p className="mt-1 text-red-500">{loginErrorMessage}</p>}
         </div>
         <div className="mb-5">
           <label className="block pb-1">비밀번호</label>
           <div className="relative">
             <input
               type={showPassword ? 'text' : 'password'}
-              className={`bg-brand-black-medium w-full rounded-xl border-solid border-brand-black-light py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation ${
+              className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
                 errors.password || loginErrorMessage ? 'border-red-500' : ''
               }`}
               placeholder="비밀번호를 입력해주세요"
@@ -96,7 +96,7 @@ export default function SignInPage() {
               />
             </button>
           </div>
-          {errors.password && <p className="text-red-500 mt-1">{errors.password.message}</p>}
+          {errors.password && <p className="mt-1 text-red-500">{errors.password.message}</p>}
         </div>
         <div className="pt-2">
           <PrimaryButton style="primary" type="submit" active={true}>

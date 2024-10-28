@@ -8,8 +8,7 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { Spinner } from 'flowbite-react'
-import { useToaster } from "@/contexts/ToasterProvider";
-
+import { useToaster } from '@/contexts/ToasterProvider'
 
 interface NicknameForm {
   nickname: string
@@ -20,7 +19,7 @@ export default function GoogleSignupPage() {
   const provider = 'google'
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const toaster = useToaster();
+  const toaster = useToaster()
 
   const redirectUri = `http://localhost:3000/oauth/${provider}`
 
@@ -34,7 +33,7 @@ export default function GoogleSignupPage() {
   const onSubmit = async (data: NicknameForm) => {
     const token = localStorage.getItem('authCode')
     if (!token) {
-      toaster("fail", "인증 코드가 없습니다. 다시 로그인 해주세요.")
+      toaster('fail', '인증 코드가 없습니다. 다시 로그인 해주세요.')
       return
     }
     const formData = {
@@ -58,7 +57,7 @@ export default function GoogleSignupPage() {
 
       if (result.accessToken) {
         await oAuthLogin({ redirectUri, token }, 'google')
-        toaster("success", "로그인이 성공하였습니다.")
+        toaster('success', '로그인이 성공하였습니다.')
         localStorage.removeItem('authCode')
         router.push('/')
       } else {
@@ -79,7 +78,7 @@ export default function GoogleSignupPage() {
   }
 
   return (
-    <div className="mt-[200px] max-w-[640px] text-white p-3 mx-auto">
+    <div className="mx-auto mt-[200px] max-w-[640px] p-3 text-white">
       <div className="flex justify-center">
         <Link href="/" className="inline-block py-10">
           <Image width={200} src={Logo} alt="로고 이미지" />
@@ -90,7 +89,7 @@ export default function GoogleSignupPage() {
           <label className="block pb-1">닉네임</label>
           <input
             type="text"
-            className={`bg-brand-black-medium w-full rounded-xl border-solid border-brand-black-light py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation ${
+            className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
               errors.nickname ? 'border-red-500' : ''
             }`}
             placeholder="닉네임을 입력해주세요"
@@ -102,7 +101,7 @@ export default function GoogleSignupPage() {
               },
             })}
           />
-          {errors.nickname && <p className="text-red-500 text-sm mt-2">{errors.nickname.message}</p>}
+          {errors.nickname && <p className="mt-2 text-sm text-red-500">{errors.nickname.message}</p>}
         </div>
         <div className="pt-2">
           <PrimaryButton style="primary" type="submit" active={loading ? false : true}>

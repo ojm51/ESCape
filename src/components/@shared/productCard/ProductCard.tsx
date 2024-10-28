@@ -6,12 +6,12 @@ import heartIcon from '@icons/heart_icon.svg'
 import { ProductTypes } from '@/dtos/ProductDto'
 import Link from 'next/link'
 
-interface ThemeCardProps {
+interface ProductCardProps {
   productId: number
   data: ProductTypes
 }
 
-export default function ThemeCard({ data, productId }: ThemeCardProps) {
+export default function ProductCard({ data, productId }: ProductCardProps) {
   const { image, name, rating, reviewCount, favoriteCount } = data
   const cardDetailContents = [
     {
