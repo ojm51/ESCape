@@ -65,7 +65,7 @@ export default function Profile({ data: userData }: ProfileProps) {
     isError: isFollowerError,
     data: followerList,
   } = useQuery({
-    queryKey: [`userFollowers${id}`],
+    queryKey: ['userFollowers', id],
     queryFn: () => getUserFollows({ userId: id, type: 'follower' }),
     enabled: !!id,
   })
@@ -75,7 +75,7 @@ export default function Profile({ data: userData }: ProfileProps) {
     isError: isFolloweeError,
     data: followeeList,
   } = useQuery({
-    queryKey: [`userFollowees${id}`],
+    queryKey: ['userFollowees', id],
     queryFn: () => getUserFollows({ userId: id, type: 'followee' }),
     enabled: !!id,
   })
@@ -137,8 +137,8 @@ export default function Profile({ data: userData }: ProfileProps) {
   const followUserMutation = useMutation({
     mutationFn: (userId: AddFollowParams) => addFollow(userId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`userInfo${id}`] })
-      queryClient.invalidateQueries({ queryKey: [`userFollowers${id}`] })
+      queryClient.invalidateQueries({ queryKey: ['userInfo', id] })
+      queryClient.invalidateQueries({ queryKey: ['userFollowers', id] })
     },
   })
 
@@ -149,8 +149,8 @@ export default function Profile({ data: userData }: ProfileProps) {
   const unfollowUserMutation = useMutation({
     mutationFn: (userId: DeleteFollowParams) => deleteFollow(userId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`userInfo${id}`] })
-      queryClient.invalidateQueries({ queryKey: [`userFollowers${id}`] })
+      queryClient.invalidateQueries({ queryKey: ['userInfo', id] })
+      queryClient.invalidateQueries({ queryKey: ['userFollowers', id] })
     },
   })
 

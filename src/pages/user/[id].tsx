@@ -29,7 +29,7 @@ export default function UserPage() {
   }, [myInfo, queryId, router])
 
   const { isPending, isError, data } = useQuery({
-    queryKey: [`userInfo${queryId}`],
+    queryKey: ['userInfo', queryId],
     queryFn: () => getUserInfo({ userId: queryId! }),
     enabled: !!queryId,
   })
