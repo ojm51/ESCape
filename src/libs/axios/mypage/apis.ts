@@ -34,7 +34,7 @@ export const getUserProducts = async ({ userId, type }: GetUserProductsParams) =
 }
 
 export const getUserFollows = async ({ userId, type }: GetUserFollowsParams) => {
-  const url = type === '팔로워' ? API_PATH.user.followers(userId) : API_PATH.user.followees(userId)
+  const url = type === 'follower' ? API_PATH.user.followers(userId) : API_PATH.user.followees(userId)
   const response = await axiosInstance.get<FollowResponseTypes>(url)
   return response.data ?? []
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
@@ -34,8 +34,9 @@ export default function Profile({ data: userData }: ProfileProps) {
   const profileImage = typeof image === 'string' ? image : image ? URL.createObjectURL(image) : defaultProfileImage
 
   const [followData, setFollowData] = useState<FollowResponseTypes>()
+  const [isFollowingState, setIsFollowingState] = useState<boolean>(isFollowing)
 
-  const [modalType, setModalType] = useState<string>('팔로워')
+  const [modalType, setModalType] = useState<string>('follower')
   const [isFollowModalOpen, setIsFollowModalOpen] = useState<boolean>(false)
   const [isEditProfileModalOpen, setEditProfileModalOpen] = useState<boolean>(false)
   const [newProfile, setNewProfile] = useState<ProfileContentsTypes>({
@@ -47,13 +48,26 @@ export default function Profile({ data: userData }: ProfileProps) {
   const toggleFollowModal = () => setIsFollowModalOpen((prev) => !prev)
   const toggleEditProfileModal = () => setEditProfileModalOpen((prev) => !prev)
 
+  /** 페이지를 이동하면 열려 있던 모달을 닫는 함수 */
+  useEffect(() => {
+    const handleRouteChange = () => {
+      toggleFollowModal()
+    }
+
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [router])
+
   const {
     isPending: isFollowerPending,
     isError: isFollowerError,
     data: followerList,
   } = useQuery({
-    queryKey: [`userFollowers${id}`],
-    queryFn: () => getUserFollows({ userId: id, type: '팔로워' }),
+    queryKey: ['userFollowers', id],
+    queryFn: () => getUserFollows({ userId: id, type: 'follower' }),
     enabled: !!id,
   })
 
@@ -62,14 +76,14 @@ export default function Profile({ data: userData }: ProfileProps) {
     isError: isFolloweeError,
     data: followeeList,
   } = useQuery({
-    queryKey: [`userFollowees${id}`],
-    queryFn: () => getUserFollows({ userId: id, type: '팔로잉' }),
+    queryKey: ['userFollowees', id],
+    queryFn: () => getUserFollows({ userId: id, type: 'followee' }),
     enabled: !!id,
   })
 
   const handleFollowListClick = (type: string) => {
     setModalType(type)
-    modalType === '팔로워' ? setFollowData(followerList) : setFollowData(followeeList)
+    setFollowData(type === 'follower' ? followerList : followeeList)
     toggleFollowModal()
   }
 
@@ -124,25 +138,39 @@ export default function Profile({ data: userData }: ProfileProps) {
   const followUserMutation = useMutation({
     mutationFn: (userId: AddFollowParams) => addFollow(userId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`userInfo${id}`] })
-      queryClient.invalidateQueries({ queryKey: [`userFollowers${id}`] })
+      queryClient.invalidateQueries({ queryKey: ['userInfo', id] })
+      queryClient.invalidateQueries({ queryKey: ['userFollowers', id] })
     },
   })
 
   const handleFollowButtonClick = () => {
-    followUserMutation.mutate({ userId: id })
+    followUserMutation.mutate(
+      { userId: id },
+      {
+        onSuccess: () => {
+          setIsFollowingState(true)
+        },
+      },
+    )
   }
 
   const unfollowUserMutation = useMutation({
     mutationFn: (userId: DeleteFollowParams) => deleteFollow(userId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`userInfo${id}`] })
-      queryClient.invalidateQueries({ queryKey: [`userFollowers${id}`] })
+      queryClient.invalidateQueries({ queryKey: ['userInfo', id] })
+      queryClient.invalidateQueries({ queryKey: ['userFollowers', id] })
     },
   })
 
   const handleUnfollowButtonClick = () => {
-    unfollowUserMutation.mutate({ userId: id })
+    unfollowUserMutation.mutate(
+      { userId: id },
+      {
+        onSuccess: () => {
+          setIsFollowingState(false)
+        },
+      },
+    )
   }
 
   return (
@@ -157,14 +185,14 @@ export default function Profile({ data: userData }: ProfileProps) {
         <div className="flex w-full content-between items-center">
           <button
             className="flex w-full flex-col content-center items-center gap-[10px]"
-            onClick={() => handleFollowListClick('팔로워')}
+            onClick={() => handleFollowListClick('follower')}
           >
             <h4 className="text-center text-lg font-semibold text-brand-white">{followersCount}</h4>
             <p className="text-center text-sm font-normal text-brand-gray-light">팔로워</p>
           </button>
           <button
             className="flex w-full flex-col content-center items-center gap-[10px]"
-            onClick={() => handleFollowListClick('팔로잉')}
+            onClick={() => handleFollowListClick('followee')}
           >
             <h4 className="text-center text-lg font-semibold text-brand-white">{followeesCount}</h4>
             <p className="text-center text-sm font-normal text-brand-gray-light">팔로잉</p>
@@ -180,7 +208,7 @@ export default function Profile({ data: userData }: ProfileProps) {
               로그아웃
             </CustomButton>
           </div>
-        ) : isFollowing ? (
+        ) : isFollowingState ? (
           <CustomButton style="tertiary" active={true} onClick={handleUnfollowButtonClick}>
             팔로우 취소
           </CustomButton>
@@ -197,9 +225,10 @@ export default function Profile({ data: userData }: ProfileProps) {
           modalFrameClassNames="max-h-[550px] w-[335px] overflow-auto scrollbar-hide md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
         >
           <FollowUserList
+            type={modalType}
             name={nickname}
-            title={`${modalType === '팔로워' ? '을 팔로우' : '이 팔로잉'}`}
-            followUserData={followData?.list}
+            title={`${modalType === 'follower' ? '을 팔로우' : '이 팔로잉'}`}
+            followUserList={followData?.list}
           />
         </Modal>
       )}

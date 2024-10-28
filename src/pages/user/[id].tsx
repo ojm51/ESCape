@@ -29,7 +29,7 @@ export default function UserPage() {
   }, [myInfo, queryId, router])
 
   const { isPending, isError, data } = useQuery({
-    queryKey: [`userInfo${queryId}`],
+    queryKey: ['userInfo', queryId],
     queryFn: () => getUserInfo({ userId: queryId! }),
     enabled: !!queryId,
   })
@@ -43,7 +43,7 @@ export default function UserPage() {
 
   return (
     <>
-      <div className="m-auto max-w-[335px] md:max-w-[509px] xl:max-w-[1340px]">
+      <div className="m-auto mt-[30px] max-w-[335px] md:mt-[40px] md:max-w-[509px] xl:mt-[60px] xl:max-w-[1340px]">
         <section className="mb-[60px] xl:float-left xl:mr-[60px]">
           {!!data ? <Profile data={data} /> : <p>failed..</p>}
         </section>

@@ -47,7 +47,8 @@ export interface UserRanking {
 export interface FollowTypes extends CommonUserTypes {}
 
 export interface FollowListTypes {
-  follow: FollowTypes
+  follower?: CommonUserTypes
+  followee?: CommonUserTypes
   id: number
 }
 
