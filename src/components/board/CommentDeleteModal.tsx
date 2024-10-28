@@ -35,7 +35,7 @@ export default function CommentDeleteModal({id, isOpen, onClick, currentPage, da
   return (
     <>
       {isOpen && (
-        <Modal onClick={onClick} classNames="">
+        <Modal onClick={onClick} modalFrameClassNames="">
           <form onSubmit={handleSubmit}>
             <div className="px-4 pt-4">
               <p className="font-bold text-[20px] leading-6 text-brand-white">댓글을 삭제하시겠습니까?</p>

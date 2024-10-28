@@ -25,7 +25,9 @@ export default function BoardPatchModal({id, isOpen, onClick, value}:BoardPatchM
 
   const [image, setImage] = useState<File | null>(null);
   const [title, setTitle] = useState<string | undefined>(articleDetailData?.title);
+  const [titleError, setTitleError] = useState<string | null>(null);
   const [content, setContent] = useState<string | undefined>(articleDetailData?.content);
+  const [contentError, setContentError] = useState<string | null>(null)
   const [userId, setUserId] = useState(1);
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -38,11 +40,39 @@ export default function BoardPatchModal({id, isOpen, onClick, value}:BoardPatchM
     }
   }, [articleDetailData]);
 
+  // 제목 유효성 검사
+  const validateTitle = (title: string | undefined) => {
+    if (!title) {
+      setTitleError("제목을 입력해주세요.");
+      return false;
+    }
+    setTitleError(null);
+    return true;
+  };
+
+  // 내용 유효성 검사
+  const validateContent = (content: string | undefined) => {
+    if (!content) {
+      setContentError("내용을 입력해주세요.");
+      return false;
+    } else if (content.length > 300) {
+      setContentError("내용은 300자 미만이어야 합니다.");
+      return false;
+    }
+    setContentError(null);
+    return true;
+  };
+
+
   // ContentSection 에서 받아온 수정된 값을 useState 에 반영하기 위한 이벤트 핸들러
   const handleFormDataChange = (value: {image: File | null; title: string | undefined; content: string | undefined}) => {
     setImage(value.image);
     setTitle(value?.title);
     setContent(value?.content);
+
+    // 사용자가 값을 입력하면 다시 유효성 검사를 하기 위한 조건문
+    if (value.title !== undefined) validateTitle(value.title);
+    if (value.content !== undefined) validateContent(value.content);
   }
 
   // 게시글 전송을 위한 useMutation
@@ -67,6 +97,10 @@ export default function BoardPatchModal({id, isOpen, onClick, value}:BoardPatchM
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
+    if (!validateTitle(title) || !validateContent(content)) {
+      return;
+    }
+
     const formData = new FormData();
     formData.append("image", image as File);
     formData.append("title", title as string);
@@ -83,13 +117,13 @@ export default function BoardPatchModal({id, isOpen, onClick, value}:BoardPatchM
   return (
     <>
       {isOpen && (
-        <Modal onClick={onClick} classNames="max-h-[90vh] w-[320px] md:w-[520px] overflow-scroll scrollbar-hidden scrollbar-hide">
+        <Modal onClick={onClick} modalFrameClassNames="max-h-[90vh] w-[320px] md:w-[520px] overflow-scroll scrollbar-hidden scrollbar-hide">
           <div className="relative mx-4 md:6 xl:mx-auto pt-[50px] pb-[100px] md:pb-0">
             <form onSubmit={handleSubmit}>
               <HeaderSection>
                 {value}
               </HeaderSection>
-              <ContentSection title={title} content={content} onFormDataChange={handleFormDataChange}/>
+              <ContentSection title={title} content={content} onFormDataChange={handleFormDataChange} contentError={contentError} titleError={titleError}/>
             </form>
           </div>
         </Modal>

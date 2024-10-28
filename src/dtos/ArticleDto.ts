@@ -12,6 +12,8 @@ export interface Article {
     nickname: string;
   }
   likeCount: number;
+  commentCount: number;
+  isLiked: boolean;
   image: string;
   createdAt: string;
   updatedAt: string;

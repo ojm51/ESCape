@@ -1,7 +1,7 @@
 import {Article} from "@/dtos/ArticleDto";
 import MedalIcon from "@icons/medal_icon.svg"
 import ProfileIcon from "@icons/profile_icon.svg"
-import HeartIcon from "@icons/heart_icon.svg"
+import HeartIcon from "@icons/board_heart_icon.svg"
 import Image from "next/image";
 import timeAgo from "@/utils/timeAgo";
 import Link from "next/link";
@@ -10,7 +10,7 @@ export interface BoardCardProps {
   like: Article;
 }
 
-export default function BestBoardCard({like }: BoardCardProps) {
+export default function BestBoardCard({ like }: BoardCardProps) {
 
   return (
       <div
@@ -29,7 +29,7 @@ export default function BestBoardCard({like }: BoardCardProps) {
             </p>
             {like?.image && like?.image !== "string" && like?.image !== "image test" && like?.image !== "null" ? (
               <Image className="w-[72px] h-[72px] rounded-lg border-[1px] border-solid border-brand-black-light"
-                     src={like.image} alt="게시물 이미지" width={72} height={72}/>) : null}
+                     src={like.image} alt="7053게시물 이미지" width={72} height={72}/>) : null}
           </div>
         </Link>
         <p className="text-[14px] leading-[17px] font-medium text-brand-gray-dark mt-3">

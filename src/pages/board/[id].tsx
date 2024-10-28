@@ -5,7 +5,7 @@ import {Router, useRouter} from "next/router";
 import {keepPreviousData, useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {getArticleDetail} from "@/libs/axios/board/getArticleDetail";
 import BoardStatusScreen from "@/components/board/BoardStatusScreen";
-import React, {FormEvent, useState} from "react";
+import React, {ChangeEvent, FormEvent, useState} from "react";
 import {getArticleDetailComments} from "@/libs/axios/board/getArticleDetailComments";
 import {postComments} from "@/libs/axios/board/postComments";
 import {CommentFormData} from "@/dtos/ArticleDto";
@@ -19,6 +19,7 @@ interface postCommentsProps {
 export default function BoardDetailPage() {
   const [userId, setUserId] = useState(1);
   const [comment, setComment] = useState("");
+  const [commentError, setCommentError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter() as Router;
   const { id } = router.query;
@@ -57,9 +58,34 @@ export default function BoardDetailPage() {
     }
   })
 
+  // 댓글 유효성 검사
+  const validateComment = (comment: string) => {
+    if (!comment) {
+      setCommentError("댓글을 입력해주세요.");
+      return false;
+    } else if (comment.length > 300) {
+      setCommentError("댓글은 300자 미만이어야 합니다.");
+      return false;
+    }
+    setCommentError(null);
+    return true;
+  }
+
+  // 댓글 내용이 변경될 때 유효성 검사를 실시하기 위한 이벤트 핸들러
+  const handleCommentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const newComment = e.target.value;
+    setComment(newComment);
+    validateComment(newComment);
+  }
+
   // comment 를 전송하기 위한 이벤트 핸들러
   const handleCommentSubmit = (e: FormEvent) => {
     e.preventDefault();
+
+    if (!validateComment(comment)) {
+      return;
+    }
+
     const newComment = { id, comment: {userId, content: comment}};
     commentPostMutation.mutate(newComment)
     setComment("");
@@ -73,7 +99,7 @@ export default function BoardDetailPage() {
     <div className="relative mx-4 md:mx-6 xl:mx-auto xl:w-[1200px] py-[100px]">
       <DetailContentSection data={articleDetailData} />
       <form onSubmit={handleCommentSubmit}>
-        <DetailPostCommentSection comment={comment} setComment={setComment} value="댓글 쓰기" />
+        <DetailPostCommentSection comment={comment} commentError={commentError} setComment={handleCommentChange} value="댓글 쓰기" />
       </form>
       <DetailCommentSection data={articleDetailCommentsData?.articleComments} dataId={id} currentPage={currentPage} />
       <PaginationSection totalPageCount={articleDetailCommentsData?.totalCount} currentPage={currentPage} onPageClick={handlePageClick} />

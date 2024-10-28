@@ -4,11 +4,13 @@ import PlusIcon from "@icons/plus_icon.svg";
 
 interface ContentSectionProps {
   title: string | undefined;
+  titleError: string | null;
   content: string | undefined;
+  contentError: string | null;
   onFormDataChange: (value: { image: File | null; title: string | undefined; content: string | undefined }) => void;
 }
 
-export default function ContentSection({ title, content, onFormDataChange }: ContentSectionProps) {
+export default function ContentSection({ title, titleError, content, contentError, onFormDataChange }: ContentSectionProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -41,17 +43,18 @@ export default function ContentSection({ title, content, onFormDataChange }: Con
       <input
         type="text"
         placeholder="제목을 입력해주세요."
-        className="bg-brand-black-medium w-full rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 text-brand-white mt-6"
+        className={`${titleError === null ? "" : "border-red-500"} bg-brand-black-medium w-full rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 text-brand-white mt-6`}
         value={title}
         onChange={handleTitleChange}
       />
+      {titleError && <p className="text-red-500 mt-4 ml-4">{titleError}</p>}
       <h2 className="flex gap-1.5 font-medium text-[16px] text-brand-white leading-[19px] mt-10">
         <span className="text-brand-indigo">*</span>내용
       </h2>
       <div className="relative">
         <textarea
           placeholder="내용을 입력해주세요."
-          className="h-[240px] bg-brand-black-medium w-full rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 text-brand-white mt-6"
+          className={`${contentError === null ? "" : "border-red-500"} h-[240px] bg-brand-black-medium w-full rounded-xl border-[1px] border-solid border-brand-black-light py-4 px-6 text-brand-white mt-6`}
           value={content}
           onChange={handleContentChange}
           maxLength={300}
@@ -60,6 +63,7 @@ export default function ContentSection({ title, content, onFormDataChange }: Con
           {content?.length} / 300
         </p>
       </div>
+      {contentError && <p className="text-red-500 mt-4 ml-4">{contentError}</p>}
       <h2 className="flex gap-1.5 font-medium text-[16px] text-brand-white leading-[19px] mt-10">
         <span className="text-brand-indigo">*</span>이미지
       </h2>

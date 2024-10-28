@@ -37,7 +37,7 @@ export default function BoardDeleteModal({id, isOpen, onClick}: BoardDeleteModal
   return (
     <>
       {isOpen && (
-        <Modal onClick={onClick} classNames="">
+        <Modal onClick={onClick} modalFrameClassNames="">
           <form onSubmit={handleSubmit}>
             <div className="px-4 pt-4">
               <p className="font-bold text-[20px] leading-6 text-brand-white">게시글을 삭제하시겠습니까?</p>

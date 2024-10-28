@@ -2,8 +2,8 @@ import {ArticleDetail} from "@/dtos/ArticleDto";
 import Dropdown from "@/components/board/DropDown";
 import Image from "next/image";
 import KebabIcon from "@icons/kebab_icon.svg";
-import CommentIcon from "@icons/comment_icon.svg"
-import HeartIcon from "@icons/heart_icon.svg"
+import CommentIcon from "@icons/board_comment_icon.svg"
+import HeartIcon from "@icons/board_heart_icon.svg"
 import timeAgo from "@/utils/timeAgo";
 import BoardPatchModal from "@/components/board/BoardPatchModal";
 import BoardDeleteModal from "@/components/board/BoardDeleteModal";
