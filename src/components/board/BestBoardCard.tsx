@@ -22,11 +22,11 @@ export default function BestBoardCard({ like }: BoardCardProps) {
           <p className="mt-3 line-clamp-2 h-[56px] w-full break-words text-[18px] font-medium leading-7 text-brand-white">
             {like?.title ? like.title : '제목이 들어가는 영역입니다.'}
           </p>
-          {like?.image && like?.image !== 'string' && like?.image !== 'image test' && like?.image !== 'null' ? (
+          {like.imageIdList.length !== 0 ? (
             <Image
               className="h-[72px] w-[72px] rounded-lg border-[1px] border-solid border-brand-black-light"
-              src={like.image}
-              alt="7053게시물 이미지"
+              src={`${process.env.NEXT_PUBLIC_BOARD_API_URL}/images/${like?.imageIdList.at(-1)}`}
+              alt="게시물 이미지"
               width={72}
               height={72}
             />
@@ -36,7 +36,13 @@ export default function BestBoardCard({ like }: BoardCardProps) {
       <p className="mt-3 text-[14px] font-medium leading-[17px] text-brand-gray-dark">{timeAgo(like?.createdAt)}</p>
       <div className="mt-10 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Image src={ProfileIcon} alt="작성자 이미지" />
+          <Image
+            className="h-8 w-8 rounded-full"
+            src={like.writer.image === 'string' ? ProfileIcon : like.writer.image}
+            alt="작성자 이미지"
+            width={32}
+            height={32}
+          />
           <p className="line-clamp-1 max-w-[260px] break-words text-[14px] font-medium leading-[17px] text-brand-white">
             {like?.writer.nickname ? like.writer.nickname : '알 수 없음'}
           </p>

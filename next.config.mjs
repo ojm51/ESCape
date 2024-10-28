@@ -7,6 +7,7 @@ const nextConfig = {
       'lh3.googleusercontent.com',
       'k.kakaocdn.net',
       'search.pstatic.net',
+      'rave-dev.ddns.net',
     ],
   },
 }

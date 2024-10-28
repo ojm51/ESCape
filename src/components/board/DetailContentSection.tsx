@@ -69,6 +69,13 @@ export default function DetailContentSection({ data, userId }: DetailContentProp
         </div>
       </div>
       <div className="py-20">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BOARD_API_URL}/images/${data?.imageIdList.at(-1)}`}
+          alt="게시물 이미지"
+          width={320}
+          height={320}
+          className="mb-4"
+        />
         <p className="text-[16px] font-medium leading-[28px] text-brand-white">
           {data?.content ? data.content : '본문이 들어가는 영역입니다.'}
         </p>
