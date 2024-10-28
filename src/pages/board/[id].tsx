@@ -1,4 +1,4 @@
-import DetailContentSection from "@/components/board/DetailContentSection";
+import DetailContentSection from '@/components/board/DetailContentSection'
 import DetailPostCommentSection from "@/components/board/DetailPostCommentSection";
 import DetailCommentSection from "@/components/board/DetailCommentSection";
 import {Router, useRouter} from "next/router";

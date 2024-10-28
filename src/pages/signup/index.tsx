@@ -11,6 +11,7 @@ import PrimaryButton from '@/components/@shared/button/CustomButton'
 import { useForm } from 'react-hook-form'
 import { Spinner } from 'flowbite-react'
 import { useToaster } from '@/contexts/ToasterProvider'
+import { postUsers } from '@/libs/axios/board/postUsers'
 
 export default function SignupPage() {
   const {
@@ -28,7 +29,11 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (!isPending && user) {
-      router.replace('/')
+      const sendUserPost = async () => {
+        await postUsers({ id: user.id, nickname: user.nickname, description: 'string', image: 'string' })
+        router.replace('/')
+      }
+      sendUserPost()
     }
   }, [isPending, user, router])
 
