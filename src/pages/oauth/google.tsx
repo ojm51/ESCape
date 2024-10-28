@@ -59,7 +59,7 @@ export default function GoogleSignupPage() {
         await oAuthLogin({ redirectUri, token }, 'google')
         toaster('success', '로그인이 성공하였습니다.')
         localStorage.removeItem('authCode')
-        router.push('/')
+        router.push('/product')
       } else {
         setError('nickname', {
           type: 'server',
