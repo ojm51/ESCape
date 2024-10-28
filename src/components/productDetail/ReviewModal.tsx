@@ -4,6 +4,7 @@ import { FaStar } from 'react-icons/fa'
 import { createReview, updateReview, uploadImage } from '@/libs/axios/product/reviewApi'
 import DefaultImage from '@images/default-image.png'
 import { IoMdCloseCircle } from 'react-icons/io'
+import { CreateReviewRequestBody, UpdateReviewRequestBody, ReviewImage } from '@/dtos/ReviewDto'
 
 interface ReviewModalProps {
   isOpen: boolean
@@ -11,7 +12,7 @@ interface ReviewModalProps {
   productName: string
   productId: number
   isEdit?: boolean
-  initialReviewData?: { rating: number; content: string; images: string[]; reviewId?: number }
+  initialReviewData?: { rating: number; content: string; images: ReviewImage[]; reviewId?: number }
 }
 
 const MAX_CHAR_COUNT = 500
@@ -28,14 +29,20 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const [rating, setRating] = useState<number>(initialReviewData.rating)
   const [reviewText, setReviewText] = useState<string>(initialReviewData.content)
   const [imageFiles, setImageFiles] = useState<File[]>([])
-  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>(initialReviewData.images || [])
+  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>(
+    initialReviewData.images.map((image) => image.source).filter((url): url is string => url !== undefined),
+  )
+  const [existingImages, setExistingImages] = useState<ReviewImage[]>(initialReviewData.images || [])
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     if (isEdit) {
       setRating(initialReviewData.rating)
       setReviewText(initialReviewData.content)
-      setUploadedImageUrls(initialReviewData.images)
+      setUploadedImageUrls(
+        initialReviewData.images.map((image) => image.source).filter((url): url is string => url !== undefined),
+      )
+      setExistingImages(initialReviewData.images) // 기존 이미지를 상태로 관리
     }
   }, [isEdit, initialReviewData])
 
@@ -59,38 +66,53 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   }
 
   const handleImageRemove = (index: number) => {
-    setImageFiles(imageFiles.filter((_, i) => i !== index))
-    setUploadedImageUrls(uploadedImageUrls.filter((_, i) => i !== index))
+    if (index < existingImages.length) {
+      // 기존 이미지 삭제
+      setExistingImages(existingImages.filter((_, i) => i !== index))
+    } else {
+      // 새로 업로드한 이미지 삭제
+      const newIndex = index - existingImages.length
+      setImageFiles(imageFiles.filter((_, i) => i !== newIndex))
+      setUploadedImageUrls(uploadedImageUrls.filter((_, i) => i !== newIndex))
+    }
   }
 
   const handleSubmit = async () => {
     setLoading(true)
     try {
-      let imageUrls = uploadedImageUrls
+      let imagePayload: ReviewImage[] = existingImages.map((image) => ({ id: image.id }))
 
-      // 이미지 파일 업로드 후, URL 리스트 업데이트
-      if (imageFiles.length > 0) {
-        const uploadedUrls = await Promise.all(imageFiles.map((file) => uploadImage(file)))
-        imageUrls = [...uploadedImageUrls, ...uploadedUrls]
+      if (uploadedImageUrls.length > 0) {
+        imagePayload = [...imagePayload, ...uploadedImageUrls.map((url) => ({ source: url }))]
       }
-
-      // payload 생성: images를 쉼표로 연결된 문자열로 변환
-      const payload = {
-        productId,
-        images: imageUrls.join(','), // 이미지 URL 배열을 쉼표로 연결한 문자열로 변환
-        content: reviewText,
-        rating,
-      }
-
-      console.log('보낼 데이터:', payload)
 
       if (isEdit && initialReviewData.reviewId) {
+        // 리뷰 수정
+        const payload: UpdateReviewRequestBody = {
+          images: imagePayload,
+          content: reviewText,
+          rating,
+        }
+
+        console.log('수정할 데이터:', payload)
         await updateReview(initialReviewData.reviewId, payload)
         alert('리뷰가 성공적으로 수정되었습니다.')
       } else {
+        // 리뷰 생성
+        const payload: CreateReviewRequestBody = {
+          productId,
+          images: imagePayload
+            .map((img) => img.source || img.id)
+            .filter((url): url is string => typeof url === 'string'),
+          content: reviewText,
+          rating,
+        }
+
+        console.log('생성할 데이터:', payload)
         await createReview(payload)
         alert('리뷰가 성공적으로 등록되었습니다.')
       }
+
       onClose()
     } catch (error) {
       console.error(isEdit ? '리뷰 수정 실패:' : '리뷰 등록 실패:', error)
@@ -131,20 +153,16 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             </p>
           </div>
           <div className="flex items-center space-x-2">
-            {imageFiles.length < MAX_IMAGE_COUNT && (
+            {uploadedImageUrls.length < MAX_IMAGE_COUNT && (
               <div onClick={() => document.getElementById('imageUpload')?.click()} className="relative cursor-pointer">
                 <div className="relative h-40 w-40">
                   <img src={DefaultImage.src} alt="Default Image" className="h-40 w-40 rounded-md object-cover" />
                 </div>
               </div>
             )}
-            {imageFiles.map((file, index) => (
+            {uploadedImageUrls.map((url, index) => (
               <div key={index} className="relative h-40 w-40">
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt="Uploaded Image"
-                  className="h-40 w-40 rounded-md object-cover"
-                />
+                <img src={url} alt="Uploaded Image" className="h-40 w-40 rounded-md object-cover" />
                 <button className="absolute right-2 top-2" onClick={() => handleImageRemove(index)}>
                   <IoMdCloseCircle size={24} className="text-white" />
                 </button>

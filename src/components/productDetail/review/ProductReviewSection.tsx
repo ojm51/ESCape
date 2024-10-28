@@ -21,6 +21,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
     data: reviews = [],
     isLoading,
     error,
+    refetch,
   } = useQuery<ProductReviewListTypes[]>({
     queryKey: ['reviews', productId, sortOption],
     queryFn: () => fetchReviews(productId, sortOption),
@@ -28,6 +29,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
 
   const handleSortChange = (newSortOption: string) => {
     setSortOption(newSortOption)
+    refetch()
   }
 
   const handleProfileClick = (userId: number) => {
@@ -36,7 +38,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
 
   const handleEditReview = (review: ProductReviewListTypes) => {
     setEditingReview(review)
-    setIsReviewModalOpen(true) // 리뷰 수정 모달 열기
+    setIsReviewModalOpen(true)
   }
 
   const handleDeleteReview = async (reviewId: number) => {
@@ -46,6 +48,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
       try {
         await deleteReview(reviewId)
         alert('리뷰가 성공적으로 삭제되었습니다.')
+        refetch()
       } catch (error) {
         console.error('리뷰 삭제 실패:', error)
         alert('리뷰 삭제에 실패했습니다.')
@@ -56,6 +59,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
   const closeModal = () => {
     setIsReviewModalOpen(false)
     setEditingReview(null)
+    refetch()
   }
 
   return (
@@ -109,11 +113,9 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
                     ))}
                   </div>
 
-                  {/* 날짜와 수정/삭제 버튼을 같은 줄에 배치 */}
                   <div className="flex items-center justify-between">
                     <p className="text-gray-400">{new Date(review.createdAt).toLocaleDateString()}</p>
 
-                    {/* 수정 및 삭제 버튼: 로그인한 사용자가 리뷰 작성자일 때만 표시 */}
                     {user && user.id === review.user.id && (
                       <div className="flex space-x-2">
                         <button className="text-[#9FA6B2] hover:underline" onClick={() => handleEditReview(review)}>
@@ -145,7 +147,6 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
         </ul>
       )}
 
-      {/* 리뷰 수정 모달 */}
       {editingReview && (
         <ReviewModal
           isOpen={isReviewModalOpen}
@@ -156,7 +157,10 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
           initialReviewData={{
             rating: editingReview.rating,
             content: editingReview.content,
-            images: editingReview.reviewImages.map((image) => image.source),
+            images: editingReview.reviewImages.map((image) => ({
+              id: image.id,
+              source: image.source,
+            })),
             reviewId: editingReview.id,
           }}
         />
