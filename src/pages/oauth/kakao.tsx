@@ -57,27 +57,27 @@ export default function KakaoSignupPage() {
     setLoading(true)
 
     try {
-       const isSignUpSuccess = await oAuthSignUp(formData, provider);
- 
-    if (typeof isSignUpSuccess === 'boolean') {
-      setError('nickname', {
-        type: 'server',
-        message: '회원가입 실패. 다시 시도해 주세요.',
-      });
-    } else { 
-      const { ok, message }: OAuthSignUpResponse = isSignUpSuccess;
+      const isSignUpSuccess = await oAuthSignUp(formData, provider)
 
-      if (ok) {
-        await oAuthLogin({ token }, provider);
-        localStorage.removeItem('authCode');
-        router.push('/product');
-      } else {
+      if (typeof isSignUpSuccess === 'boolean') {
         setError('nickname', {
           type: 'server',
-          message: message || '회원가입 실패. 다시 시도해 주세요.',
-        });
+          message: '회원가입 실패. 다시 시도해 주세요.',
+        })
+      } else {
+        const { ok, message }: OAuthSignUpResponse = isSignUpSuccess
+
+        if (ok) {
+          await oAuthLogin({ token }, provider)
+          localStorage.removeItem('authCode')
+          router.push('/product')
+        } else {
+          setError('nickname', {
+            type: 'server',
+            message: message || '회원가입 실패. 다시 시도해 주세요.',
+          })
+        }
       }
-    }
     } catch (err) {
       setError('nickname', {
         type: 'server',
@@ -112,9 +112,7 @@ export default function KakaoSignupPage() {
               },
             })}
           />
-          {errors.nickname && (
-            <p className="text-red-500 text-sm mt-2">{(errors.nickname as FieldError).message}</p>
-          )}
+          {errors.nickname && <p className="mt-2 text-sm text-red-500">{(errors.nickname as FieldError).message}</p>}
         </div>
         <div className="pt-2">
           <PrimaryButton style="primary" type="submit" active={true}>

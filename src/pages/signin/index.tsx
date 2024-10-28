@@ -38,25 +38,25 @@ export default function SignInPage() {
   }, [user, router])
 
   const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
-  setLoading(true);
-  try {
-    const response = await login(data); 
-    if (typeof response === 'boolean') {
-      setLoginErrorMessage('로그인 실패. 다시 시도해 주세요.');
-    } else { 
-      const { success, message } = response;
-      if (!success) {
-        setLoginErrorMessage(message);
+    setLoading(true)
+    try {
+      const response = await login(data)
+      if (typeof response === 'boolean') {
+        setLoginErrorMessage('로그인 실패. 다시 시도해 주세요.')
       } else {
-        router.push('/product');
+        const { success, message } = response
+        if (!success) {
+          setLoginErrorMessage(message)
+        } else {
+          router.push('/product')
+        }
       }
+    } catch (error) {
+      setLoginErrorMessage('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.')
+    } finally {
+      setLoading(false)
     }
-  } catch (error) {
-    setLoginErrorMessage('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.');
-  } finally {
-    setLoading(false);
   }
-};
 
   return (
     <div className="mx-auto mt-[200px] max-w-[640px] p-3 text-white">
