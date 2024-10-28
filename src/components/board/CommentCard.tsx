@@ -1,72 +1,87 @@
-import {ArticleComment} from "@/dtos/ArticleDto";
-import KebabIcon from "../../../public/icons/kebab_icon.svg"
-import ProfileIcon from "../../../public/icons/profile_icon.svg"
-import Image from "next/image";
-import timeAgo from "@/utils/timeAgo";
-import Dropdown from "@/components/board/DropDown";
-import {useState} from "react";
-import CommentDeleteModal from "@/components/board/CommentDeleteModal";
-import CommentPatchModal from "@/components/board/CommentPatchModal";
+import { ArticleComment } from '@/dtos/ArticleDto'
+import KebabIcon from '../../../public/icons/kebab_icon.svg'
+import ProfileIcon from '../../../public/icons/profile_icon.svg'
+import Image from 'next/image'
+import timeAgo from '@/utils/timeAgo'
+import Dropdown from '@/components/board/DropDown'
+import { useState } from 'react'
+import CommentDeleteModal from '@/components/board/CommentDeleteModal'
+import CommentPatchModal from '@/components/board/CommentPatchModal'
 
 export interface DetailCommentProps {
-  data?: ArticleComment;
-  currentPage: number;
-  dataId: string | string[] | undefined;
+  data?: ArticleComment
+  currentPage: number
+  dataId: string | string[] | undefined
+  userId: string | number | undefined
 }
 
-export default function CommentCard({ data, currentPage, dataId }: DetailCommentProps) {
-  const [isPatchOpen, setIsPatchOpen] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const togglePatchModal = () => setIsPatchOpen((prevState) => !prevState);
-  const toggleDeleteModal = () => setIsDeleteOpen((prevState) => !prevState);
+export default function CommentCard({ data, currentPage, dataId, userId }: DetailCommentProps) {
+  const [isPatchOpen, setIsPatchOpen] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const togglePatchModal = () => setIsPatchOpen((prevState) => !prevState)
+  const toggleDeleteModal = () => setIsDeleteOpen((prevState) => !prevState)
 
   // 댓글 수정하기를 클릭할 시 수정 모달을 열어주는 이벤트 핸들러
   const handlePatchModal = () => {
-    setIsPatchOpen(!isPatchOpen);
+    setIsPatchOpen(!isPatchOpen)
   }
 
   // 댓글 삭제하기를 클릭할 시 삭제 모달을 열어주는 이벤트 핸들러
   const handleDeleteModal = () => {
-    setIsDeleteOpen(!isDeleteOpen);
+    setIsDeleteOpen(!isDeleteOpen)
   }
 
   return (
     <>
-      <div className="bg-brand-black-medium rounded-xl border-[1px] border-solid border-brand-black-light py-5 px-6">
+      <div className="rounded-xl border-[1px] border-solid border-brand-black-light bg-brand-black-medium px-6 py-5">
         <div className="flex justify-between">
-          <p className="text-[16px] leading-[19px] font-normal text-brand-white break-words line-clamp-[10]">
-            {data?.content ? data.content : "댓글이 들어가는 영역입니다."}
+          <p className="line-clamp-[10] break-words text-[16px] font-normal leading-[19px] text-brand-white">
+            {data?.content ? data.content : '댓글이 들어가는 영역입니다.'}
           </p>
           <div>
-            <Dropdown width="w-[120px]"
-                      buttonChildren={<div className="w-6 h-6 ml-4"><Image src={KebabIcon} alt="수정 & 삭제하기" width={24}
-                                                                           height={24}/></div>}>
-              <button onClick={handlePatchModal}>
-                수정하기
-              </button>
-              <button onClick={handleDeleteModal}>
-                삭제하기
-              </button>
+            <Dropdown
+              width="w-[120px]"
+              buttonChildren={
+                <div className={`${userId === data?.writer.id ? '' : 'hidden'} ml-4 h-6 w-6`}>
+                  <Image src={KebabIcon} alt="수정 & 삭제하기" width={24} height={24} />
+                </div>
+              }
+            >
+              <button onClick={handlePatchModal}>수정하기</button>
+              <button onClick={handleDeleteModal}>삭제하기</button>
             </Dropdown>
           </div>
         </div>
-        <div className="flex mt-12 items-center justify-between">
-          <div className="flex gap-3 items-center">
-            <Image src={data?.writer.image && data?.writer.image !== "string" ? data.writer.image : ProfileIcon}
-                   alt="작성자 이미지"/>
-            <p
-              className="max-w-[260px] text-[14px] leading-[17px] text-brand-white font-medium break-words line-clamp-1 pr-1">
-              {data?.writer.nickname ? data.writer.nickname : "알 수 없음"}
+        <div className="mt-12 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Image
+              src={data?.writer.image && data?.writer.image !== 'string' ? data.writer.image : ProfileIcon}
+              alt="작성자 이미지"
+            />
+            <p className="line-clamp-1 max-w-[260px] break-words pr-1 text-[14px] font-medium leading-[17px] text-brand-white">
+              {data?.writer.nickname ? data.writer.nickname : '알 수 없음'}
             </p>
-            <p
-              className="text-[14px] leading-[17px] font-medium text-brand-gray-dark pl-4 border-l-[1px] border-solid border-brand-black-light">
+            <p className="border-l-[1px] border-solid border-brand-black-light pl-4 text-[14px] font-medium leading-[17px] text-brand-gray-dark">
               {timeAgo(data?.createdAt)}
             </p>
           </div>
         </div>
       </div>
-      <CommentPatchModal id={data?.id} content={data?.content} isOpen={isPatchOpen} onClick={togglePatchModal} currentPage={currentPage} dataId={dataId} />
-      <CommentDeleteModal id={data?.id} isOpen={isDeleteOpen} onClick={toggleDeleteModal} currentPage={currentPage} dataId={dataId} />
+      <CommentPatchModal
+        id={data?.id}
+        content={data?.content}
+        isOpen={isPatchOpen}
+        onClick={togglePatchModal}
+        currentPage={currentPage}
+        dataId={dataId}
+      />
+      <CommentDeleteModal
+        id={data?.id}
+        isOpen={isDeleteOpen}
+        onClick={toggleDeleteModal}
+        currentPage={currentPage}
+        dataId={dataId}
+      />
     </>
   )
 }

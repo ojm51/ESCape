@@ -103,7 +103,7 @@ export default function BoardsPage() {
         data={articlesData?.articleList}
         selectedOption={selectedOption}
         setSelectedOption={setSelectedOption}
-        userId={user.id}
+        userId={Number(user?.id)}
       />
       <PaginationSection
         totalPageCount={articlesData?.totalCount}

@@ -9,13 +9,10 @@ import iconSignin from '@icons/icon_signin.svg'
 
 import HeaderSidebar from './HeaderSidebar'
 import defaultProfileImage from '@images/user_default.svg'
-import classNames from 'classnames'
 import { useAuth } from '@/contexts/AuthProvider'
-
 
 export default function Header({ children }: PropsWithChildren) {
   const { user, logout } = useAuth()
-  const { pathname } = useRouter()
   const [searchInputValue, setSearchInputValue] = useState('')
 
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
@@ -29,7 +26,6 @@ export default function Header({ children }: PropsWithChildren) {
       setIsOpenSidebar((prev) => !prev)
     }
   }
-
 
   const router = useRouter()
 

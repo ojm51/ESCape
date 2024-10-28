@@ -5,8 +5,32 @@ import Logo from '../../../public/images/logo.svg'
 import PrimaryButton from '@/components/@shared/button/CustomButton'
 import { OAuthProviders } from '@/dtos/AuthDto'
 import { Spinner } from 'flowbite-react'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { useState } from 'react'
+
+interface NicknameFormInputs {
+  nickname: string
+}
 
 export default function NicknamePage({ provider }: { provider?: OAuthProviders }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<NicknameFormInputs>()
+  const [loading, setLoading] = useState(false)
+
+  const onSubmit: SubmitHandler<NicknameFormInputs> = async (data) => {
+    setLoading(true)
+    try {
+      console.log('닉네임:', data.nickname)
+    } catch (error) {
+      console.error('닉네임 등록 실패:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="mx-auto mt-[200px] max-w-[640px] p-3 text-white">
       <div className="flex justify-center">

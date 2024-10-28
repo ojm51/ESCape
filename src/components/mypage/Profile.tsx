@@ -14,6 +14,7 @@ import EditProfile from './EditProfile'
 import FollowUserList from './FollowUserList'
 import { AddFollowParams, DeleteFollowParams } from '@/libs/axios/user/types'
 import { addFollow, deleteFollow } from '@/libs/axios/user/apis'
+import { patchUsers } from '@/libs/axios/board/patchUsers'
 
 type ProfileContentsTypes = {
   image: string | File | null
@@ -97,7 +98,17 @@ export default function Profile({ data: userData }: ProfileProps) {
   }
 
   const uploadNewProfileMutation = useMutation({
-    mutationFn: (newProfile: UpdateMyInfoParams) => updateMyInfo(newProfile),
+    mutationFn: async (newProfile: UpdateMyInfoParams) => {
+      await Promise.all([
+        updateMyInfo(newProfile),
+        patchUsers({
+          id: Number(myInfo?.id),
+          nickname: newProfile.nickname,
+          description: newProfile.description,
+          image: newProfile.image,
+        }),
+      ])
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myInfo'] })
       toggleEditProfileModal()

@@ -12,14 +12,19 @@ import GoogleOauthButton from '@/components/auth/GoogleOauthButton'
 import KakoOauthButton from '@/components/auth/KakoOauthButton'
 import PrimaryButton from '@/components/@shared/button/CustomButton'
 import { Spinner } from 'flowbite-react'
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
+
+interface SignInFormInputs {
+  email: string
+  password: string
+}
 
 export default function SignInPage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm()
+  } = useForm<SignInFormInputs>()
   const [loading, setLoading] = useState(false)
   const [loginErrorMessage, setLoginErrorMessage] = useState('')
   const router = useRouter()
@@ -28,18 +33,28 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (user) {
-      router.replace('/')
+      router.replace('/product')
     }
   }, [user, router])
 
-  const onSubmit = async (data: { email: string; password: string }) => {
+  const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
     setLoading(true)
-    const { success, message } = await login(data)
-    if (!success) {
-      setLoginErrorMessage(message)
+    try {
+      const response = await login(data)
+      if (typeof response === 'boolean') {
+        setLoginErrorMessage('로그인 실패. 다시 시도해 주세요.')
+      } else {
+        const { success, message } = response
+        if (!success) {
+          setLoginErrorMessage(message)
+        } else {
+          router.push('/product')
+        }
+      }
+    } catch (error) {
+      setLoginErrorMessage('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.')
+    } finally {
       setLoading(false)
-    } else {
-      router.push('/')
     }
   }
 

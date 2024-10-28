@@ -1,6 +1,6 @@
 import { signIn } from '@/libs/axios/auth/auth'
 import oAuthSignIn from '@/libs/axios/oauth/oAuthSignIn'
-import { OAuthProviders, OAuthSignInForm, SignInForm, SignInReturn, oauthAppsReturn } from '@/dtos/AuthDto'
+import { OAuthProviders, OAuthSignInForm, SignInForm, SignInReturn } from '@/dtos/AuthDto'
 import { CommonUserTypes } from '@/dtos/UserDto'
 import { removeTokens } from '@/utils/authTokenStorage'
 import { useRouter } from 'next/router'
@@ -11,7 +11,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 interface AuthValues {
   user: CommonUserTypes | null
   isPending: boolean
-  login: (formData: SignInForm) => Promise<boolean>
+  login: (formData: SignInForm) => Promise<boolean | { success: boolean, message: string }>
   logout: () => void
   oAuthLogin: (formData: OAuthSignInForm, provider: OAuthProviders) => Promise<SignInReturn | null>
 }
@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const toaster = useToaster()
   const router = useRouter()
 
-  const handleAuthChange = (key: string, value: UserValue | boolean) => {
+  const handleAuthChange = (key: 'user' | 'isPending', value: UserValue | boolean) => {
     setAuthState((prev) => ({
       ...prev,
       [key]: value,
@@ -60,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const login = async (formData: SignInForm) => {
+  const login = async (formData: SignInForm): Promise<boolean | { success: boolean, message: string }> => {
     const isSignInSuccess = await signIn(formData)
     if (!isSignInSuccess) {
       return { success: false, message: '이메일 혹은 비밀번호를 확인해주세요.' }

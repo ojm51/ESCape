@@ -12,7 +12,7 @@ export default function AddBoardsPage() {
   const [content, setContent] = useState<string | undefined>('')
   const [titleError, setTitleError] = useState<string | null>(null)
   const [contentError, setContentError] = useState<string | null>(null)
-  const [userId, setUserId] = useState()
+  const [userId, setUserId] = useState<string | number | undefined>()
   const router = useRouter()
   const queryClient = useQueryClient()
   const { user } = useAuth()
@@ -49,7 +49,7 @@ export default function AddBoardsPage() {
     setImage(value.image)
     setTitle(value?.title)
     setContent(value?.content)
-    setUserId(user.id)
+    setUserId(user?.id)
   }
 
   // 게시글 전송을 위한 useMutation

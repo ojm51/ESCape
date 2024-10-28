@@ -8,10 +8,17 @@ import Logo from '../../../public/images/logo.svg'
 import EyesShowIcon from '../../../public/icons/icon_eyes_show.svg'
 import EyesHiddenIcon from '../../../public/icons/icon_eyes_hidden.svg'
 import PrimaryButton from '@/components/@shared/button/CustomButton'
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { Spinner } from 'flowbite-react'
 import { useToaster } from '@/contexts/ToasterProvider'
 import { postUsers } from '@/libs/axios/board/postUsers'
+
+interface SignUpFormInputs {
+  email: string
+  nickname: string
+  password: string
+  passwordConfirmation: string
+}
 
 export default function SignupPage() {
   const {
@@ -19,7 +26,7 @@ export default function SignupPage() {
     handleSubmit,
     formState: { errors, isValid },
     watch,
-  } = useForm({
+  } = useForm<SignUpFormInputs>({
     mode: 'onChange',
   })
   const [loading, setLoading] = useState(false)
@@ -30,32 +37,33 @@ export default function SignupPage() {
   useEffect(() => {
     if (!isPending && user) {
       const sendUserPost = async () => {
-        await postUsers({ id: user.id, nickname: user.nickname, description: 'string', image: 'string' })
+        await postUsers({ id: Number(user.id), nickname: user.nickname, description: 'string', image: 'string' })
         router.replace('/')
       }
       sendUserPost()
     }
   }, [isPending, user, router])
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
     setLoading(true)
     const { email, password } = data
     const isSignUpSuccess = await signUp(data)
 
     if (isSignUpSuccess) {
       await login({ email, password })
-      router.push('/')
+      router.push('/product')
       return
     }
     setLoading(false)
     toaster('fail', '회원가입에 실패하였습니다.')
   }
-  const validatePassword = (value) => {
-    const regex = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,}$/ // 숫자, 영문, 특수문자 포함 및 최소 8자
+
+  const validatePassword = (value: string): true | string => {
+    const regex = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,}$/
     if (!regex.test(value)) {
-      return '비밀번호는 숫자, 영문, 특수문자를 포함해야 합니다.' // 에러 메시지
+      return '비밀번호는 숫자, 영문, 특수문자를 포함해야 합니다.'
     }
-    return true // 유효성 통과
+    return true
   }
 
   const passwordValue = watch('password')
@@ -171,7 +179,7 @@ export default function SignupPage() {
           )}
         </div>
         <div className="pt-2">
-          <PrimaryButton style="primary" type="submit" onClick={() => {}} active={true} disabled={!isValid}>
+          <PrimaryButton style="primary" type="submit" onClick={() => {}} active={true}>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '가입하기'}
           </PrimaryButton>
         </div>

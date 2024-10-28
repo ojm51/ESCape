@@ -5,17 +5,16 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useToaster } from '@/contexts/ToasterProvider'
 
-const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
-const GOOGLE_CLIENT_SECRET = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''
+const GOOGLE_CLIENT_SECRET = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET || ''
 const REDIRECT_URI = `http://localhost:3000/oauth/google`
 
 export default function GoogleOauthButton() {
   const { oAuthLogin } = useAuth()
   const router = useRouter()
-  const [code, setCode] = useState('')
+  const [code, setCode] = useState<string>('')
   const toaster = useToaster()
 
-  // 팝업 열기
   const handleGoogleClick = () => {
     const width = 480
     const height = 702
@@ -37,7 +36,6 @@ export default function GoogleOauthButton() {
       return
     }
 
-    // 팝업에서 인증 코드 가져오기
     const checkPopup = setInterval(() => {
       try {
         if (googleWindow.closed) {
@@ -73,7 +71,7 @@ export default function GoogleOauthButton() {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: new URLSearchParams(data),
+      body: new URLSearchParams(data as Record<string, string>),
     })
 
     const tokenData = await response.json()

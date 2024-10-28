@@ -1,15 +1,29 @@
-import React, { createContext, useContext, useState } from 'react'
-import { Toast, ToastToggle } from 'flowbite-react'
-import { HiCheck, HiExclamation, HiX } from 'react-icons/hi'
+import React, { createContext, useContext, useState, ReactNode } from "react";
+import { Toast, ToastToggle } from "flowbite-react";
+import { HiCheck, HiExclamation, HiX } from "react-icons/hi";
+ 
+type ToastType = 'success' | 'fail' | 'warn';
 
-const ICONS = {
+interface ToastComponentProps {
+  type: ToastType;
+  message: string;
+  onClick: () => void;
+}
+
+interface ToastItem {
+  id: number;
+  type: ToastType;
+  message: string;
+}
+ 
+const ICONS: Record<ToastType, React.ElementType> = {
   success: HiCheck,
   fail: HiExclamation,
   warn: HiX,
 }
 
-function ToastComponent({ type, message, onClick }) {
-  const Icon = ICONS[type] || HiExclamation
+function ToastComponent({ type, message, onClick }: ToastComponentProps) {
+  const Icon = ICONS[type];
 
   return (
     <Toast className="flex items-center">
@@ -24,14 +38,22 @@ function ToastComponent({ type, message, onClick }) {
     </Toast>
   )
 }
+ 
+interface ToasterContextType {
+  toaster: (type: ToastType, message: string) => void;
+}
 
-const ToasterContext = createContext()
+const ToasterContext = createContext<ToasterContextType | undefined>(undefined);
 
-function ToasterProvider({ children }) {
-  const [toasts, setToasts] = useState([])
+interface ToasterProviderProps {
+  children: ReactNode;
+}
+ 
+function ToasterProvider({ children }: ToasterProviderProps) {
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
 
-  function addToast(type, message) {
-    const newToast = {
+  function addToast(type: ToastType, message: string): ToastItem {
+    const newToast: ToastItem = {
       id: Date.now(),
       type,
       message,
@@ -41,13 +63,13 @@ function ToasterProvider({ children }) {
     return newToast
   }
 
-  function removeToast(id) {
-    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id))
+  function removeToast(id: number) {
+    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
   }
 
-  function toaster(type, message) {
-    const newToast = addToast(type, message)
-    setTimeout(() => removeToast(newToast.id), 2000)
+  function toaster(type: ToastType, message: string) {
+    const newToast = addToast(type, message);
+    setTimeout(() => removeToast(newToast.id), 2000);
   }
 
   return (
@@ -66,13 +88,13 @@ function ToasterProvider({ children }) {
     </ToasterContext.Provider>
   )
 }
-
+ 
 export function useToaster() {
-  const { toaster } = useContext(ToasterContext)
-  if (!toaster) {
-    throw new Error('ToastContext 안에서만 사용할 수 있습니다.')
+  const context = useContext(ToasterContext);
+  if (!context) {
+    throw new Error("ToasterContext 안에서만 사용할 수 있습니다.");
   }
-  return toaster
+  return context.toaster;
 }
 
 export default ToasterProvider
