@@ -1,16 +1,15 @@
-import React, { createContext, useContext, useState } from "react";
-import { Toast, ToastToggle } from "flowbite-react";
-import { HiCheck, HiExclamation, HiX } from "react-icons/hi";
+import React, { createContext, useContext, useState } from 'react'
+import { Toast, ToastToggle } from 'flowbite-react'
+import { HiCheck, HiExclamation, HiX } from 'react-icons/hi'
 
 const ICONS = {
   success: HiCheck,
   fail: HiExclamation,
   warn: HiX,
-};
+}
 
 function ToastComponent({ type, message, onClick }) {
-  const Icon = ICONS[type] || HiExclamation; 
-
+  const Icon = ICONS[type] || HiExclamation
 
   return (
     <Toast className="flex items-center">
@@ -23,32 +22,32 @@ function ToastComponent({ type, message, onClick }) {
       <div className="ml-3 text-sm font-normal">{message}</div>
       <ToastToggle onClick={onClick} />
     </Toast>
-  );
+  )
 }
 
-const ToasterContext = createContext();
+const ToasterContext = createContext()
 
 function ToasterProvider({ children }) {
-  const [toasts, setToasts] = useState([]);
+  const [toasts, setToasts] = useState([])
 
   function addToast(type, message) {
     const newToast = {
       id: Date.now(),
       type,
       message,
-    };
+    }
 
-    setToasts((prevToasts) => [...prevToasts, newToast]);
-    return newToast;
+    setToasts((prevToasts) => [...prevToasts, newToast])
+    return newToast
   }
 
   function removeToast(id) {
-    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id))
   }
 
   function toaster(type, message) {
-    const newToast = addToast(type, message);
-    setTimeout(() => removeToast(newToast.id), 2000);
+    const newToast = addToast(type, message)
+    setTimeout(() => removeToast(newToast.id), 2000)
   }
 
   return (
@@ -65,15 +64,15 @@ function ToasterProvider({ children }) {
         ))}
       </div>
     </ToasterContext.Provider>
-  );
+  )
 }
 
 export function useToaster() {
-  const { toaster } = useContext(ToasterContext);
+  const { toaster } = useContext(ToasterContext)
   if (!toaster) {
-    throw new Error("ToastContext 안에서만 사용할 수 있습니다.");
+    throw new Error('ToastContext 안에서만 사용할 수 있습니다.')
   }
-  return toaster;
+  return toaster
 }
 
-export default ToasterProvider;
+export default ToasterProvider
