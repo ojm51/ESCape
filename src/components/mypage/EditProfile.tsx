@@ -43,7 +43,8 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
       URL.revokeObjectURL(previewImage)
     }
 
-    setPreviewImage(URL.createObjectURL(selectedImageFile))
+    const nextImage = URL.createObjectURL(selectedImageFile)
+    setPreviewImage(nextImage)
     setFormValues((prevValues) => ({
       ...prevValues,
       image: selectedImageFile,
