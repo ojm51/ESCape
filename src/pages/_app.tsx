@@ -4,7 +4,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ReactNode, useEffect } from 'react'
 import { AuthProvider } from '@/contexts/AuthProvider'
-import Header from '@/components/@shared/layout/Header'
+
+import ToasterProvider from '@/contexts/ToasterProvider'
+import Layout from '@/components/@shared/layout/Layout'
 
 interface ProvidersProps {
   children: ReactNode
@@ -28,12 +30,12 @@ declare global {
 function Providers({ children }: ProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Header>
-          {children}
+      <ToasterProvider>
+        <AuthProvider>
           {process.env.NODE_ENV !== 'production' && <ReactQueryDevtools initialIsOpen={false} />}
-        </Header>
-      </AuthProvider>
+          {children}
+        </AuthProvider>
+      </ToasterProvider>
     </QueryClientProvider>
   )
 }
@@ -50,7 +52,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <Providers>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </Providers>
   )
 }
