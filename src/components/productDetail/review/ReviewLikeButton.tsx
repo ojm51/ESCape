@@ -6,12 +6,11 @@ import { useAuth } from '@/contexts/AuthProvider'
 
 interface ReviewLikeButtonProps {
   reviewId: number
-  teamId: string
   initialIsLiked: boolean
   initialLikeCount: number
 }
 
-const ReviewLikeButton: React.FC<ReviewLikeButtonProps> = ({ reviewId, teamId, initialIsLiked, initialLikeCount }) => {
+const ReviewLikeButton: React.FC<ReviewLikeButtonProps> = ({ reviewId, initialIsLiked, initialLikeCount }) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked)
   const [likeCount, setLikeCount] = useState(initialLikeCount)
 
@@ -30,11 +29,11 @@ const ReviewLikeButton: React.FC<ReviewLikeButtonProps> = ({ reviewId, teamId, i
     try {
       if (isLiked) {
         // 좋아요 해제 (DELETE 요청)
-        await axios.delete(`https://mogazoa-api.vercel.app/${teamId}/reviews/${reviewId}/like`)
+        await axios.delete(`/reviews/${reviewId}/like`)
         setLikeCount((prevCount) => prevCount - 1)
       } else {
         // 좋아요 추가 (POST 요청)
-        await axios.post(`https://mogazoa-api.vercel.app/${teamId}/reviews/${reviewId}/like`)
+        await axios.post(`/reviews/${reviewId}/like`)
         setLikeCount((prevCount) => prevCount + 1)
       }
       setIsLiked((prevIsLiked) => !prevIsLiked) // 상태 토글

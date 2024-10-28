@@ -11,10 +11,10 @@ import { ProductDetailTypes, DescriptionTypes } from '@/dtos/ProductDto'
 import ReviewModal from '../ReviewModal'
 import { useAuth } from '@/contexts/AuthProvider'
 
-const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
+const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) => {
   const { data, isLoading, error } = useQuery<ProductDetailTypes>({
     queryKey: ['productDetail', productId],
-    queryFn: () => fetchProductDetails(teamId, productId),
+    queryFn: () => fetchProductDetails(productId),
   })
 
   const { user } = useAuth()
@@ -69,7 +69,7 @@ const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({
         <div className="mb-2 flex items-center justify-between">
           <div className="flex items-center">
             <h2 className="text-2xl font-bold">{productDetail.name}</h2>
-            <FavoriteButton productId={productId} teamId={teamId} isFavorite={productDetail.isFavorite} />
+            <FavoriteButton productId={productId} isFavorite={productDetail.isFavorite} />
           </div>
           <div className="flex space-x-4">
             <KakaoShareButton
@@ -116,7 +116,6 @@ const ProductDetailSection: React.FC<{ productId: number; teamId: string }> = ({
           isOpen={isModalOpen}
           onClose={() => setModalOpen(false)}
           productName={productDetail.name}
-          teamId={teamId}
           productId={productId}
         />
       )}

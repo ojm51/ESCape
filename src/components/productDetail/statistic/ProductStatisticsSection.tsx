@@ -8,11 +8,10 @@ import StatisticsDetail from './StatisticsDetail'
 import { ProductDetailTypes } from '@/dtos/ProductDto'
 
 interface StatisticsProps {
-  teamId: string
   productId: number
 }
 
-const ProductStatisticsSection: React.FC<StatisticsProps> = ({ teamId, productId }) => {
+const ProductStatisticsSection: React.FC<StatisticsProps> = ({ productId }) => {
   // React Query를 사용하여 데이터를 가져옴
   const {
     data: productData,
@@ -20,7 +19,7 @@ const ProductStatisticsSection: React.FC<StatisticsProps> = ({ teamId, productId
     error,
   } = useQuery<ProductDetailTypes>({
     queryKey: ['productDetail', productId],
-    queryFn: () => fetchProductDetails(teamId, productId),
+    queryFn: () => fetchProductDetails(productId),
   })
 
   if (isLoading) return <div>로딩 중...</div>

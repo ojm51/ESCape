@@ -3,11 +3,10 @@ import { Dropdown } from 'flowbite-react'
 
 interface SortDropdownProps {
   productId: number
-  teamId: string
   order: (sortOption: string) => void
 }
 
-const SortDropdown: React.FC<SortDropdownProps> = ({ productId, teamId, order }) => {
+const SortDropdown: React.FC<SortDropdownProps> = ({ productId, order }) => {
   const [selectedOption, setSelectedOption] = useState('최신순')
 
   const handleSortChange = (sortOption: string, label: string) => {

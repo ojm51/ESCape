@@ -10,7 +10,6 @@ interface ReviewModalProps {
   isOpen: boolean
   onClose: () => void
   productName: string
-  teamId: string
   productId: number
   isEdit?: boolean // 리뷰 수정 모드 여부
   initialReviewData?: { rating: number; content: string; images: string[]; reviewId?: number } // 수정 모드 시 초기 데이터
@@ -23,7 +22,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   isOpen,
   onClose,
   productName,
-  teamId,
   productId,
   isEdit = false,
   initialReviewData = { rating: 0, content: '', images: [] },
@@ -76,7 +74,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       for (const file of imageFiles) {
         const formData = new FormData()
         formData.append('image', file)
-        const response = await axios.post(`/${teamId}/images/upload`, formData, {
+        const response = await axios.post(`/images/upload`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         uploadedUrls.push(response.data.imageUrl)
@@ -107,7 +105,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
       if (isEdit && initialReviewData.reviewId) {
         // 수정 요청
-        await updateReview(teamId, initialReviewData.reviewId, {
+        await updateReview(initialReviewData.reviewId, {
           images: imageUrls.join(','), // 이미지 URL을 ','로 연결해 전송
           content: reviewText,
           rating,
@@ -115,7 +113,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
         alert('리뷰가 성공적으로 수정되었습니다.')
       } else {
         // 생성 요청
-        await createReview(teamId, {
+        await createReview({
           productId,
           images: imageUrls.join(','), // 이미지 URL을 ','로 연결해 전송
           content: reviewText,

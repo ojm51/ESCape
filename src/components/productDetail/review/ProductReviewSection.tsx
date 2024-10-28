@@ -8,7 +8,7 @@ import { ProductReviewListTypes } from '@/dtos/ProductDto'
 import DefaultImage from '@images/default-image.png'
 import ReviewLikeButton from './ReviewLikeButton'
 
-const ProductReviewSection: React.FC<{ productId: number; teamId: string }> = ({ productId, teamId }) => {
+const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) => {
   const router = useRouter()
   const [sortOption, setSortOption] = React.useState<string>('recent')
 
@@ -19,7 +19,7 @@ const ProductReviewSection: React.FC<{ productId: number; teamId: string }> = ({
     error,
   } = useQuery<ProductReviewListTypes[]>({
     queryKey: ['reviews', productId, sortOption],
-    queryFn: () => fetchReviews(teamId, productId, sortOption),
+    queryFn: () => fetchReviews(productId, sortOption),
   })
 
   const handleSortChange = (newSortOption: string) => {
@@ -34,7 +34,7 @@ const ProductReviewSection: React.FC<{ productId: number; teamId: string }> = ({
     <div className={'relative z-0 mx-auto max-w-[940px]'}>
       <div className="mb-[30px] flex items-center justify-between">
         <h3 className={'text-lg font-semibold'}>{'상품 리뷰'}</h3>
-        <SortDropdown productId={productId} teamId={teamId} order={handleSortChange} />
+        <SortDropdown productId={productId} order={handleSortChange} />
       </div>
       {isLoading ? (
         <p>로딩 중...</p>
@@ -88,7 +88,6 @@ const ProductReviewSection: React.FC<{ productId: number; teamId: string }> = ({
                   <div className="mt-auto flex items-center space-x-1">
                     <ReviewLikeButton
                       reviewId={review.id}
-                      teamId={teamId}
                       initialIsLiked={review.isLiked}
                       initialLikeCount={review.likeCount}
                     />
