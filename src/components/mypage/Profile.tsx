@@ -34,6 +34,7 @@ export default function Profile({ data: userData }: ProfileProps) {
   const profileImage = typeof image === 'string' ? image : image ? URL.createObjectURL(image) : defaultProfileImage
 
   const [followData, setFollowData] = useState<FollowResponseTypes>()
+  const [isFollowingState, setIsFollowingState] = useState<boolean>(isFollowing)
 
   const [modalType, setModalType] = useState<string>('follower')
   const [isFollowModalOpen, setIsFollowModalOpen] = useState<boolean>(false)
@@ -143,7 +144,14 @@ export default function Profile({ data: userData }: ProfileProps) {
   })
 
   const handleFollowButtonClick = () => {
-    followUserMutation.mutate({ userId: id })
+    followUserMutation.mutate(
+      { userId: id },
+      {
+        onSuccess: () => {
+          setIsFollowingState(true)
+        },
+      },
+    )
   }
 
   const unfollowUserMutation = useMutation({
@@ -155,7 +163,14 @@ export default function Profile({ data: userData }: ProfileProps) {
   })
 
   const handleUnfollowButtonClick = () => {
-    unfollowUserMutation.mutate({ userId: id })
+    unfollowUserMutation.mutate(
+      { userId: id },
+      {
+        onSuccess: () => {
+          setIsFollowingState(false)
+        },
+      },
+    )
   }
 
   return (
@@ -193,7 +208,7 @@ export default function Profile({ data: userData }: ProfileProps) {
               로그아웃
             </CustomButton>
           </div>
-        ) : isFollowing ? (
+        ) : isFollowingState ? (
           <CustomButton style="tertiary" active={true} onClick={handleUnfollowButtonClick}>
             팔로우 취소
           </CustomButton>
