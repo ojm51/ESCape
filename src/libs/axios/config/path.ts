@@ -49,7 +49,7 @@ export const API_PATH = {
     default: '/images/upload',
   },
   follow: {
-    default: '/follow ',
+    default: '/follow',
   },
   category: {
     default: '/categories',

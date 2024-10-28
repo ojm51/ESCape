@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
-import defaultImage from '@images/default_image.png'
+import defaultProfileImage from '@images/user_default.svg'
 import { FollowResponseTypes, UserTypes } from '@/dtos/UserDto'
+import { updateMyInfo } from '@/libs/axios/mypage/apis'
+import { AddImageFileParams, UpdateMyInfoParams } from '@/libs/axios/mypage/types'
 import { addImageFile, getUserFollows } from '@/libs/axios/mypage/apis'
 import { useAuth } from '@/contexts/AuthProvider'
 import Modal from '../@shared/modal/Modal'
 import CustomButton from '../@shared/button/CustomButton'
-import EditProfile from '../user/EditProfile'
+import EditProfile from './EditProfile'
 import FollowUserList from './FollowUserList'
-import { useRouter } from 'next/router'
-import { updateMyInfo } from '@/libs/axios/mypage/apis'
-import { AddImageFileParams, UpdateMyInfoParams } from '@/libs/axios/mypage/types'
+import { AddFollowParams, DeleteFollowParams } from '@/libs/axios/user/types'
+import { addFollow, deleteFollow } from '@/libs/axios/user/apis'
 
 type ProfileContentsTypes = {
   image: string | File | null
@@ -29,7 +31,7 @@ export default function Profile({ data: userData }: ProfileProps) {
 
   const { user: myInfo, logout } = useAuth()
   const { id, image, nickname, description, followersCount, followeesCount, isFollowing } = userData
-  const profileImage = typeof image === 'string' ? image : image ? URL.createObjectURL(image) : defaultImage
+  const profileImage = typeof image === 'string' ? image : image ? URL.createObjectURL(image) : defaultProfileImage
 
   const [followData, setFollowData] = useState<FollowResponseTypes>()
 
@@ -50,7 +52,7 @@ export default function Profile({ data: userData }: ProfileProps) {
     isError: isFollowerError,
     data: followerList,
   } = useQuery({
-    queryKey: ['userFollowers'],
+    queryKey: [`userFollowers${id}`],
     queryFn: () => getUserFollows({ userId: id, type: '팔로워' }),
     enabled: !!id,
   })
@@ -60,7 +62,7 @@ export default function Profile({ data: userData }: ProfileProps) {
     isError: isFolloweeError,
     data: followeeList,
   } = useQuery({
-    queryKey: ['userFollowees'],
+    queryKey: [`userFollowees${id}`],
     queryFn: () => getUserFollows({ userId: id, type: '팔로잉' }),
     enabled: !!id,
   })
@@ -119,6 +121,30 @@ export default function Profile({ data: userData }: ProfileProps) {
     })
   }
 
+  const followUserMutation = useMutation({
+    mutationFn: (userId: AddFollowParams) => addFollow(userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`userInfo${id}`] })
+      queryClient.invalidateQueries({ queryKey: [`userFollowers${id}`] })
+    },
+  })
+
+  const handleFollowButtonClick = () => {
+    followUserMutation.mutate({ userId: id })
+  }
+
+  const unfollowUserMutation = useMutation({
+    mutationFn: (userId: DeleteFollowParams) => deleteFollow(userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`userInfo${id}`] })
+      queryClient.invalidateQueries({ queryKey: [`userFollowers${id}`] })
+    },
+  })
+
+  const handleUnfollowButtonClick = () => {
+    unfollowUserMutation.mutate({ userId: id })
+  }
+
   return (
     <>
       <div className="flex w-full flex-col content-center items-center gap-[30px] rounded-xl border-unactive bg-[#252530] px-5 py-[30px] xl:w-[340px]">
@@ -155,11 +181,13 @@ export default function Profile({ data: userData }: ProfileProps) {
             </CustomButton>
           </div>
         ) : isFollowing ? (
-          <CustomButton style="tertiary" active={true}>
+          <CustomButton style="tertiary" active={true} onClick={handleUnfollowButtonClick}>
             팔로우 취소
           </CustomButton>
         ) : (
-          <CustomButton active={true}>팔로우</CustomButton>
+          <CustomButton active={true} onClick={handleFollowButtonClick}>
+            팔로우
+          </CustomButton>
         )}
       </div>
 

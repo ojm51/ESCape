@@ -5,7 +5,7 @@ export interface CommonUserTypes {
   image: string | File | null
   description: string
   nickname: string
-  id: number
+  id: number | string
 }
 
 export interface MostFavoriteCategoryTypes {

@@ -8,7 +8,7 @@ import {
   GetUserProductsParams,
   UpdateMyInfoParams,
 } from './types'
-import { ProductListTypes } from '@/dtos/ProductDto'
+import { ResponseProductListTypes } from '@/dtos/ProductDto'
 import { ImageTypes } from '@/dtos/ImageDto'
 
 export const getMyInfo = async () => {
@@ -29,7 +29,7 @@ export const getUserInfo = async ({ userId }: GetUserInfoParams) => {
 
 export const getUserProducts = async ({ userId, type }: GetUserProductsParams) => {
   const url = type === 'reviewed' ? API_PATH.user.reviewedProducts(userId) : API_PATH.user.favoriteProducts(userId)
-  const response = await axiosInstance.get<ProductListTypes>(url)
+  const response = await axiosInstance.get<ResponseProductListTypes>(url)
   return response.data.list ?? []
 }
 

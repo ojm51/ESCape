@@ -27,6 +27,7 @@ function Providers({ children }: ProvidersProps) {
       <ToasterProvider>
         <AuthProvider>
           {process.env.NODE_ENV !== 'production' && <ReactQueryDevtools initialIsOpen={false} />}
+          {children}
         </AuthProvider>
       </ToasterProvider>
     </QueryClientProvider>
