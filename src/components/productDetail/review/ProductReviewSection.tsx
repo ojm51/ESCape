@@ -13,8 +13,8 @@ import { useToaster } from '@/contexts/ToasterProvider'
 
 const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) => {
   const router = useRouter()
-  const { user } = useAuth()
   const toaster = useToaster()
+  const { user } = useAuth()
   const queryClient = useQueryClient()
   const [sortOption, setSortOption] = useState<string>('recent')
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
