@@ -11,6 +11,7 @@ import PrimaryButton from '@/components/@shared/ui/CustomButton'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Spinner } from 'flowbite-react'
 import { useToaster } from '@/contexts/ToasterProvider'
+import { postUsers } from '@/libs/axios/board/postUsers'
 
 interface SignUpFormInputs {
   email: string
@@ -35,7 +36,11 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (!isPending && user) {
-      router.replace('/')
+      const sendUserPost = async () => {
+        await postUsers({ id: Number(user.id), nickname: user.nickname, description: 'string', image: 'string' })
+        router.replace('/')
+      }
+      sendUserPost()
     }
   }, [isPending, user, router])
 
