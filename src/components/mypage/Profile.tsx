@@ -187,7 +187,10 @@ export default function Profile({ data: userData }: ProfileProps) {
   return (
     <>
       <div className="flex w-full flex-col content-center items-center gap-[30px] rounded-xl border-unactive bg-[#252530] px-5 py-[30px] xl:w-[340px]">
-        <Image className="rounded-full" src={profileImage} alt="프로필 이미지" width={120} height={120} />
+        <div className="relative h-[120px] w-[120px] overflow-hidden rounded-full">
+          <Image className="object-cover" fill src={profileImage} alt="프로필 이미지" />
+        </div>
+
         <div className="flex w-full flex-col gap-[10px]">
           <h3 className="text-center text-xl font-semibold leading-7 text-brand-white">{nickname}</h3>
           <p className="text-sm font-normal leading-tight text-brand-gray-dark">{description}</p>
