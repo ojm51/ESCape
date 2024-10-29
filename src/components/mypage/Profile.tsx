@@ -39,7 +39,7 @@ export default function Profile({ data: userData }: ProfileProps) {
 
   const [modalType, setModalType] = useState<string>('follower')
   const [isFollowModalOpen, setIsFollowModalOpen] = useState<boolean>(false)
-  const [isEditProfileModalOpen, setEditProfileModalOpen] = useState<boolean>(false)
+  const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState<boolean>(false)
   const [newProfile, setNewProfile] = useState<ProfileContentsTypes>({
     image: myInfo?.image ? myInfo.image : null,
     nickname: myInfo?.nickname ?? '',
@@ -47,12 +47,17 @@ export default function Profile({ data: userData }: ProfileProps) {
   })
 
   const toggleFollowModal = () => setIsFollowModalOpen((prev) => !prev)
-  const toggleEditProfileModal = () => setEditProfileModalOpen((prev) => !prev)
+  const toggleEditProfileModal = () => setIsEditProfileModalOpen((prev) => !prev)
 
   /** 페이지를 이동하면 열려 있던 모달을 닫는 함수 */
   useEffect(() => {
     const handleRouteChange = () => {
-      toggleFollowModal()
+      if (isFollowModalOpen) {
+        toggleFollowModal()
+      }
+      if (isEditProfileModalOpen) {
+        toggleEditProfileModal()
+      }
     }
 
     router.events.on('routeChangeStart', handleRouteChange)
