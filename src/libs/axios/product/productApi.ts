@@ -42,3 +42,13 @@ export const fetchProductDetails = async (productId: number): Promise<ProductDet
 
   return productData
 }
+
+export const addFavorite = async (productId: number) => {
+  const response = await axiosInstance.post(`/products/${productId}/favorite`)
+  return response.data
+}
+
+export const removeFavorite = async (productId: number) => {
+  const response = await axiosInstance.delete(`/products/${productId}/favorite`)
+  return response.data
+}

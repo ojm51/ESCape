@@ -12,16 +12,15 @@ import ReviewModal from '../ReviewModal'
 import { useAuth } from '@/contexts/AuthProvider'
 
 const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) => {
-  const { data, isLoading, error } = useQuery<ProductDetailTypes>({
+  const { data, isLoading, error, refetch } = useQuery<ProductDetailTypes>({
     queryKey: ['productDetail', productId],
     queryFn: () => fetchProductDetails(productId),
   })
 
   const { user } = useAuth()
-
   const [isModalOpen, setModalOpen] = useState(false)
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <div>로딩 중...</div>
   if (error) return <div>제품 세부 정보를 불러오지 못했습니다.</div>
 
   const productDetail = data as ProductDetailTypes
@@ -53,6 +52,10 @@ const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) =>
     }
   }
 
+  const handleRefetch = () => {
+    refetch()
+  }
+
   return (
     <div className="mx-auto flex max-w-[940px] flex-col rounded-md pt-6 text-white lg:flex-row">
       <div className="mb-4 flex-shrink-0 lg:mb-0 lg:mr-6">
@@ -69,7 +72,7 @@ const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) =>
         <div className="mb-2 flex items-center justify-between">
           <div className="flex items-center">
             <h2 className="text-2xl font-bold">{productDetail.name}</h2>
-            <FavoriteButton productId={productId} isFavorite={productDetail.isFavorite} />
+            <FavoriteButton productId={productId} isFavorite={productDetail.isFavorite} onRefetch={handleRefetch} />
           </div>
           <div className="flex space-x-4">
             <KakaoShareButton
@@ -114,7 +117,10 @@ const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) =>
       {isModalOpen && (
         <ReviewModal
           isOpen={isModalOpen}
-          onClose={() => setModalOpen(false)}
+          onClose={() => {
+            setModalOpen(false)
+            handleRefetch()
+          }}
           productName={productDetail.name}
           productId={productId}
         />

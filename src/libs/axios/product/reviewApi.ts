@@ -12,12 +12,11 @@ export const fetchReviews = async (productId: number, sortOption: string): Promi
 }
 
 export const createReview = async (reviewData: CreateReviewRequestBody) => {
-  const response = await axiosInstance.post(`/reviews`, reviewData, {
+  const response = await axiosInstance.post(`/reviews/`, reviewData, {
     headers: {
       'Content-Type': 'application/json',
     },
   })
-
   return response.data
 }
 
@@ -27,6 +26,35 @@ export const updateReview = async (reviewId: number, reviewData: UpdateReviewReq
       'Content-Type': 'application/json',
     },
   })
+  return response.data
+}
 
+export const deleteReview = async (reviewId: number) => {
+  const response = await axiosInstance.delete(`/reviews/${reviewId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  return response.data
+}
+
+export const uploadImage = async (imageFile: File) => {
+  const formData = new FormData()
+  formData.append('image', imageFile)
+
+  const response = await axiosInstance.post(`/images/upload`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+
+  return response.data.url
+}
+
+export const addReviewLike = async (reviewId: number) => {
+  const response = await axiosInstance.post(`/reviews/${reviewId}/like`)
+  return response.data
+}
+
+export const removeReviewLike = async (reviewId: number) => {
+  const response = await axiosInstance.delete(`/reviews/${reviewId}/like`)
   return response.data
 }

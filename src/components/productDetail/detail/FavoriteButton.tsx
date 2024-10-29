@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { FaHeart, FaRegHeart } from 'react-icons/fa'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/contexts/AuthProvider'
+import { addFavorite, removeFavorite } from '@/libs/axios/product/productApi'
 
 interface FavoriteButtonProps {
   productId: number
-  isFavorite: boolean // 부모 컴포넌트로부터 받을 초기 상태
+  isFavorite: boolean
+  onRefetch: () => void
 }
 
-const FavoriteButton: React.FC<FavoriteButtonProps> = ({ productId, isFavorite: initialIsFavorite }) => {
+const FavoriteButton: React.FC<FavoriteButtonProps> = ({ productId, isFavorite: initialIsFavorite, onRefetch }) => {
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite)
   const { user, isPending } = useAuth()
   const router = useRouter()
@@ -23,11 +24,12 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ productId, isFavorite: 
 
     try {
       if (isFavorite) {
-        await axios.delete(`/products/${productId}/favorite`)
+        await removeFavorite(productId)
       } else {
-        await axios.post(`/products/${productId}/favorite`)
+        await addFavorite(productId)
       }
       setIsFavorite((prevIsFavorite) => !prevIsFavorite)
+      onRefetch() // 상태 변경 후 refetch 호출
     } catch (error) {
       console.error('찜하기 처리 중 오류가 발생했습니다.', error)
     }

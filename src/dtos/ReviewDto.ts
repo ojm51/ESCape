@@ -1,12 +1,17 @@
 export interface CreateReviewRequestBody {
   productId: number
-  images: string
+  images: string[]
   content: string
   rating: number
 }
 
 export interface UpdateReviewRequestBody {
-  images: string
+  images: ReviewImage[]
   content: string
   rating: number
+}
+
+export interface ReviewImage {
+  id?: number
+  source?: string
 }
