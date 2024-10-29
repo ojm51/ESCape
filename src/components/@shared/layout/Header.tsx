@@ -11,11 +11,13 @@ import HeaderSidebar from './HeaderSidebar'
 import defaultProfileImage from '@images/user_default.svg'
 import { useAuth } from '@/contexts/AuthProvider'
 import classNames from 'classnames'
+import useRouteHandler from '@/hooks/useRouteHandler'
 
 export default function Header({ children }: PropsWithChildren) {
   const { user } = useAuth()
   const [searchInputValue, setSearchInputValue] = useState('')
   const [isOpenSearchInput, setIsOpenSearchInput] = useState(false)
+  const { handleKeyword } = useRouteHandler()
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
 
   const toggleSearchInput = () => {
@@ -47,7 +49,7 @@ export default function Header({ children }: PropsWithChildren) {
       router.push('/product')
       return
     }
-    router.push({ pathname: '/product', query: { keyword: searchInputValue } })
+    handleKeyword(searchInputValue)
     setSearchInputValue('')
   }
 
