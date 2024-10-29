@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import SortDropdown from './SortDropdown'
 import StarRating from '../StarRating'
@@ -13,6 +13,7 @@ import { useAuth } from '@/contexts/AuthProvider'
 const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) => {
   const router = useRouter()
   const { user } = useAuth()
+  const queryClient = useQueryClient()
   const [sortOption, setSortOption] = useState<string>('recent')
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
   const [editingReview, setEditingReview] = useState<ProductReviewListTypes | null>(null)
@@ -49,6 +50,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
         await deleteReview(reviewId)
         alert('리뷰가 성공적으로 삭제되었습니다.')
         refetch()
+        queryClient.invalidateQueries({ queryKey: ['productDetail', productId] })
       } catch (error) {
         console.error('리뷰 삭제 실패:', error)
         alert('리뷰 삭제에 실패했습니다.')
@@ -60,6 +62,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
     setIsReviewModalOpen(false)
     setEditingReview(null)
     refetch()
+    queryClient.invalidateQueries({ queryKey: ['productDetail', productId] })
   }
 
   return (
