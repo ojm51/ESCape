@@ -67,21 +67,13 @@ export default function Profile({ data: userData }: ProfileProps) {
     }
   }, [router])
 
-  const {
-    isPending: isFollowerPending,
-    isError: isFollowerError,
-    data: followerList,
-  } = useQuery({
+  const { isError: isFollowerError, data: followerList } = useQuery({
     queryKey: ['userFollowers', id],
     queryFn: () => getUserFollows({ userId: id, type: 'follower' }),
     enabled: !!id,
   })
 
-  const {
-    isPending: isFolloweePending,
-    isError: isFolloweeError,
-    data: followeeList,
-  } = useQuery({
+  const { isError: isFolloweeError, data: followeeList } = useQuery({
     queryKey: ['userFollowees', id],
     queryFn: () => getUserFollows({ userId: id, type: 'followee' }),
     enabled: !!id,
