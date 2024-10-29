@@ -81,30 +81,34 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
         <ul>
           {reviews.map((review) => (
             <li key={review.id} className="relative mb-4 rounded-lg border border-unactive bg-[#252530] p-6">
-              <div className="flex justify-between">
-                <div className="flex items-start">
-                  <img
-                    src={review.user.image || DefaultImage.src}
-                    alt={review.user.nickname}
-                    className={`mr-4 h-12 w-12 cursor-pointer rounded-full object-cover ${
-                      review.user.image ? '' : 'border-2 border-unactive'
-                    }`}
-                    onClick={() => handleProfileClick(review.user.id)}
-                    onError={(e) => {
-                      e.currentTarget.src = DefaultImage.src
-                      e.currentTarget.classList.add('border-2', 'border-unactive')
-                    }}
-                  />
+              <div className="md:flex md:justify-between">
+                {/* 모바일에서는 section이 위에, 그 아래에 리뷰 내용이 배치되도록 설정 */}
+                <section className="mb-4 md:mb-0">
+                  <div className="flex items-start">
+                    <img
+                      src={review.user.image || DefaultImage.src}
+                      alt={review.user.nickname}
+                      className={`mr-4 h-12 w-12 cursor-pointer rounded-full object-cover ${
+                        review.user.image ? '' : 'border-2 border-unactive'
+                      }`}
+                      onClick={() => handleProfileClick(review.user.id)}
+                      onError={(e) => {
+                        e.currentTarget.src = DefaultImage.src
+                        e.currentTarget.classList.add('border-2', 'border-unactive')
+                      }}
+                    />
 
-                  <div className="flex w-[120px] flex-col">
-                    <p className="truncate font-bold text-white">{review.user.nickname}</p>
-                    <StarRating rating={Number(review.rating)} color="#FFD700" />
+                    <div className="flex w-[120px] flex-col">
+                      <p className="truncate font-bold text-white">{review.user.nickname}</p>
+                      <StarRating rating={Number(review.rating)} color="#FFD700" />
+                    </div>
                   </div>
-                </div>
+                </section>
 
-                <div className="mx-8 flex flex-grow flex-col">
-                  <p className="mb-3 text-white">{review.content}</p>
-                  <div className="mb-2 flex space-x-2">
+                {/* 모바일에서 아래로 배치되도록 설정 */}
+                <div className="space-y-2 md:mx-8 md:flex md:flex-grow md:flex-col">
+                  <p className="text-white">{review.content}</p>
+                  <div className="flex space-x-2">
                     {review.reviewImages.map((image) => (
                       <img
                         key={image.id}
@@ -119,21 +123,23 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <p className="text-gray-400">{new Date(review.createdAt).toLocaleDateString()}</p>
-
-                    {user && user.id === review.user.id && (
-                      <div className="flex space-x-2">
-                        <button className="text-[#9FA6B2] hover:underline" onClick={() => handleEditReview(review)}>
-                          수정
-                        </button>
-                        <button
-                          className="text-[#9FA6B2] hover:underline"
-                          onClick={() => handleDeleteReview(review.id)}
-                        >
-                          삭제
-                        </button>
-                      </div>
-                    )}
+                    {/* 작성 시간과 수정/삭제 버튼을 옆에 배치 */}
+                    <div className="flex items-center space-x-2 text-gray-400">
+                      <p>{new Date(review.createdAt).toLocaleDateString()}</p>
+                      {user && user.id === review.user.id && (
+                        <div className="flex space-x-2">
+                          <button className="text-[#9FA6B2] hover:underline" onClick={() => handleEditReview(review)}>
+                            수정
+                          </button>
+                          <button
+                            className="text-[#9FA6B2] hover:underline"
+                            onClick={() => handleDeleteReview(review.id)}
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 

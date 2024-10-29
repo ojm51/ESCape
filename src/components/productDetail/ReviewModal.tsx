@@ -142,7 +142,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             />
           ))}
         </div>
-        <div className="flex flex-col" style={{ width: '540px', gap: '20px' }}>
+        <div className="flex w-[290px] flex-col gap-5 md:w-[540px]">
           <div className="relative rounded-lg bg-[#252530]">
             <textarea
               value={reviewText}
@@ -155,34 +155,42 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
               {reviewText.length}/{MAX_CHAR_COUNT}
             </p>
           </div>
-          <div className="flex items-center space-x-2">
-            {uploadedImageUrls.length + existingImages.length < MAX_IMAGE_COUNT && (
-              <div onClick={() => document.getElementById('imageUpload')?.click()} className="relative cursor-pointer">
-                <div className="relative h-40 w-40">
-                  <img src={DefaultImage.src} alt="Default Image" className="h-40 w-40 rounded-md object-cover" />
-                </div>
-              </div>
-            )}
-            {existingImages.map((image, index) => (
-              <div key={image.id} className="relative h-40 w-40">
-                <img src={image.source} alt="Existing Image" className="h-40 w-40 rounded-md object-cover" />
-                <button className="absolute right-2 top-2" onClick={() => handleImageRemove(index)}>
-                  <IoMdCloseCircle size={24} className="text-white" />
-                </button>
-              </div>
-            ))}
-            {uploadedImageUrls.map((url, index) => (
-              <div key={index} className="relative h-40 w-40">
-                <img src={url} alt="Uploaded Image" className="h-40 w-40 rounded-md object-cover" />
-                <button
-                  className="absolute right-2 top-2"
-                  onClick={() => handleImageRemove(existingImages.length + index)}
+
+          {/* 모바일 환경에서 이미지 스크롤 추가 */}
+          <div className="flex items-center space-x-2 overflow-x-auto whitespace-nowrap">
+            <div className="inline-flex space-x-2">
+              {uploadedImageUrls.length + existingImages.length < MAX_IMAGE_COUNT && (
+                <div
+                  onClick={() => document.getElementById('imageUpload')?.click()}
+                  className="relative cursor-pointer"
                 >
-                  <IoMdCloseCircle size={24} className="text-white" />
-                </button>
-              </div>
-            ))}
+                  <div className="relative h-40 w-40">
+                    <img src={DefaultImage.src} alt="Default Image" className="h-40 w-40 rounded-md object-cover" />
+                  </div>
+                </div>
+              )}
+              {existingImages.map((image, index) => (
+                <div key={image.id} className="relative inline-block h-40 w-40">
+                  <img src={image.source} alt="Existing Image" className="h-40 w-40 rounded-md object-cover" />
+                  <button className="absolute right-2 top-2" onClick={() => handleImageRemove(index)}>
+                    <IoMdCloseCircle size={24} className="text-white" />
+                  </button>
+                </div>
+              ))}
+              {uploadedImageUrls.map((url, index) => (
+                <div key={index} className="relative inline-block h-40 w-40">
+                  <img src={url} alt="Uploaded Image" className="h-40 w-40 rounded-md object-cover" />
+                  <button
+                    className="absolute right-2 top-2"
+                    onClick={() => handleImageRemove(existingImages.length + index)}
+                  >
+                    <IoMdCloseCircle size={24} className="text-white" />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
+
           <input
             type="file"
             accept="image/*"

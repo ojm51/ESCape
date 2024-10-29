@@ -41,7 +41,7 @@ const ReviewLikeButton: React.FC<ReviewLikeButtonProps> = ({ reviewId, initialIs
 
   return (
     <div
-      className={`flex cursor-pointer items-center space-x-1 rounded-full border px-3 py-1 ${
+      className={`flex cursor-pointer items-center space-x-0.5 rounded-full border px-2.5 py-0.5 ${
         isLiked ? 'border-blue-500 text-blue-500' : 'border-gray-400 text-gray-400'
       }`}
       onClick={handleLikeToggle}
