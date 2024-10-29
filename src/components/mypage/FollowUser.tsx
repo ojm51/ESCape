@@ -15,7 +15,7 @@ export default function FollowUser({ followUserData }: FollowUserProps) {
 
   return (
     <Link className="flex content-start items-center gap-5" href={`/user/${id}`}>
-      <Image className="xl:w-[52px]" src={profileImage} alt="프로필 이미지" width={48} height={48} />
+      <Image className="rounded-full xl:w-[52px]" src={profileImage} alt="프로필 이미지" width={48} height={48} />
       <p className="text-base font-medium xl:text-lg">{nickname}</p>
     </Link>
   )

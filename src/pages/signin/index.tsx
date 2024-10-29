@@ -10,7 +10,7 @@ import EyesHiddenIcon from '../../../public/icons/icon_eyes_hidden.svg'
 
 import GoogleOauthButton from '@/components/auth/GoogleOauthButton'
 import KakoOauthButton from '@/components/auth/KakoOauthButton'
-import PrimaryButton from '@/components/@shared/button/CustomButton'
+import PrimaryButton from '@/components/@shared/ui/CustomButton'
 import { Spinner } from 'flowbite-react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 

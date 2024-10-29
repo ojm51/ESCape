@@ -9,7 +9,7 @@ import { AddImageFileParams, UpdateMyInfoParams } from '@/libs/axios/mypage/type
 import { addImageFile, getUserFollows } from '@/libs/axios/mypage/apis'
 import { useAuth } from '@/contexts/AuthProvider'
 import Modal from '../@shared/modal/Modal'
-import CustomButton from '../@shared/button/CustomButton'
+import CustomButton from '../@shared/ui/CustomButton'
 import EditProfile from './EditProfile'
 import FollowUserList from './FollowUserList'
 import { AddFollowParams, DeleteFollowParams } from '@/libs/axios/user/types'
@@ -250,9 +250,9 @@ export default function Profile({ data: userData }: ProfileProps) {
           modalFrameClassNames="max-h-[550px] w-[335px] overflow-auto scrollbar-hide md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
         >
           <EditProfile
-            image={myInfo?.image ? myInfo.image : null}
-            nickname={myInfo?.nickname ?? ''}
-            description={myInfo?.description ?? ''}
+            image={image ? image : null}
+            nickname={nickname ?? ''}
+            description={description ?? ''}
             onEdit={handleUpdateProfileButtonClick}
             isPending={uploadNewProfileMutation.isPending}
           />

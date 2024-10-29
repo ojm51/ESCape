@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react'
 import Image from 'next/image'
 import imageIcon from '@icons/image_icon.svg'
 import deleteIcon from '@icons/close_icon.svg'
-import CustomButton from '../@shared/button/CustomButton'
+import CustomButton from '../@shared/ui/CustomButton'
 import { Spinner } from 'flowbite-react'
 
 const INPUT_MAX_LENGTH = 10
@@ -30,7 +30,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
 
   const isFormComplete = useMemo(() => {
     const { image, ...restValues } = formValues
-    const isAllInputFilled = Object.values(restValues).every((inputValue) => inputValue !== '')
+    const isAllInputFilled = Object.values(restValues).every((inputValue) => inputValue !== '') && image !== null
     return isAllInputFilled
   }, [formValues])
 
@@ -43,7 +43,8 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
       URL.revokeObjectURL(previewImage)
     }
 
-    setPreviewImage(URL.createObjectURL(selectedImageFile))
+    const nextImage = URL.createObjectURL(selectedImageFile)
+    setPreviewImage(nextImage)
     setFormValues((prevValues) => ({
       ...prevValues,
       image: selectedImageFile,

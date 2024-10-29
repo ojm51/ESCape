@@ -3,6 +3,7 @@ import ActivityCard from './ActivityCard'
 import starIcon from '@icons/star_icon.svg'
 import commentIcon from '@icons/comment_icon.svg'
 import { UserTypes } from '@/dtos/UserDto'
+import { CATEGORY_DATA } from '@/libs/constants/category'
 
 interface ActivityCardListProps {
   data: UserTypes
@@ -10,6 +11,11 @@ interface ActivityCardListProps {
 
 export default function ActivityCardList({ data }: ActivityCardListProps) {
   const { averageRating, reviewCount, mostFavoriteCategory } = data
+
+  const favoriteCategory = mostFavoriteCategory
+    ? CATEGORY_DATA.find((category) => mostFavoriteCategory.id === category.id)
+    : undefined
+
   const activityCardContents = [
     {
       title: '남긴 별점 평균',
@@ -26,7 +32,7 @@ export default function ActivityCardList({ data }: ActivityCardListProps) {
     {
       title: '관심 지역',
       icon: '',
-      value: !!mostFavoriteCategory ? mostFavoriteCategory.name : '-',
+      value: !!favoriteCategory ? favoriteCategory.name : '-',
       isCategory: true,
     },
   ]
