@@ -45,9 +45,11 @@ export default function UserPage() {
     <>
       <div className="m-auto mt-[30px] max-w-[335px] md:mt-[40px] md:max-w-[509px] xl:mt-[60px] xl:max-w-[1340px]">
         <section className="mb-[60px] xl:float-left xl:mr-[60px]">
-          {!!data ? <Profile data={data} /> : <p>failed..</p>}
+          <Profile data={data} />
         </section>
-        <section className="mb-[60px]">{!!data ? <ActivityCardList data={data} /> : <p>failed..</p>}</section>
+        <section className="mb-[60px]">
+          <ActivityCardList data={data} />
+        </section>
         <ProductCardList data={data} />
       </div>
     </>
