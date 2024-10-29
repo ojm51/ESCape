@@ -30,7 +30,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
 
   const isFormComplete = useMemo(() => {
     const { image, ...restValues } = formValues
-    const isAllInputFilled = Object.values(restValues).every((inputValue) => inputValue !== '')
+    const isAllInputFilled = Object.values(restValues).every((inputValue) => inputValue !== '') && image !== null
     return isAllInputFilled
   }, [formValues])
 
@@ -43,7 +43,8 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
       URL.revokeObjectURL(previewImage)
     }
 
-    setPreviewImage(URL.createObjectURL(selectedImageFile))
+    const nextImage = URL.createObjectURL(selectedImageFile)
+    setPreviewImage(nextImage)
     setFormValues((prevValues) => ({
       ...prevValues,
       image: selectedImageFile,
