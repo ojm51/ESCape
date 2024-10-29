@@ -55,7 +55,7 @@ export default function BoardsPage() {
     enabled: !!pageLimit,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const totalCount = lastPage.totalCount
+      const { totalCount } = lastPage
       const loadedCount = allPages.flatMap((page) => page.articleList).length
       if (loadedCount < totalCount) {
         return allPages.length + 1

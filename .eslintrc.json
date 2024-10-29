@@ -4,7 +4,7 @@
     "es2021": true
   },
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier", "unused-imports"],
   "extends": [
     "airbnb",
     "airbnb/hooks",
@@ -34,7 +34,6 @@
     "react/prefer-stateless-function": 0,
     "react/jsx-one-expression-per-line": 0,
     "no-nested-ternary": 0,
-    "react/jsx-curly-brace-presence": ["warn", { "props": "always", "children": "always" }],
     "import/no-unresolved": ["error", { "caseSensitive": false }],
     "react/jsx-props-no-spreading": [1, { "custom": "ignore" }],
     "linebreak-style": 0,
@@ -42,11 +41,24 @@
     "no-use-before-define": 0,
     "import/no-extraneous-dependencies": 0,
     "no-shadow": 0,
-    "jsx-a11y/no-noninteractive-element-interactions": 0
+    "jsx-a11y/no-noninteractive-element-interactions": 0,
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+    ]
   },
   "settings": {
     "import/resolver": {
       "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      },
+      "alias": {
+        "map": [
+          ["@", "./src"],
+          ["@icons", "./public/icons"],
+          ["@images", "./public/images"]
+        ],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }

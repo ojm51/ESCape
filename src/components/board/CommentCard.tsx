@@ -1,12 +1,12 @@
 import { ArticleComment } from '@/dtos/ArticleDto'
-import KebabIcon from '../../../public/icons/kebab_icon.svg'
-import ProfileIcon from '../../../public/icons/profile_icon.svg'
 import Image from 'next/image'
 import timeAgo from '@/utils/timeAgo'
 import Dropdown from '@/components/board/DropDown'
 import { useState } from 'react'
 import CommentDeleteModal from '@/components/board/CommentDeleteModal'
 import CommentPatchModal from '@/components/board/CommentPatchModal'
+import ProfileIcon from '../../../public/icons/profile_icon.svg'
+import KebabIcon from '../../../public/icons/kebab_icon.svg'
 
 export interface DetailCommentProps {
   data?: ArticleComment

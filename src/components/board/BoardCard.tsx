@@ -85,8 +85,7 @@ export default function BoardCard({ article, userId }: BoardCardProps) {
               </div>
             ) : (
               <div className="flex gap-1">
-                <Image src={HeartIcon} alt="heart" />
-                {'0'}
+                <Image src={HeartIcon} alt="heart" />0
               </div>
             )}
           </div>

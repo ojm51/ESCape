@@ -1,4 +1,6 @@
 import { FollowResponseTypes, UserTypes } from '@/dtos/UserDto'
+import { ResponseProductListTypes } from '@/dtos/ProductDto'
+import { ImageTypes } from '@/dtos/ImageDto'
 import axiosInstance from '../axiosInstance'
 import { API_PATH } from '../config/path'
 import {
@@ -8,8 +10,6 @@ import {
   GetUserProductsParams,
   UpdateMyInfoParams,
 } from './types'
-import { ResponseProductListTypes } from '@/dtos/ProductDto'
-import { ImageTypes } from '@/dtos/ImageDto'
 
 export const getMyInfo = async () => {
   const response = await axiosInstance.get<UserTypes>(API_PATH.user.me)

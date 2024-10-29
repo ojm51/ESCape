@@ -33,7 +33,8 @@ export default function AddBoardsPage() {
     if (!content) {
       setContentError('내용을 입력해주세요.')
       return false
-    } else if (content.length > 300) {
+    }
+    if (content.length > 300) {
       setContentError('내용은 300자 미만이어야 합니다.')
       return false
     }
