@@ -3,20 +3,23 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Logo from '../../../public/images/logo.svg'
 import PrimaryButton from '@/components/@shared/button/CustomButton'
-
 import { Spinner } from 'flowbite-react'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, FieldError } from 'react-hook-form'
 import oAuthSignUp from '@/libs/axios/oauth/oAuthSignUp'
 
 interface NicknameForm {
   nickname: string
 }
 
+interface OAuthSignUpResponse {
+  ok: boolean
+  message?: string
+}
+
 export default function KakaoSignupPage() {
   const { oAuthLogin } = useAuth()
-
   const provider = 'kakao'
   const router = useRouter()
   const { code } = router.query
@@ -36,7 +39,7 @@ export default function KakaoSignupPage() {
     }
     localStorage.setItem('authCode', code)
     window.close()
-  }, [code])
+  }, [code, router])
 
   const onSubmit = async (data: NicknameForm) => {
     const token = localStorage.getItem('authCode')
@@ -55,18 +58,25 @@ export default function KakaoSignupPage() {
 
     try {
       const isSignUpSuccess = await oAuthSignUp(formData, provider)
-      const result = await isSignUpSuccess.json()
-      console.log('API Response:', result)
 
-      if (isSignUpSuccess) {
-        await oAuthLogin({ token }, provider)
-        localStorage.removeItem('authCode')
-        router.push('/')
-      } else {
+      if (typeof isSignUpSuccess === 'boolean') {
         setError('nickname', {
           type: 'server',
-          message: result.message || '회원가입 실패. 다시 시도해 주세요.',
+          message: '회원가입 실패. 다시 시도해 주세요.',
         })
+      } else {
+        const { ok, message }: OAuthSignUpResponse = isSignUpSuccess
+
+        if (ok) {
+          await oAuthLogin({ token }, provider)
+          localStorage.removeItem('authCode')
+          router.push('/product')
+        } else {
+          setError('nickname', {
+            type: 'server',
+            message: message || '회원가입 실패. 다시 시도해 주세요.',
+          })
+        }
       }
     } catch (err) {
       setError('nickname', {
@@ -79,7 +89,7 @@ export default function KakaoSignupPage() {
   }
 
   return (
-    <div className="mt-[200px] max-w-[640px] text-white p-3 mx-auto">
+    <div className="mx-auto mt-[200px] max-w-[640px] p-3 text-white">
       <div className="flex justify-center">
         <Link href="/" className="inline-block py-10">
           <Image width={200} src={Logo} alt="로고 이미지" />
@@ -90,7 +100,7 @@ export default function KakaoSignupPage() {
           <label className="block pb-1">닉네임</label>
           <input
             type="text"
-            className={`bg-brand-black-medium w-full rounded-xl border-solid border-brand-black-light py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation ${
+            className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
               errors.nickname ? 'border-red-500' : ''
             }`}
             placeholder="닉네임을 입력해주세요"
@@ -102,7 +112,7 @@ export default function KakaoSignupPage() {
               },
             })}
           />
-          {errors.nickname && <p className="text-red-500 text-sm mt-2">{errors.nickname.message}</p>}
+          {errors.nickname && <p className="mt-2 text-sm text-red-500">{(errors.nickname as FieldError).message}</p>}
         </div>
         <div className="pt-2">
           <PrimaryButton style="primary" type="submit" active={true}>

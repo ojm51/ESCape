@@ -8,10 +8,17 @@ import Logo from '../../../public/images/logo.svg'
 import EyesShowIcon from '../../../public/icons/icon_eyes_show.svg'
 import EyesHiddenIcon from '../../../public/icons/icon_eyes_hidden.svg'
 import PrimaryButton from '@/components/@shared/button/CustomButton'
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { Spinner } from 'flowbite-react'
-import { useToaster } from "@/contexts/ToasterProvider";
+import { useToaster } from '@/contexts/ToasterProvider'
+import { postUsers } from '@/libs/axios/board/postUsers'
 
+interface SignUpFormInputs {
+  email: string
+  nickname: string
+  password: string
+  passwordConfirmation: string
+}
 
 export default function SignupPage() {
   const {
@@ -19,40 +26,44 @@ export default function SignupPage() {
     handleSubmit,
     formState: { errors, isValid },
     watch,
-  } = useForm({
+  } = useForm<SignUpFormInputs>({
     mode: 'onChange',
   })
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const { user, login, isPending } = useAuth()
-  const toaster = useToaster();
+  const toaster = useToaster()
 
   useEffect(() => {
     if (!isPending && user) {
-      router.replace('/')
+      const sendUserPost = async () => {
+        await postUsers({ id: Number(user.id), nickname: user.nickname, description: 'string', image: 'string' })
+        router.replace('/')
+      }
+      sendUserPost()
     }
   }, [isPending, user, router])
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
     setLoading(true)
     const { email, password } = data
     const isSignUpSuccess = await signUp(data)
 
     if (isSignUpSuccess) {
       await login({ email, password })
-      router.push('/')
+      router.push('/product')
       return
     }
     setLoading(false)
-    toaster("fail", "회원가입에 실패하였습니다.")
-
+    toaster('fail', '회원가입에 실패하였습니다.')
   }
-  const validatePassword = (value) => {
-    const regex = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,}$/ // 숫자, 영문, 특수문자 포함 및 최소 8자
+
+  const validatePassword = (value: string): true | string => {
+    const regex = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,}$/
     if (!regex.test(value)) {
-      return '비밀번호는 숫자, 영문, 특수문자를 포함해야 합니다.' // 에러 메시지
+      return '비밀번호는 숫자, 영문, 특수문자를 포함해야 합니다.'
     }
-    return true // 유효성 통과
+    return true
   }
 
   const passwordValue = watch('password')
@@ -71,9 +82,9 @@ export default function SignupPage() {
           <label className="block pb-1">이메일</label>
           <input
             type="text"
-            className={`bg-brand-black-medium w-full rounded-xl border-solid ${
+            className={`w-full rounded-xl border-solid bg-brand-black-medium ${
               errors.email ? 'border-red-500' : 'border-brand-black-light'
-            } py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation`}
+            } px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation`}
             placeholder="이메일을 입력해주세요"
             {...register('email', {
               required: '이메일은 필수 입력입니다.',
@@ -83,15 +94,15 @@ export default function SignupPage() {
               },
             })}
           />
-          {errors.email && <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>}
+          {errors.email && <p className="mt-2 text-sm text-red-500">{errors.email.message}</p>}
         </div>
         <div className="mb-5">
           <label className="block pb-1">닉네임</label>
           <input
             type="text"
-            className={`bg-brand-black-medium w-full rounded-xl border-solid ${
+            className={`w-full rounded-xl border-solid bg-brand-black-medium ${
               errors.nickname ? 'border-red-500' : 'border-brand-black-light'
-            } py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation`}
+            } px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation`}
             placeholder="닉네임을 입력해주세요"
             {...register('nickname', {
               required: '닉네임은 필수 입력입니다.',
@@ -101,16 +112,16 @@ export default function SignupPage() {
               },
             })}
           />
-          {errors.nickname && <p className="text-red-500 text-sm mt-2">{errors.nickname.message}</p>}
+          {errors.nickname && <p className="mt-2 text-sm text-red-500">{errors.nickname.message}</p>}
         </div>
         <div className="mb-5">
           <label className="block pb-1">비밀번호</label>
           <div className="relative">
             <input
               type={showPassword ? 'text' : 'password'}
-              className={`bg-brand-black-medium w-full rounded-xl border-solid ${
+              className={`w-full rounded-xl border-solid bg-brand-black-medium ${
                 errors.password ? 'border-red-500' : 'border-brand-black-light'
-              } py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation`}
+              } px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation`}
               placeholder="비밀번호는 필수 입력입니다."
               {...register('password', {
                 required: '비밀번호는 필수 항목입니다.',
@@ -134,16 +145,16 @@ export default function SignupPage() {
               />
             </button>
           </div>
-          {errors.password && <p className="text-red-500 text-sm mt-2">{errors.password.message}</p>}
+          {errors.password && <p className="mt-2 text-sm text-red-500">{errors.password.message}</p>}
         </div>
         <div className="mb-5">
           <label className="block pb-1">비밀번호 확인</label>
           <div className="relative">
             <input
               type={showPasswordConfirmation ? 'text' : 'password'}
-              className={`bg-brand-black-medium w-full rounded-xl border-solid ${
+              className={`w-full rounded-xl border-solid bg-brand-black-medium ${
                 errors.passwordConfirmation ? 'border-red-500' : 'border-brand-black-light'
-              } py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation`}
+              } px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation`}
               placeholder="비밀번호를 다시 입력해주세요"
               {...register('passwordConfirmation', {
                 required: '비밀번호 확인을 입력해주세요.',
@@ -164,11 +175,11 @@ export default function SignupPage() {
             </button>
           </div>
           {errors.passwordConfirmation && (
-            <p className="text-red-500 text-sm mt-2">{errors.passwordConfirmation.message}</p>
+            <p className="mt-2 text-sm text-red-500">{errors.passwordConfirmation.message}</p>
           )}
         </div>
         <div className="pt-2">
-          <PrimaryButton style="primary"  type="submit" onClick={() => {}} active={true} disabled={!isValid}>
+          <PrimaryButton style="primary" type="submit" onClick={() => {}} active={true}>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '가입하기'}
           </PrimaryButton>
         </div>

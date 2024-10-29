@@ -1,17 +1,17 @@
 import { signIn } from '@/libs/axios/auth/auth'
 import oAuthSignIn from '@/libs/axios/oauth/oAuthSignIn'
-import { OAuthProviders, OAuthSignInForm, SignInForm, SignInReturn, oauthAppsReturn } from '@/dtos/AuthDto'
+import { OAuthProviders, OAuthSignInForm, SignInForm, SignInReturn } from '@/dtos/AuthDto'
 import { CommonUserTypes } from '@/dtos/UserDto'
 import { removeTokens } from '@/utils/authTokenStorage'
 import { useRouter } from 'next/router'
 import getUser from '@/libs/axios/user/getUser'
-import { useToaster } from "@/contexts/ToasterProvider";
+import { useToaster } from '@/contexts/ToasterProvider'
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 
 interface AuthValues {
   user: CommonUserTypes | null
   isPending: boolean
-  login: (formData: SignInForm) => Promise<boolean>
+  login: (formData: SignInForm) => Promise<boolean | { success: boolean, message: string }>
   logout: () => void
   oAuthLogin: (formData: OAuthSignInForm, provider: OAuthProviders) => Promise<SignInReturn | null>
 }
@@ -36,10 +36,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user: null,
     isPending: true,
   })
-  const toaster = useToaster();
-  const router = useRouter();
+  const toaster = useToaster()
+  const router = useRouter()
 
-  const handleAuthChange = (key: string, value: UserValue | boolean) => {
+  const handleAuthChange = (key: 'user' | 'isPending', value: UserValue | boolean) => {
     setAuthState((prev) => ({
       ...prev,
       [key]: value,
@@ -60,12 +60,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const login = async (formData: SignInForm) => {
+  const login = async (formData: SignInForm): Promise<boolean | { success: boolean, message: string }> => {
     const isSignInSuccess = await signIn(formData)
-    if (!isSignInSuccess) { 
-      return { success: false, message: "이메일 혹은 비밀번호를 확인해주세요." }
+    if (!isSignInSuccess) {
+      return { success: false, message: '이메일 혹은 비밀번호를 확인해주세요.' }
     }
-    toaster("success", "로그인에 성공하였습니다.");
+    toaster('success', '로그인에 성공하였습니다.')
     await getMe()
     return true
   }
@@ -80,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     handleAuthChange('user', null)
     removeTokens()
-    toaster("success", "로그아웃이 되었습니다.")
+    toaster('success', '로그아웃이 되었습니다.')
   }
 
   useEffect(() => {
@@ -108,14 +108,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth(required?: boolean) {
   const context = useContext(AuthContext)
-  const toaster = useToaster();
-  const router = useRouter();
+  const toaster = useToaster()
+  const router = useRouter()
 
   if (!context) throw new Error('useAuth는 반드시 AuthProvider 노드 안에서 사용돼야 합니다.')
 
   useEffect(() => {
     if (required && !context.user && !context.isPending) {
-      toaster("warn", "로그인이 필요한 페이지입니다.");
+      toaster('warn', '로그인이 필요한 페이지입니다.')
       router.push('/signin')
     }
   }, [required, context.user, context.isPending, router, toaster])

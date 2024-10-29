@@ -2,10 +2,10 @@ export interface CommonUserTypes {
   updatedAt: string
   createdAt: string
   teamId: string
-  image: string
+  image: string | File | null
   description: string
   nickname: string
-  id: number
+  id: number | string
 }
 
 export interface MostFavoriteCategoryTypes {
@@ -47,7 +47,8 @@ export interface UserRanking {
 export interface FollowTypes extends CommonUserTypes {}
 
 export interface FollowListTypes {
-  follow: FollowTypes
+  follower?: CommonUserTypes
+  followee?: CommonUserTypes
   id: number
 }
 

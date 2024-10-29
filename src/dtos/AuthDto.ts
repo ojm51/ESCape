@@ -19,7 +19,6 @@ export interface OAuthSignUpForm {
   token: string
 }
 
-
 export interface SignUpForm {
   email: string
   nickname: string

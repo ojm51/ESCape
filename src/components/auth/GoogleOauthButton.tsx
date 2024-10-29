@@ -3,19 +3,18 @@ import Image from 'next/image'
 import GoogleIcon from '../../../public/icons/icon_google.svg'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
-import { useToaster } from "@/contexts/ToasterProvider";
+import { useToaster } from '@/contexts/ToasterProvider'
 
-const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
-const GOOGLE_CLIENT_SECRET = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''
+const GOOGLE_CLIENT_SECRET = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET || ''
 const REDIRECT_URI = `http://localhost:3000/oauth/google`
 
 export default function GoogleOauthButton() {
   const { oAuthLogin } = useAuth()
   const router = useRouter()
-  const [code, setCode] = useState('')
-  const toaster = useToaster();
+  const [code, setCode] = useState<string>('')
+  const toaster = useToaster()
 
-  // 팝업 열기
   const handleGoogleClick = () => {
     const width = 480
     const height = 702
@@ -32,12 +31,11 @@ export default function GoogleOauthButton() {
       `left=${left},top=${top},width=${width},height=${height}`,
     )
 
-    if (!googleWindow) { 
-      toaster("fail", "팝업을 열 수 없습니다. 팝업 차단이 설정되어 있는지 확인해 주세요.")
+    if (!googleWindow) {
+      toaster('fail', '팝업을 열 수 없습니다. 팝업 차단이 설정되어 있는지 확인해 주세요.')
       return
     }
 
-    // 팝업에서 인증 코드 가져오기
     const checkPopup = setInterval(() => {
       try {
         if (googleWindow.closed) {
@@ -73,7 +71,7 @@ export default function GoogleOauthButton() {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: new URLSearchParams(data),
+      body: new URLSearchParams(data as Record<string, string>),
     })
 
     const tokenData = await response.json()
@@ -83,7 +81,7 @@ export default function GoogleOauthButton() {
       try {
         const isSignInSuccess = await oAuthLogin({ redirectUri: REDIRECT_URI, token: tokenData.id_token }, 'google')
         if (isSignInSuccess?.accessToken) {
-          toaster("success", "로그인이 성공하였습니다.")
+          toaster('success', '로그인이 성공하였습니다.')
           localStorage.removeItem('authCode')
           router.push('/')
         } else {
@@ -91,12 +89,12 @@ export default function GoogleOauthButton() {
         }
       } catch (error) {
         console.error('로그인 실패:', error)
-        toaster("fail", "로그인에 실패했습니다. 다시 시도해 주세요.")
+        toaster('fail', '로그인에 실패했습니다. 다시 시도해 주세요.')
         router.push('/oauth/google')
       }
     } else {
       console.error('ID 토큰을 가져오는 데 실패했습니다:', tokenData)
-      toaster("fail", "ID 토큰을 가져오지 못했습니다.")
+      toaster('fail', 'ID 토큰을 가져오지 못했습니다.')
     }
   }
 
@@ -110,7 +108,7 @@ export default function GoogleOauthButton() {
     <button
       type="button"
       title="구글 로그인"
-      className="border-solid rounded-full border-brand-black-light"
+      className="rounded-full border-solid border-brand-black-light"
       onClick={handleGoogleClick}
     >
       <Image width={56} src={GoogleIcon} alt="구글 로고" />

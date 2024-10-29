@@ -6,14 +6,27 @@ import iconHamburger from '@icons/icon_hamburger.svg'
 import logoBig from '@images/logo.svg'
 import iconGlass from '@icons/icon_glass.svg'
 import iconSignin from '@icons/icon_signin.svg'
+
+import HeaderSidebar from './HeaderSidebar'
 import defaultProfileImage from '@images/user_default.svg'
-import classNames from 'classnames'
 import { useAuth } from '@/contexts/AuthProvider'
 
 export default function Header({ children }: PropsWithChildren) {
   const { user, logout } = useAuth()
-  const { pathname } = useRouter()
   const [searchInputValue, setSearchInputValue] = useState('')
+
+  const [isOpenSidebar, setIsOpenSidebar] = useState(false)
+
+  const handleSidebar = (active?: 'open' | 'close') => {
+    if (active === 'open') {
+      setIsOpenSidebar(true)
+    } else if (active === 'close') {
+      setIsOpenSidebar(false)
+    } else {
+      setIsOpenSidebar((prev) => !prev)
+    }
+  }
+
   const router = useRouter()
 
   const handleLogout = () => {
@@ -41,7 +54,12 @@ export default function Header({ children }: PropsWithChildren) {
     <>
       <div className="relative z-10">
         <div className="fixed flex h-[70px] w-full items-center justify-between border-b border-[#252530] bg-body-bg px-5 md:h-[80px] md:px-[30px] xl:h-[100px] xl:px-[120px]">
-          <button className="relative h-[11.27px] w-[17px] md:hidden">
+          <button
+            onClick={() => {
+              handleSidebar()
+            }}
+            className="relative h-[11.27px] w-[17px] md:hidden"
+          >
             <Image src={iconHamburger} alt="카테고리 보기" fill />
           </button>
           <div className="flex items-center gap-10">
@@ -99,6 +117,7 @@ export default function Header({ children }: PropsWithChildren) {
         </div>
       </div>
       <div className="pt-[70px] md:pt-[80px] xl:pt-[100px]">{children}</div>
+      <HeaderSidebar isOpen={isOpenSidebar} handleSidebar={handleSidebar} />
     </>
   )
 }

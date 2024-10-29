@@ -1,15 +1,18 @@
-import React, {ReactNode} from "react";
+import React, { ReactNode } from 'react'
 
 interface PaginationButtonProps {
-  children: ReactNode;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  isActive: boolean;
+  children: ReactNode
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void
+  isActive: boolean
 }
 
-export default function BoardPaginationButton({children, onClick, isActive}: PaginationButtonProps) {
+export default function BoardPaginationButton({ children, onClick, isActive }: PaginationButtonProps) {
   return (
-    <button onClick={onClick} className={`text-[14px] leading-[17px] font-medium ${isActive ? "text-brand-white" : "text-brand-gray-dark"}`}>
-        {children}
+    <button
+      onClick={onClick}
+      className={`text-[14px] font-medium leading-[17px] ${isActive ? 'text-brand-white' : 'text-brand-gray-dark'}`}
+    >
+      {children}
     </button>
   )
 }

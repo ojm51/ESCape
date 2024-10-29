@@ -1,43 +1,35 @@
-import useToggle from "@/hooks/useToggle";
-import React, {
-  useEffect,
-  useRef,
-  ReactNode,
-  ReactElement,
-  isValidElement,
-  Children,
-  cloneElement
-} from "react";
+import useToggle from '@/hooks/useToggle'
+import React, { useEffect, useRef, ReactNode, ReactElement, isValidElement, Children, cloneElement } from 'react'
 
 interface Props {
-  children: ReactNode;
-  width: string;
-  buttonChildren: ReactNode;
-  childType?: "menu" | "other";
+  children: ReactNode
+  width: string
+  buttonChildren: ReactNode
+  childType?: 'menu' | 'other'
 }
 
-export default function Dropdown({ buttonChildren, children, width, childType = "menu" }: Props) {
-  const [isVisible, setIsVisible] = useToggle(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+export default function Dropdown({ buttonChildren, children, width, childType = 'menu' }: Props) {
+  const [isVisible, setIsVisible] = useToggle(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (!isVisible) {
-        return;
+        return
       }
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsVisible();
+        setIsVisible()
       }
     }
     if (isVisible) {
-      window.addEventListener("click", handleClickOutside);
+      window.addEventListener('click', handleClickOutside)
     } else {
-      window.removeEventListener("click", handleClickOutside);
+      window.removeEventListener('click', handleClickOutside)
     }
     return () => {
-      window.removeEventListener("click", handleClickOutside);
-    };
-  }, [isVisible]);
+      window.removeEventListener('click', handleClickOutside)
+    }
+  }, [isVisible])
 
   return (
     <div ref={dropdownRef}>
@@ -45,7 +37,7 @@ export default function Dropdown({ buttonChildren, children, width, childType = 
         className="flex w-full"
         type="button"
         onClick={() => {
-          setIsVisible();
+          setIsVisible()
         }}
       >
         {buttonChildren}
@@ -60,16 +52,16 @@ export default function Dropdown({ buttonChildren, children, width, childType = 
               if (isValidElement(child)) {
                 return cloneElement(child as ReactElement, {
                   className:
-                    childType === "menu"
+                    childType === 'menu'
                       ? `flex w-full items-center justify-center rounded-xl py-2 text-[14px] font-normal text-brand-white hover:bg-brand-black-dark`
                       : `flex w-full items-center rounded-xl px-4 py-2 text-[14px] font-normal text-brand-white`,
-                });
+                })
               }
-              return child;
+              return child
             })}
           </button>
         </div>
       )}
     </div>
-  );
+  )
 }

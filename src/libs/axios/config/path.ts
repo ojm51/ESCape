@@ -1,24 +1,24 @@
 export const API_PATH = {
   user: {
-    me: '/user/me',
-    ranking: '/user/ranking',
+    me: '/users/me',
+    ranking: '/users/ranking',
     user(userId: string | number) {
-      return `/user/${userId}`
+      return `/users/${userId}`
     },
     createdProducts(userId: string | number) {
-      return `/user/${userId}/created-products`
+      return `/users/${userId}/created-products`
     },
     reviewedProducts(userId: string | number) {
-      return `/user/${userId}/reviewed-products`
+      return `/users/${userId}/reviewed-products`
     },
     favoriteProducts(userId: string | number) {
-      return `/user/${userId}/favorite-products`
+      return `/users/${userId}/favorite-products`
     },
     followees(userId: string | number) {
-      return `/user/${userId}/followees`
+      return `/users/${userId}/followees`
     },
     followers(userId: string | number) {
-      return `/user/${userId}/followers`
+      return `/users/${userId}/followers`
     },
   },
   review: {
@@ -49,7 +49,7 @@ export const API_PATH = {
     default: '/images/upload',
   },
   follow: {
-    default: '/follow ',
+    default: '/follow',
   },
   category: {
     default: '/categories',

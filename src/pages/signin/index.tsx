@@ -12,14 +12,19 @@ import GoogleOauthButton from '@/components/auth/GoogleOauthButton'
 import KakoOauthButton from '@/components/auth/KakoOauthButton'
 import PrimaryButton from '@/components/@shared/button/CustomButton'
 import { Spinner } from 'flowbite-react'
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
+
+interface SignInFormInputs {
+  email: string
+  password: string
+}
 
 export default function SignInPage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm()
+  } = useForm<SignInFormInputs>()
   const [loading, setLoading] = useState(false)
   const [loginErrorMessage, setLoginErrorMessage] = useState('')
   const router = useRouter()
@@ -28,18 +33,28 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (user) {
-      router.replace('/')
+      router.replace('/product')
     }
   }, [user, router])
 
-  const onSubmit = async (data: { email: string; password: string }) => {
+  const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
     setLoading(true)
-    const { success, message } = await login(data)
-    if (!success) {
-      setLoginErrorMessage(message)
+    try {
+      const response = await login(data)
+      if (typeof response === 'boolean') {
+        setLoginErrorMessage('로그인 실패. 다시 시도해 주세요.')
+      } else {
+        const { success, message } = response
+        if (!success) {
+          setLoginErrorMessage(message)
+        } else {
+          router.push('/product')
+        }
+      }
+    } catch (error) {
+      setLoginErrorMessage('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.')
+    } finally {
       setLoading(false)
-    } else {
-      router.push('/')
     }
   }
 
@@ -55,7 +70,7 @@ export default function SignInPage() {
           <label className="block pb-1">이메일</label>
           <input
             type="text"
-            className={`bg-brand-black-medium w-full rounded-xl border-solid border-brand-black-light py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation ${
+            className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
               errors.email || loginErrorMessage ? 'border-red-500' : ''
             }`}
             placeholder="이메일을 입력해주세요"
@@ -67,15 +82,15 @@ export default function SignInPage() {
               },
             })}
           />
-          {errors.email && <p className="text-red-500 mt-1">{errors.email.message}</p>}
-          {loginErrorMessage && <p className="text-red-500 mt-1">{loginErrorMessage}</p>}
+          {errors.email && <p className="mt-1 text-red-500">{errors.email.message}</p>}
+          {loginErrorMessage && <p className="mt-1 text-red-500">{loginErrorMessage}</p>}
         </div>
         <div className="mb-5">
           <label className="block pb-1">비밀번호</label>
           <div className="relative">
             <input
               type={showPassword ? 'text' : 'password'}
-              className={`bg-brand-black-medium w-full rounded-xl border-solid border-brand-black-light py-4 px-6 text-brand-gray-dark focus:outline-blue-gradation ${
+              className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
                 errors.password || loginErrorMessage ? 'border-red-500' : ''
               }`}
               placeholder="비밀번호를 입력해주세요"
@@ -96,7 +111,7 @@ export default function SignInPage() {
               />
             </button>
           </div>
-          {errors.password && <p className="text-red-500 mt-1">{errors.password.message}</p>}
+          {errors.password && <p className="mt-1 text-red-500">{errors.password.message}</p>}
         </div>
         <div className="pt-2">
           <PrimaryButton style="primary" type="submit" active={true}>

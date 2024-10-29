@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react'
 import { ProductTypes } from '@/dtos/ProductDto'
-import ThemeCard from '../@shared/themeCard/ThemeCard'
+import ProductCard from '../@shared/productCard/ProductCard'
 
 interface ProductListProps {
   keyValue?: number
@@ -15,7 +15,7 @@ export default function ProductList({ keyValue, children, productList }: PropsWi
         {productList &&
           productList.length > 0 &&
           productList.map((product) => (
-            <ThemeCard key={keyValue ? product.id + keyValue : product.id} data={product} productId={product.id} />
+            <ProductCard key={keyValue ? product.id + keyValue : product.id} data={product} productId={product.id} />
           ))}
       </div>
     </section>

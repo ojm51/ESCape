@@ -2,9 +2,9 @@ import useRouteHandler from '@/hooks/useRouteHandler'
 import classNames from 'classnames'
 import { CATEGORY_DATA } from '@/libs/constants/category'
 
-interface SidebarProps {}
+interface CategoryListProps {}
 
-export default function Sidebar({}: SidebarProps) {
+export default function CategoryList({}: CategoryListProps) {
   const { handleCategory, category } = useRouteHandler()
 
   return (

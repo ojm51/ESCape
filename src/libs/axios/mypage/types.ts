@@ -1,13 +1,23 @@
-export interface getUserInfoParams {
+export interface UpdateMyInfoParams {
+  image: string
+  nickname: string
+  description: string
+}
+
+export interface GetUserInfoParams {
   userId: string | number
 }
 
-export interface getUserProductsParams {
+export interface GetUserProductsParams {
   userId: string | number
   type: string
 }
 
-export interface getUserFollowsParams {
+export interface GetUserFollowsParams {
   userId: string | number
   type: string
+}
+
+export interface AddImageFileParams {
+  image: File
 }

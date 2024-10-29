@@ -2,7 +2,7 @@ import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { AuthProvider } from '@/contexts/AuthProvider'
 
 import ToasterProvider from '@/contexts/ToasterProvider'
@@ -15,11 +15,17 @@ interface ProvidersProps {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60 * 1000, // 데이터 fresh 시간 일단 1분으로 설정
-      retry: 1, // 실패 시 재시도 횟수 일단 1회로 축소
+      staleTime: 60 * 1000,
+      retry: 1,
     },
   },
 })
+
+declare global {
+  interface Window {
+    Kakao: any
+  }
+}
 
 function Providers({ children }: ProvidersProps) {
   return (
@@ -35,6 +41,15 @@ function Providers({ children }: ProvidersProps) {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Kakao) {
+      const kakaoApiKey = process.env.NEXT_PUBLIC_KAKAO_API_KEY
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(kakaoApiKey)
+      }
+    }
+  }, [])
+
   return (
     <Providers>
       <Layout>
