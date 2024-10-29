@@ -4,7 +4,6 @@ const useRouteHandler = () => {
   const router = useRouter()
   const { category, keyword, order } = router.query
   const handleKeyword = (keyword: string) => {
-    console.log(category)
     router.push({ pathname: '/product', query: { ...(category && { category: category }), keyword: keyword } })
   }
 
