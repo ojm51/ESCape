@@ -20,7 +20,7 @@ export default function ActivityCardList({ data }: ActivityCardListProps) {
     {
       title: '남긴 별점 평균',
       icon: starIcon,
-      value: averageRating.toFixed(2),
+      value: averageRating === 0 ? averageRating : averageRating.toFixed(2),
       isCategory: false,
     },
     {
