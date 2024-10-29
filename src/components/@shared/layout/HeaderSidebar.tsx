@@ -27,7 +27,7 @@ const customTheme: CustomFlowbiteTheme = {
   },
   sidebar: {
     root: {
-      inner: 'h-[100vh]  overflow-x-hidden rounded bg-body-bg px-3 py-4 ',
+      inner: 'h-[100vh] mt-[30px] overflow-x-hidden rounded bg-body-bg px-3 py-4 ',
     },
     item: {
       base: 'flex items-center w-full justify-center rounded-lg p-2 text-base font-semibold text-gray-500 hover:bg-unactive hover:text-brand-gray-light',
@@ -39,7 +39,7 @@ const customTheme: CustomFlowbiteTheme = {
 }
 
 export default function HeaderSidebar({ handleSidebar, isOpen }: HeaderSidebarProps) {
-  const { handleCategory } = useRouteHandler()
+  const { handleCategory, handleQueryReset } = useRouteHandler()
   const { user } = useAuth()
   return (
     <Flowbite theme={{ theme: customTheme }}>
@@ -54,6 +54,14 @@ export default function HeaderSidebar({ handleSidebar, isOpen }: HeaderSidebarPr
         <Sidebar>
           <Sidebar.Items>
             <Sidebar.ItemGroup>
+              <Sidebar.Item
+                icon={RxDotFilled}
+                onClick={() => {
+                  handleQueryReset
+                }}
+              >
+                인기 테마
+              </Sidebar.Item>
               {CATEGORY_DATA.map(
                 (menu) =>
                   menu.name && (
