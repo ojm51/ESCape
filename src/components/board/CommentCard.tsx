@@ -55,8 +55,11 @@ export default function CommentCard({ data, currentPage, dataId, userId }: Detai
         <div className="mt-12 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Image
+              className="h-8 w-8 rounded-full"
               src={data?.writer.image && data?.writer.image !== 'string' ? data.writer.image : ProfileIcon}
               alt="작성자 이미지"
+              width={32}
+              height={32}
             />
             <p className="line-clamp-1 max-w-[260px] break-words pr-1 text-[14px] font-medium leading-[17px] text-brand-white">
               {data?.writer.nickname ? data.writer.nickname : '알 수 없음'}

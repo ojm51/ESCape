@@ -7,6 +7,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { patchArticles } from '@/libs/axios/board/patchArticles'
 import { useAuth } from '@/contexts/AuthProvider'
+import { postImage } from '@/libs/axios/board/postImage'
 
 export interface BoardPatchModalProps {
   id: number | undefined
@@ -84,7 +85,19 @@ export default function BoardPatchModal({ id, isOpen, onClick, value }: BoardPat
   // 게시글 전송을 위한 useMutation
   // 쿼리 무효화 작업이 완료된 후 페이지를 이동하기 위해 async await 를 사용하여 기다림
   const uploadPatchMutation = useMutation({
-    mutationFn: (formData: FormData) => patchArticles({ formData, id }),
+    mutationFn: async (formData: FormData) => {
+      const response = await patchArticles({ formData, id })
+
+      if (response.id && image) {
+        const imageFormData = new FormData()
+        imageFormData.append('file', image)
+        await postImage({
+          id: response.id,
+          formData: imageFormData,
+        })
+      }
+      return response
+    },
     onSuccess: async () => {
       try {
         await queryClient.invalidateQueries({ queryKey: ['articleDetail', String(id)] })

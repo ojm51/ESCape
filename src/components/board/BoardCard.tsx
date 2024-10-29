@@ -40,13 +40,10 @@ export default function BoardCard({ article, userId }: BoardCardProps) {
               {article?.title ? article.title : '제목이 들어가는 영역입니다.'}
             </p>
           </Link>
-          {article?.image &&
-          article?.image !== 'string' &&
-          article?.image !== 'image test' &&
-          article?.image !== 'null' ? (
+          {article?.imageIdList.length !== 0 ? (
             <Image
               className="border-brand-black-light] h-[72px] w-[72px] rounded-lg border-[1px] border-solid"
-              src={article.image}
+              src={`${process.env.NEXT_PUBLIC_BOARD_API_URL}/images/${article?.imageIdList.at(-1)}`}
               alt="게시물 이미지"
               width={72}
               height={72}
@@ -66,7 +63,13 @@ export default function BoardCard({ article, userId }: BoardCardProps) {
         </div>
         <div className="mt-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Image src={ProfileIcon} alt="작성자 이미지" />
+            <Image
+              className="h-8 w-8 rounded-full"
+              src={article.writer.image === 'string' ? ProfileIcon : article.writer.image}
+              alt="작성자 이미지"
+              width={32}
+              height={32}
+            />
             <p className="line-clamp-1 max-w-[260px] break-words pr-1 text-[14px] font-medium leading-[17px] text-brand-white">
               {article?.writer.nickname ? article.writer.nickname : '알 수 없음'}
             </p>

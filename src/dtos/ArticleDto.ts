@@ -10,16 +10,18 @@ export interface Article {
   writer: {
     id: number
     nickname: string
+    image: string | null
   }
   likeCount: number
   commentCount: number
   isLiked: boolean
-  image: string
+  imageIdList: number[]
   createdAt: string
   updatedAt: string
 }
 
 export interface ArticleFormData {
+  id: string
   image: string
   content: string
   title: string

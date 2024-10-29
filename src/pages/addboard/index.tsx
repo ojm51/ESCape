@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { postArticles } from '@/libs/axios/addboard/postArticles'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/contexts/AuthProvider'
+import { postImage } from '@/libs/axios/board/postImage'
 
 export default function AddBoardsPage() {
   const [image, setImage] = useState<File | null>(null)
@@ -55,21 +56,30 @@ export default function AddBoardsPage() {
   // 게시글 전송을 위한 useMutation
   // 쿼리 무효화 작업이 완료된 후 페이지를 이동하기 위해 async await 를 사용하여 기다림
   const uploadPostMutation = useMutation({
-    mutationFn: (newPost: FormData) => postArticles(newPost),
-    onSuccess: async () => {
-      try {
-        await queryClient.invalidateQueries({ queryKey: ['articles'] })
-        await queryClient.invalidateQueries({ queryKey: ['likes'] })
-        router?.push('/board')
-      } catch (e) {
-        console.error(e)
+    mutationFn: async (newPost: FormData) => {
+      const response = await postArticles(newPost)
+
+      // postArticles 가 끝난 후 생성된 게시글의 id를 받아와서 이미지를 전송
+      // 게시글용 외부 API 가 file 형태로 받기 때문에, file 형태로 이름을 변경해서 전달
+      if (response.id && image) {
+        const imageFormData = new FormData()
+        imageFormData.append('file', image)
+        await postImage({
+          id: response.id,
+          formData: imageFormData,
+        })
       }
+      return response
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['articles'] })
+      await queryClient.invalidateQueries({ queryKey: ['likes'] })
+      await router.push('/board')
     },
   })
 
   // 작성을 완료한 value 를 formData 에 담아 보내기 위한 이벤트 핸들러
-  // formData 를 활용한 이유는 이미지 파일이 JSON 형태로 전송할 수 없는 문제가 있어서 임시 사용
-  // URL 로 받아와서 string 형태로 처리할 수 있는 방법이 있으면 개선 예정
+  // 이미지 값을 별도로 분리했기 때문에 formData 를 활용할 필요는 없지만 잘 작동하기 때문에 굳이 수정 안함
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
 
@@ -78,14 +88,12 @@ export default function AddBoardsPage() {
     }
 
     const formData = new FormData()
-    formData.append('image', image as File)
     formData.append('title', title as string)
     formData.append('content', content as string)
     formData.append('userId', String(userId))
 
     uploadPostMutation.mutate(formData)
 
-    setImage(null)
     setTitle('')
     setContent('')
   }
