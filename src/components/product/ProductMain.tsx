@@ -5,9 +5,25 @@ import useInfiniteProducts from '@/hooks/useInfiniteProduct'
 import useInfiniteScroll from '@/hooks/useInfiniteScroll'
 import useRouteHandler from '@/hooks/useRouteHandler'
 import { CATEGORY_DATA } from '@/libs/constants/category'
+import CustomDropDown from '../@shared/ui/CustomDropDown'
+
+const DROPDOWN_VALUE = [
+  {
+    label: '최신순',
+    value: 'recent',
+  },
+  {
+    label: '별점순',
+    value: 'rating',
+  },
+  {
+    label: '리뷰순',
+    value: 'reviewCount',
+  },
+]
 
 export default function ProductMain() {
-  const { keyword, order, category } = useRouteHandler()
+  const { keyword, order, category, handleOrder } = useRouteHandler()
   const { data: reviewCountData } = useProducts({ order: 'reviewCount' })
   const { data: ratingData } = useProducts({ order: 'rating' })
   const { data: productData, fetchNextPage } = useInfiniteProducts({
@@ -29,18 +45,37 @@ export default function ProductMain() {
   const allProducts = productData?.pages.flatMap((page) => page.list)
   return (
     <div className="xl:h-100vh-xl scroll-hidden flex w-full max-w-[940px] flex-col gap-[60px] xl:min-w-[940px] xl:gap-[80px] xl:pt-[60px]">
-      {category && (
+      {category && !keyword && (
         <>
           <ProductList productList={allProducts}>
-            <div>'{nowCategory?.name}'의 모든 테마</div>
+            <div className="flex justify-between">
+              <div>'{nowCategory?.name}'의 모든 테마</div>
+              <CustomDropDown dropDownValues={DROPDOWN_VALUE} onClick={handleOrder} />
+            </div>
           </ProductList>
           <div ref={targetRef} className="mb-4"></div>
         </>
       )}
-      {keyword && (
+      {keyword && !category && (
         <>
           <ProductList productList={allProducts}>
-            <div>'{keyword}'에 대한 검색 결과</div>
+            <div className="flex justify-between">
+              <div>'{keyword}'에 대한 검색 결과</div>
+              <CustomDropDown dropDownValues={DROPDOWN_VALUE} onClick={handleOrder} />
+            </div>
+          </ProductList>
+          <div ref={targetRef} className="mb-4"></div>
+        </>
+      )}
+      {keyword && category && (
+        <>
+          <ProductList productList={allProducts}>
+            <div className="flex justify-between">
+              <div>
+                '{nowCategory?.name}'의 '{keyword}'에 대한 검색 결과
+              </div>
+              <CustomDropDown dropDownValues={DROPDOWN_VALUE} onClick={handleOrder} />
+            </div>
           </ProductList>
           <div ref={targetRef} className="mb-4"></div>
         </>
