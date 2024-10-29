@@ -82,6 +82,17 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   }
 
   const handleSubmit = async () => {
+    // 필수 값 검증
+    if (rating === 0) {
+      toaster('warn', '별점을 선택해 주세요.')
+      return
+    }
+
+    if (reviewText.trim() === '') {
+      toaster('warn', '리뷰 내용을 입력해 주세요.')
+      return
+    }
+
     setLoading(true)
     try {
       const imagePayload: ReviewImage[] = [
