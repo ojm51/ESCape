@@ -21,7 +21,7 @@ const useRouteHandler = () => {
     })
   }
 
-  return { handleKeyword, handleCategory, handleOrder, category, keyword, order }
+  return { handleKeyword, handleCategory, handleOrder, handleQueryReset, category, keyword, order }
 }
 
 export default useRouteHandler
