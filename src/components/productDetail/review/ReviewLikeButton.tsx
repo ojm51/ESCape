@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FaThumbsUp } from 'react-icons/fa'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/contexts/AuthProvider'
+import { useToaster } from '@/contexts/ToasterProvider'
 import { addReviewLike, removeReviewLike } from '@/libs/axios/product/reviewApi'
 
 interface ReviewLikeButtonProps {
@@ -14,11 +15,12 @@ const ReviewLikeButton: React.FC<ReviewLikeButtonProps> = ({ reviewId, initialIs
   const [isLiked, setIsLiked] = useState(initialIsLiked)
   const [likeCount, setLikeCount] = useState(initialLikeCount)
   const { user, isPending } = useAuth()
+  const toaster = useToaster()
   const router = useRouter()
 
   const handleLikeToggle = async () => {
     if (!user && !isPending) {
-      alert('로그인이 필요합니다.')
+      toaster('fail', '로그인이 필요합니다.')
       router.push('/signin')
       return
     }

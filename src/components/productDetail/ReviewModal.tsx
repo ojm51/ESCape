@@ -5,6 +5,7 @@ import { createReview, updateReview, uploadImage } from '@/libs/axios/product/re
 import DefaultImage from '@images/default-image.png'
 import { IoMdCloseCircle } from 'react-icons/io'
 import { CreateReviewRequestBody, UpdateReviewRequestBody, ReviewImage } from '@/dtos/ReviewDto'
+import { useToaster } from '@/contexts/ToasterProvider'
 
 interface ReviewModalProps {
   isOpen: boolean
@@ -36,6 +37,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     initialReviewData.images.filter((image) => image.id),
   )
   const [loading, setLoading] = useState<boolean>(false)
+  const toaster = useToaster()
 
   useEffect(() => {
     if (isOpen && isEdit) {
@@ -64,7 +66,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
         const uploadedUrls = await Promise.all(newFiles.map((file) => uploadImage(file)))
         setUploadedImageUrls((prevUrls) => [...prevUrls, ...uploadedUrls])
       } else {
-        alert(`이미지는 최대 ${MAX_IMAGE_COUNT}개까지만 업로드할 수 있습니다.`)
+        toaster('warn', `이미지는 최대 ${MAX_IMAGE_COUNT}개까지만 업로드할 수 있습니다.`)
       }
     }
   }
@@ -98,7 +100,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
         console.log('수정할 데이터:', payload)
         await updateReview(initialReviewData.reviewId, payload)
-        alert('리뷰가 성공적으로 수정되었습니다.')
+        toaster('success', '리뷰가 성공적으로 수정되었습니다.')
       } else {
         const payload: CreateReviewRequestBody = {
           productId,
@@ -111,13 +113,13 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
         console.log('생성할 데이터:', payload)
         await createReview(payload)
-        alert('리뷰가 성공적으로 등록되었습니다.')
+        toaster('success', '리뷰가 성공적으로 등록되었습니다.')
       }
 
       onClose()
     } catch (error) {
       console.error(isEdit ? '리뷰 수정 실패:' : '리뷰 등록 실패:', error)
-      alert(isEdit ? '리뷰 수정에 실패했습니다.' : '리뷰 등록에 실패했습니다.')
+      toaster('fail', isEdit ? '리뷰 수정에 실패했습니다.' : '리뷰 등록에 실패했습니다.')
     } finally {
       setLoading(false)
     }

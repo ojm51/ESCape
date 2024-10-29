@@ -10,6 +10,7 @@ import { fetchProductDetails } from '@/libs/axios/product/productApi'
 import { ProductDetailTypes, DescriptionTypes } from '@/dtos/ProductDto'
 import ReviewModal from '../ReviewModal'
 import { useAuth } from '@/contexts/AuthProvider'
+import { useToaster } from '@/contexts/ToasterProvider'
 
 const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) => {
   const queryClient = useQueryClient()
@@ -19,6 +20,7 @@ const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) =>
   })
 
   const { user } = useAuth()
+  const toaster = useToaster()
   const [isModalOpen, setModalOpen] = useState(false)
 
   if (isLoading) return <div>로딩 중...</div>
@@ -30,12 +32,12 @@ const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) =>
   const handleShareClick = () => {
     const shareUrl = window.location.href
     navigator.clipboard.writeText(shareUrl)
-    alert('링크가 클립보드에 복사되었습니다.')
+    toaster('success', '링크가 클립보드에 복사되었습니다.')
   }
 
   const handleReviewClick = () => {
     if (!user) {
-      alert('리뷰 작성은 로그인이 필요합니다.')
+      toaster('fail', '리뷰 작성은 로그인이 필요합니다.')
       window.location.href = '/signin'
       return
     }
@@ -49,7 +51,7 @@ const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) =>
         window.location.href = parsedDescription.url
       }
     } else {
-      alert('예약 URL을 찾을 수 없습니다.')
+      toaster('fail', '예약 URL을 찾을 수 없습니다.')
     }
   }
 

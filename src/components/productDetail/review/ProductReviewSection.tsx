@@ -9,10 +9,12 @@ import DefaultImage from '@images/default-image.png'
 import ReviewLikeButton from './ReviewLikeButton'
 import ReviewModal from '../ReviewModal'
 import { useAuth } from '@/contexts/AuthProvider'
+import { useToaster } from '@/contexts/ToasterProvider'
 
 const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) => {
   const router = useRouter()
   const { user } = useAuth()
+  const toaster = useToaster()
   const queryClient = useQueryClient()
   const [sortOption, setSortOption] = useState<string>('recent')
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
@@ -48,12 +50,12 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
     if (confirmed) {
       try {
         await deleteReview(reviewId)
-        alert('리뷰가 성공적으로 삭제되었습니다.')
+        toaster('success', '리뷰가 성공적으로 삭제되었습니다.')
         refetch()
         queryClient.invalidateQueries({ queryKey: ['productDetail', productId] })
       } catch (error) {
         console.error('리뷰 삭제 실패:', error)
-        alert('리뷰 삭제에 실패했습니다.')
+        toaster('fail', '리뷰 삭제에 실패했습니다.')
       }
     }
   }

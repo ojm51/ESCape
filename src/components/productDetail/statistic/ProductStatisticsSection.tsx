@@ -12,7 +12,6 @@ interface StatisticsProps {
 }
 
 const ProductStatisticsSection: React.FC<StatisticsProps> = ({ productId }) => {
-  // React Query를 사용하여 데이터를 가져옴
   const {
     data: productData,
     isLoading,
