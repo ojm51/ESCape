@@ -29,11 +29,12 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
   const [inputCount, setInputCount] = useState<number>(description.length)
 
   const isFormComplete = useMemo(() => {
-    const { image, ...restValues } = formValues
-    const isAllInputFilled = Object.values(restValues).every((inputValue) => inputValue !== '') && image !== null
+    const { image, nickname } = formValues
+    const isAllInputFilled = nickname !== '' && image !== null
     return isAllInputFilled
   }, [formValues])
 
+  /** @todo 파일 이름 한글인지 체크 */
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
 
@@ -45,7 +46,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
 
     const nextImage = URL.createObjectURL(selectedImageFile)
     setPreviewImage(nextImage)
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       image: selectedImageFile,
     }))
@@ -56,16 +57,16 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
       URL.revokeObjectURL(previewImage)
     }
 
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       image: null,
     }))
-    setPreviewImage('')
+    setPreviewImage(null)
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value.slice(0, INPUT_MAX_LENGTH)
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       [e.target.name]: inputValue,
     }))
@@ -74,7 +75,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textareaValue = e.target.value.slice(0, TEXTAREA_MAX_LENGTH)
     setInputCount(textareaValue.length)
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       [e.target.name]: textareaValue,
     }))
