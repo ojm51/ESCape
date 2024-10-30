@@ -63,7 +63,7 @@ export default function HeaderSidebar({ handleSidebar, isOpen }: HeaderSidebarPr
                 인기 테마
               </Sidebar.Item>
               {CATEGORY_DATA.map(
-                (menu) =>
+                menu =>
                   menu.name && (
                     <Sidebar.Item
                       icon={RxDotFilled}

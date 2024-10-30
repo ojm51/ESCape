@@ -11,7 +11,7 @@ export default function ErrorPage() {
   return (
     <div className="mx-auto mt-[200px] max-w-[640px] p-3 text-white">
       <div className="mb-20 text-center">비정상적인 접근입니다.</div>
-      <PrimaryButton style="primary" type="button" active={true} onClick={handleClick}>
+      <PrimaryButton style="primary" type="button" active onClick={handleClick}>
         홈으로 가기
       </PrimaryButton>
     </div>

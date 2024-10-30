@@ -22,7 +22,7 @@ export default function CategoryList({}: CategoryListProps) {
         인기 테마
       </button>
       {CATEGORY_DATA.map(
-        (menu) =>
+        menu =>
           menu.name && (
             <button
               onClick={() => {

@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
-import SortDropdown from './SortDropdown'
-import StarRating from '../StarRating'
+import { useAuth } from '@/contexts/AuthProvider'
+import { useToaster } from '@/contexts/ToasterProvider'
 import { fetchReviews, deleteReview } from '@/libs/axios/product/reviewApi'
 import { ProductReviewListTypes } from '@/dtos/ProductDto'
 import DefaultImage from '@images/default-image.png'
+import SortDropdown from './SortDropdown'
+import StarRating from '../StarRating'
 import ReviewLikeButton from './ReviewLikeButton'
 import ReviewModal from '../ReviewModal'
-import { useAuth } from '@/contexts/AuthProvider'
-import { useToaster } from '@/contexts/ToasterProvider'
 
 const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) => {
   const router = useRouter()
@@ -68,10 +68,10 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
   }
 
   return (
-    <div className={'relative mx-auto max-w-[940px]'}>
+    <div className="relative mx-auto max-w-[940px]">
       <div className="mb-[30px] flex items-center justify-between">
-        <h3 className={'text-lg font-semibold'}>{'상품 리뷰'}</h3>
-        <SortDropdown productId={productId} order={handleSortChange} />
+        <h3 className="text-lg font-semibold">상품 리뷰</h3>
+        <SortDropdown order={handleSortChange} />
       </div>
       {isLoading ? (
         <p>로딩 중...</p>
@@ -79,7 +79,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
         <p>{(error as Error).message}</p>
       ) : (
         <ul>
-          {reviews.map((review) => (
+          {reviews.map(review => (
             <li key={review.id} className="relative mb-4 rounded-lg border border-unactive bg-[#252530] p-6">
               <div className="md:flex md:justify-between">
                 {/* 모바일에서는 section이 위에, 그 아래에 리뷰 내용이 배치되도록 설정 */}
@@ -92,7 +92,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
                         review.user.image ? '' : 'border-2 border-unactive'
                       }`}
                       onClick={() => handleProfileClick(review.user.id)}
-                      onError={(e) => {
+                      onError={e => {
                         e.currentTarget.src = DefaultImage.src
                         e.currentTarget.classList.add('border-2', 'border-unactive')
                       }}
@@ -109,13 +109,13 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
                 <div className="space-y-2 md:mx-8 md:flex md:flex-grow md:flex-col">
                   <p className="text-white">{review.content}</p>
                   <div className="flex space-x-2">
-                    {review.reviewImages.map((image) => (
+                    {review.reviewImages.map(image => (
                       <img
                         key={image.id}
                         src={image.source}
                         alt={`Review Image ${image.id}`}
                         className="h-16 w-16 rounded object-cover"
-                        onError={(e) => {
+                        onError={e => {
                           e.currentTarget.src = DefaultImage.src
                         }}
                       />
@@ -128,10 +128,15 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
                       <p>{new Date(review.createdAt).toLocaleDateString()}</p>
                       {user && user.id === review.user.id && (
                         <div className="flex space-x-2">
-                          <button className="text-[#9FA6B2] hover:underline" onClick={() => handleEditReview(review)}>
+                          <button
+                            type="button"
+                            className="text-[#9FA6B2] hover:underline"
+                            onClick={() => handleEditReview(review)}
+                          >
                             수정
                           </button>
                           <button
+                            type="button"
                             className="text-[#9FA6B2] hover:underline"
                             onClick={() => handleDeleteReview(review.id)}
                           >
@@ -162,13 +167,13 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
         <ReviewModal
           isOpen={isReviewModalOpen}
           onClose={closeModal}
-          productName={`상품 이름`}
+          productName="상품 이름"
           productId={productId}
-          isEdit={true}
+          isEdit
           initialReviewData={{
             rating: editingReview.rating,
             content: editingReview.content,
-            images: editingReview.reviewImages.map((image) => ({
+            images: editingReview.reviewImages.map(image => ({
               id: image.id,
               source: image.source,
             })),

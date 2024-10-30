@@ -4,8 +4,8 @@ import { fetchProductDetails } from '@/libs/axios/product/productApi'
 import starIcon from '@icons/star_icon.svg'
 import commentIcon from '@icons/comment_icon.svg'
 import heartIcon from '@icons/heart_icon.svg'
-import StatisticsDetail from './StatisticsDetail'
 import { ProductDetailTypes } from '@/dtos/ProductDto'
+import StatisticsDetail from './StatisticsDetail'
 
 interface StatisticsProps {
   productId: number
@@ -79,10 +79,10 @@ const ProductStatisticsSection: React.FC<StatisticsProps> = ({ productId }) => {
   ]
 
   return (
-    <div className={'mx-auto mb-10 max-w-[940px]'}>
-      <h3 className={'mb-[30px] text-lg font-semibold'}>{'상품 통계'}</h3>
-      <div className={'grid grid-cols-1 gap-[10px] md:grid-cols-3 xl:gap-5'}>
-        {statisticsDetailContents.map((statisticsDetailContent) => (
+    <div className="mx-auto mb-10 max-w-[940px]">
+      <h3 className="mb-[30px] text-lg font-semibold">상품 통계</h3>
+      <div className="grid grid-cols-1 gap-[10px] md:grid-cols-3 xl:gap-5">
+        {statisticsDetailContents.map(statisticsDetailContent => (
           <StatisticsDetail
             key={statisticsDetailContent.title}
             title={statisticsDetailContent.title}

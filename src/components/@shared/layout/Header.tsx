@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { ChangeEvent, FormEvent, PropsWithChildren, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, PropsWithChildren, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import iconHamburger from '@icons/icon_hamburger.svg'
@@ -7,11 +7,11 @@ import logoBig from '@images/logo.svg'
 import iconGlass from '@icons/icon_glass.svg'
 import iconSignin from '@icons/icon_signin.svg'
 
-import HeaderSidebar from './HeaderSidebar'
 import defaultProfileImage from '@images/user_default.svg'
 import { useAuth } from '@/contexts/AuthProvider'
 import classNames from 'classnames'
 import useRouteHandler from '@/hooks/useRouteHandler'
+import HeaderSidebar from './HeaderSidebar'
 
 export default function Header({ children }: PropsWithChildren) {
   const { user } = useAuth()
@@ -21,7 +21,7 @@ export default function Header({ children }: PropsWithChildren) {
   const [isOpenSidebar, setIsOpenSidebar] = useState(false)
 
   const toggleSearchInput = () => {
-    setIsOpenSearchInput((prev) => !prev)
+    setIsOpenSearchInput(prev => !prev)
   }
 
   const handleSidebar = (active?: 'open' | 'close') => {
@@ -30,7 +30,7 @@ export default function Header({ children }: PropsWithChildren) {
     } else if (active === 'close') {
       setIsOpenSidebar(false)
     } else {
-      setIsOpenSidebar((prev) => !prev)
+      setIsOpenSidebar(prev => !prev)
     }
   }
 
@@ -90,19 +90,17 @@ export default function Header({ children }: PropsWithChildren) {
               </form>
             </div>
             {user ? (
-              <>
-                <Link href="/mypage" className="flex items-center gap-3">
-                  <div className="relative h-[42px] w-[42px] overflow-hidden rounded-full bg-brand-black-light">
-                    <Image
-                      src={user.image || defaultProfileImage}
-                      alt="프로필 이미지"
-                      width={42}
-                      height={42}
-                      onError={handleImageError}
-                    />
-                  </div>
-                </Link>
-              </>
+              <Link href="/mypage" className="flex items-center gap-3">
+                <div className="relative h-[42px] w-[42px] overflow-hidden rounded-full bg-brand-black-light">
+                  <Image
+                    src={user.image || defaultProfileImage}
+                    alt="프로필 이미지"
+                    width={42}
+                    height={42}
+                    onError={handleImageError}
+                  />
+                </div>
+              </Link>
             ) : (
               <>
                 <Link href="/signin">로그인</Link>

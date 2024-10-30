@@ -11,7 +11,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 interface AuthValues {
   user: CommonUserTypes | null
   isPending: boolean
-  login: (formData: SignInForm) => Promise<boolean | { success: boolean, message: string }>
+  login: (formData: SignInForm) => Promise<boolean | { success: boolean; message: string }>
   logout: () => void
   oAuthLogin: (formData: OAuthSignInForm, provider: OAuthProviders) => Promise<SignInReturn | null>
 }
@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
 
   const handleAuthChange = (key: 'user' | 'isPending', value: UserValue | boolean) => {
-    setAuthState((prev) => ({
+    setAuthState(prev => ({
       ...prev,
       [key]: value,
     }))
@@ -60,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const login = async (formData: SignInForm): Promise<boolean | { success: boolean, message: string }> => {
+  const login = async (formData: SignInForm): Promise<boolean | { success: boolean; message: string }> => {
     const isSignInSuccess = await signIn(formData)
     if (!isSignInSuccess) {
       return { success: false, message: '이메일 혹은 비밀번호를 확인해주세요.' }

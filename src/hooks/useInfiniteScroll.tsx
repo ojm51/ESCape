@@ -14,8 +14,8 @@ const useInfiniteScroll = ({ loadMore, hasMore }: InfiniteScrollParams) => {
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(async (entry) => {
+      entries => {
+        entries.forEach(async entry => {
           if (entry.isIntersecting && hasMore) {
             saveScrollPosition()
             await loadMore()

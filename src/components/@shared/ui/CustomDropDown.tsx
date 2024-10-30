@@ -44,7 +44,7 @@ export default function CustomDropDown({ dropDownValues, onClick }: CustomDropDo
           </button>
         )}
       >
-        {dropDownValues.map((item) => (
+        {dropDownValues.map(item => (
           <Dropdown.Item
             key={item.value}
             onClick={() => {

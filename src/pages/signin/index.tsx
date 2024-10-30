@@ -3,16 +3,15 @@ import { useRouter } from 'next/router'
 import { useAuth } from '@/contexts/AuthProvider'
 import Link from 'next/link'
 import Image from 'next/image'
-import Logo from '../../../public/images/logo.svg'
-
-import EyesShowIcon from '../../../public/icons/icon_eyes_show.svg'
-import EyesHiddenIcon from '../../../public/icons/icon_eyes_hidden.svg'
 
 import GoogleOauthButton from '@/components/auth/GoogleOauthButton'
 import KakoOauthButton from '@/components/auth/KakoOauthButton'
 import PrimaryButton from '@/components/@shared/ui/CustomButton'
 import { Spinner } from 'flowbite-react'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import EyesHiddenIcon from '../../../public/icons/icon_eyes_hidden.svg'
+import EyesShowIcon from '../../../public/icons/icon_eyes_show.svg'
+import Logo from '../../../public/images/logo.svg'
 
 interface SignInFormInputs {
   email: string
@@ -37,7 +36,7 @@ export default function SignInPage() {
     }
   }, [user, router])
 
-  const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
+  const onSubmit: SubmitHandler<SignInFormInputs> = async data => {
     setLoading(true)
     try {
       const response = await login(data)
@@ -114,7 +113,7 @@ export default function SignInPage() {
           {errors.password && <p className="mt-1 text-red-500">{errors.password.message}</p>}
         </div>
         <div className="pt-2">
-          <PrimaryButton style="primary" type="submit" active={true}>
+          <PrimaryButton style="primary" type="submit" active>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '로그인'}
           </PrimaryButton>
         </div>

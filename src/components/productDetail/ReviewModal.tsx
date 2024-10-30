@@ -31,10 +31,10 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const [reviewText, setReviewText] = useState<string>(initialReviewData.content)
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>(
-    initialReviewData.images.filter((image) => !image.id).map((image) => image.source as string),
+    initialReviewData.images.filter(image => !image.id).map(image => image.source as string),
   )
   const [existingImages, setExistingImages] = useState<ReviewImage[]>(
-    initialReviewData.images.filter((image) => image.id),
+    initialReviewData.images.filter(image => image.id),
   )
   const [loading, setLoading] = useState<boolean>(false)
   const toaster = useToaster()
@@ -43,8 +43,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     if (isOpen && isEdit) {
       setRating(initialReviewData.rating)
       setReviewText(initialReviewData.content)
-      setUploadedImageUrls(initialReviewData.images.filter((image) => !image.id).map((image) => image.source as string))
-      setExistingImages(initialReviewData.images.filter((image) => image.id))
+      setUploadedImageUrls(initialReviewData.images.filter(image => !image.id).map(image => image.source as string))
+      setExistingImages(initialReviewData.images.filter(image => image.id))
     }
   }, [isOpen, isEdit, initialReviewData])
 
@@ -63,8 +63,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       if (imageFiles.length + newFiles.length <= MAX_IMAGE_COUNT) {
         setImageFiles([...imageFiles, ...newFiles])
 
-        const uploadedUrls = await Promise.all(newFiles.map((file) => uploadImage(file)))
-        setUploadedImageUrls((prevUrls) => [...prevUrls, ...uploadedUrls])
+        const uploadedUrls = await Promise.all(newFiles.map(file => uploadImage(file)))
+        setUploadedImageUrls(prevUrls => [...prevUrls, ...uploadedUrls])
       } else {
         toaster('warn', `이미지는 최대 ${MAX_IMAGE_COUNT}개까지만 업로드할 수 있습니다.`)
       }
@@ -96,8 +96,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     setLoading(true)
     try {
       const imagePayload: ReviewImage[] = [
-        ...existingImages.map((image) => ({ id: image.id })),
-        ...uploadedImageUrls.map((url) => ({ source: url })),
+        ...existingImages.map(image => ({ id: image.id })),
+        ...uploadedImageUrls.map(url => ({ source: url })),
       ]
 
       console.log('이미지 payload:', imagePayload)
@@ -115,9 +115,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       } else {
         const payload: CreateReviewRequestBody = {
           productId,
-          images: imagePayload
-            .map((img) => img.source || img.id)
-            .filter((url): url is string => typeof url === 'string'),
+          images: imagePayload.map(img => img.source || img.id).filter((url): url is string => typeof url === 'string'),
           content: reviewText,
           rating,
         }
@@ -143,7 +141,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold text-white">{productName}</h2>
         <div className="flex space-x-2">
-          {[1, 2, 3, 4, 5].map((star) => (
+          {[1, 2, 3, 4, 5].map(star => (
             <FaStar
               key={star}
               size={24}
@@ -176,22 +174,23 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                   className="relative cursor-pointer"
                 >
                   <div className="relative h-40 w-40">
-                    <img src={DefaultImage.src} alt="Default Image" className="h-40 w-40 rounded-md object-cover" />
+                    <img src={DefaultImage.src} alt="Default" className="h-40 w-40 rounded-md object-cover" />
                   </div>
                 </div>
               )}
               {existingImages.map((image, index) => (
                 <div key={image.id} className="relative inline-block h-40 w-40">
-                  <img src={image.source} alt="Existing Image" className="h-40 w-40 rounded-md object-cover" />
-                  <button className="absolute right-2 top-2" onClick={() => handleImageRemove(index)}>
+                  <img src={image.source} alt="Existing_Image" className="h-40 w-40 rounded-md object-cover" />
+                  <button type="button" className="absolute right-2 top-2" onClick={() => handleImageRemove(index)}>
                     <IoMdCloseCircle size={24} className="text-white" />
                   </button>
                 </div>
               ))}
               {uploadedImageUrls.map((url, index) => (
                 <div key={index} className="relative inline-block h-40 w-40">
-                  <img src={url} alt="Uploaded Image" className="h-40 w-40 rounded-md object-cover" />
+                  <img src={url} alt="Uploaded_Image" className="h-40 w-40 rounded-md object-cover" />
                   <button
+                    type="button"
                     className="absolute right-2 top-2"
                     onClick={() => handleImageRemove(existingImages.length + index)}
                   >
@@ -212,6 +211,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
           />
         </div>
         <button
+          type="button"
           onClick={handleSubmit}
           className="w-full rounded-lg bg-blue-500 p-3 text-white hover:bg-blue-600"
           disabled={loading}

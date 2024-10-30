@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 })
 
-axiosInstance.interceptors.request.use((config) => {
+axiosInstance.interceptors.request.use(config => {
   const accessToken = localStorage.getItem('accessToken')
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`
@@ -15,7 +15,7 @@ axiosInstance.interceptors.request.use((config) => {
 })
 
 axiosInstance.interceptors.response.use(
-  (res) => res,
+  res => res,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
       removeTokens()

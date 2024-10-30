@@ -1,16 +1,16 @@
-import Image from 'next/image'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import Image from 'next/image'
+import { IoMdShare } from 'react-icons/io'
+import { useAuth } from '@/contexts/AuthProvider'
+import { useToaster } from '@/contexts/ToasterProvider'
+import { fetchProductDetails } from '@/libs/axios/product/productApi'
+import { ProductDetailTypes, DescriptionTypes } from '@/dtos/ProductDto'
 import FeatureTag from './FeatureTag'
 import CustomButton from '../../@shared/ui/CustomButton'
 import FavoriteButton from './FavoriteButton'
 import KakaoShareButton from './KakaoShareButton'
-import { IoMdShare } from 'react-icons/io'
-import { fetchProductDetails } from '@/libs/axios/product/productApi'
-import { ProductDetailTypes, DescriptionTypes } from '@/dtos/ProductDto'
 import ReviewModal from '../ReviewModal'
-import { useAuth } from '@/contexts/AuthProvider'
-import { useToaster } from '@/contexts/ToasterProvider'
 
 const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) => {
   const queryClient = useQueryClient()
@@ -85,6 +85,7 @@ const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) =>
               imageUrl={productDetail.image}
             />
             <button
+              type="button"
               onClick={handleShareClick}
               className="flex items-center justify-center rounded-lg border-unactive bg-[#252530] p-2 text-[#6E6E82] hover:bg-[#252530] hover:text-white"
             >
@@ -101,17 +102,17 @@ const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) =>
 
         <div className="mb-4 flex flex-wrap gap-2">
           <FeatureTag label="지역" value={parsedDescription.loc} />
-          <FeatureTag label="난이도" value={parsedDescription.lev} isStarRating={true} />
+          <FeatureTag label="난이도" value={parsedDescription.lev} isStarRating />
           <FeatureTag label="시간" value={`${parsedDescription.time} min`} />
-          <FeatureTag label="공포도" value={parsedDescription.hor} isStarRating={true} />
-          <FeatureTag label="활동성" value={parsedDescription.act} isStarRating={true} />
+          <FeatureTag label="공포도" value={parsedDescription.hor} isStarRating />
+          <FeatureTag label="활동성" value={parsedDescription.act} isStarRating />
         </div>
 
         <div className="flex space-x-4">
-          <CustomButton active={true} onClick={handleReviewClick} style="primary">
+          <CustomButton active onClick={handleReviewClick} style="primary">
             리뷰 작성하기
           </CustomButton>
-          <CustomButton active={true} onClick={handleReservationClick} style="secondary">
+          <CustomButton active onClick={handleReservationClick} style="secondary">
             예약하기
           </CustomButton>
         </div>

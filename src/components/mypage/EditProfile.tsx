@@ -2,8 +2,8 @@ import React, { useMemo, useState } from 'react'
 import Image from 'next/image'
 import imageIcon from '@icons/image_icon.svg'
 import deleteIcon from '@icons/close_icon.svg'
-import CustomButton from '../@shared/ui/CustomButton'
 import { Spinner } from 'flowbite-react'
+import CustomButton from '../@shared/ui/CustomButton'
 
 const INPUT_MAX_LENGTH = 10
 const TEXTAREA_MAX_LENGTH = 300
@@ -30,7 +30,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
 
   const isFormComplete = useMemo(() => {
     const { image, ...restValues } = formValues
-    const isAllInputFilled = Object.values(restValues).every((inputValue) => inputValue !== '') && image !== null
+    const isAllInputFilled = Object.values(restValues).every(inputValue => inputValue !== '') && image !== null
     return isAllInputFilled
   }, [formValues])
 
@@ -45,7 +45,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
 
     const nextImage = URL.createObjectURL(selectedImageFile)
     setPreviewImage(nextImage)
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       image: selectedImageFile,
     }))
@@ -56,7 +56,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
       URL.revokeObjectURL(previewImage)
     }
 
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       image: null,
     }))
@@ -65,16 +65,16 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value.slice(0, INPUT_MAX_LENGTH)
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       [e.target.name]: inputValue,
     }))
   }
 
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    let textareaValue = e.target.value.slice(0, TEXTAREA_MAX_LENGTH)
+    const textareaValue = e.target.value.slice(0, TEXTAREA_MAX_LENGTH)
     setInputCount(textareaValue.length)
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       [e.target.name]: textareaValue,
     }))

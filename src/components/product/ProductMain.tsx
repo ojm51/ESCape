@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import useProducts from '@/hooks/useProducts'
-import ProductList from './ProductList'
 import useInfiniteProducts from '@/hooks/useInfiniteProduct'
 import useInfiniteScroll from '@/hooks/useInfiniteScroll'
 import useRouteHandler from '@/hooks/useRouteHandler'
 import { CATEGORY_DATA } from '@/libs/constants/category'
+import ProductList from './ProductList'
 import CustomDropDown from '../@shared/ui/CustomDropDown'
 
 const DROPDOWN_VALUE = [
@@ -39,10 +39,10 @@ export default function ProductMain() {
   })
 
   useEffect(() => {}, [keyword, order, category])
-  const nowCategory = CATEGORY_DATA.find((item) => item.id === Number(category))
+  const nowCategory = CATEGORY_DATA.find(item => item.id === Number(category))
   const hotProducts = reviewCountData?.list.slice(0, 6) || null
   const ratingProducts = ratingData?.list.slice(0, 6) || null
-  const allProducts = productData?.pages.flatMap((page) => page.list)
+  const allProducts = productData?.pages.flatMap(page => page.list)
   return (
     <div className="xl:h-100vh-xl scroll-hidden flex w-full max-w-[940px] flex-col gap-[60px] xl:min-w-[940px] xl:gap-[80px] xl:pt-[60px]">
       {category && !keyword && (
@@ -53,7 +53,7 @@ export default function ProductMain() {
               <CustomDropDown dropDownValues={DROPDOWN_VALUE} onClick={handleOrder} />
             </div>
           </ProductList>
-          <div ref={targetRef} className="mb-4"></div>
+          <div ref={targetRef} className="mb-4" />
         </>
       )}
       {keyword && !category && (
@@ -64,7 +64,7 @@ export default function ProductMain() {
               <CustomDropDown dropDownValues={DROPDOWN_VALUE} onClick={handleOrder} />
             </div>
           </ProductList>
-          <div ref={targetRef} className="mb-4"></div>
+          <div ref={targetRef} className="mb-4" />
         </>
       )}
       {keyword && category && (
@@ -77,7 +77,7 @@ export default function ProductMain() {
               <CustomDropDown dropDownValues={DROPDOWN_VALUE} onClick={handleOrder} />
             </div>
           </ProductList>
-          <div ref={targetRef} className="mb-4"></div>
+          <div ref={targetRef} className="mb-4" />
         </>
       )}
       {!category && !keyword && (

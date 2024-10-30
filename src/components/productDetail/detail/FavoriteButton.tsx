@@ -30,7 +30,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ productId, isFavorite: 
       } else {
         await addFavorite(productId)
       }
-      setIsFavorite((prevIsFavorite) => !prevIsFavorite)
+      setIsFavorite(prevIsFavorite => !prevIsFavorite)
       onRefetch() // 상태 변경 후 refetch 호출
     } catch (error) {
       console.error('찜하기 처리 중 오류가 발생했습니다.', error)
@@ -39,6 +39,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ productId, isFavorite: 
 
   return (
     <button
+      type="button"
       onClick={handleFavoriteToggle}
       className="ml-4 flex items-center justify-center rounded-lg text-red-500 hover:text-red-600"
     >
