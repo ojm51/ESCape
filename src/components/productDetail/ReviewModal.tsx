@@ -71,18 +71,20 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     }
   }
 
-  const handleImageRemove = (index: number) => {
-    if (index < existingImages.length) {
-      setExistingImages(existingImages.filter((_, i) => i !== index))
-    } else {
-      const newIndex = index - existingImages.length
-      setImageFiles(imageFiles.filter((_, i) => i !== newIndex))
-      setUploadedImageUrls(uploadedImageUrls.filter((_, i) => i !== newIndex))
+  const handleImageRemove = (identifier: number | string | undefined) => {
+    if (identifier !== undefined) {
+      // undefined가 아닌 경우에만 동작
+      if (typeof identifier === 'number') {
+        setExistingImages(existingImages.filter(image => image.id !== identifier))
+      } else {
+        setUploadedImageUrls(uploadedImageUrls.filter(url => url !== identifier))
+        const index = uploadedImageUrls.findIndex(url => url === identifier)
+        setImageFiles(imageFiles.filter((_, i) => i !== index))
+      }
     }
   }
 
   const handleSubmit = async () => {
-    // 필수 값 검증
     if (rating === 0) {
       toaster('warn', '별점을 선택해 주세요.')
       return
@@ -165,35 +167,31 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             </p>
           </div>
 
-          {/* 모바일 환경에서 이미지 스크롤 추가 */}
           <div className="flex items-center space-x-2 overflow-x-auto whitespace-nowrap">
             <div className="inline-flex space-x-2">
               {uploadedImageUrls.length + existingImages.length < MAX_IMAGE_COUNT && (
-                <div
+                <button
+                  type="button"
                   onClick={() => document.getElementById('imageUpload')?.click()}
                   className="relative cursor-pointer"
                 >
                   <div className="relative h-40 w-40">
                     <img src={DefaultImage.src} alt="Default" className="h-40 w-40 rounded-md object-cover" />
                   </div>
-                </div>
+                </button>
               )}
-              {existingImages.map((image, index) => (
+              {existingImages.map(image => (
                 <div key={image.id} className="relative inline-block h-40 w-40">
                   <img src={image.source} alt="Existing_Image" className="h-40 w-40 rounded-md object-cover" />
-                  <button type="button" className="absolute right-2 top-2" onClick={() => handleImageRemove(index)}>
+                  <button type="button" className="absolute right-2 top-2" onClick={() => handleImageRemove(image.id)}>
                     <IoMdCloseCircle size={24} className="text-white" />
                   </button>
                 </div>
               ))}
-              {uploadedImageUrls.map((url, index) => (
-                <div key={index} className="relative inline-block h-40 w-40">
+              {uploadedImageUrls.map(url => (
+                <div key={url} className="relative inline-block h-40 w-40">
                   <img src={url} alt="Uploaded_Image" className="h-40 w-40 rounded-md object-cover" />
-                  <button
-                    type="button"
-                    className="absolute right-2 top-2"
-                    onClick={() => handleImageRemove(existingImages.length + index)}
-                  >
+                  <button type="button" className="absolute right-2 top-2" onClick={() => handleImageRemove(url)}>
                     <IoMdCloseCircle size={24} className="text-white" />
                   </button>
                 </div>

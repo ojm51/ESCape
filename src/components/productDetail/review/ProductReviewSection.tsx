@@ -85,18 +85,27 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
                 {/* 모바일에서는 section이 위에, 그 아래에 리뷰 내용이 배치되도록 설정 */}
                 <section className="mb-4 md:mb-0">
                   <div className="flex items-start">
-                    <img
-                      src={review.user.image || DefaultImage.src}
-                      alt={review.user.nickname}
-                      className={`mr-4 h-12 w-12 cursor-pointer rounded-full object-cover ${
-                        review.user.image ? '' : 'border-2 border-unactive'
-                      }`}
+                    <button
+                      type="button"
                       onClick={() => handleProfileClick(review.user.id)}
-                      onError={e => {
-                        e.currentTarget.src = DefaultImage.src
-                        e.currentTarget.classList.add('border-2', 'border-unactive')
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          handleProfileClick(review.user.id)
+                        }
                       }}
-                    />
+                      className="mr-4 h-12 w-12 cursor-pointer overflow-hidden rounded-full object-cover focus:outline-none"
+                      aria-label={`${review.user.nickname}의 프로필`}
+                    >
+                      <img
+                        src={review.user.image || DefaultImage.src}
+                        alt={review.user.nickname}
+                        className={`h-full w-full object-cover ${review.user.image ? '' : 'border-2 border-unactive'}`}
+                        onError={e => {
+                          e.currentTarget.src = DefaultImage.src
+                          e.currentTarget.classList.add('border-2', 'border-unactive')
+                        }}
+                      />
+                    </button>
 
                     <div className="flex w-[120px] flex-col">
                       <p className="truncate font-bold text-white">{review.user.nickname}</p>
@@ -113,7 +122,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
                       <img
                         key={image.id}
                         src={image.source}
-                        alt={`Review Image ${image.id}`}
+                        alt={`Review_Image ${image.id}`}
                         className="h-16 w-16 rounded object-cover"
                         onError={e => {
                           e.currentTarget.src = DefaultImage.src

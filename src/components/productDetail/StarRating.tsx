@@ -16,19 +16,15 @@ const StarRating: React.FC<StarRatingProps> = ({ rating, maxStars = 5, color = '
 
   return (
     <div className="flex">
-      {Array(fullStars)
-        .fill(0)
-        .map((_, index) => (
-          <FaStar key={`full-${index}`} style={{ color }} />
-        ))}
+      {Array.from({ length: fullStars }, (_, index) => (
+        <FaStar key={`full-${index}-${rating}`} style={{ color }} />
+      ))}
 
-      {halfStar === 1 && <FaStarHalfAlt key="half" style={{ color }} />}
+      {halfStar === 1 && <FaStarHalfAlt key={`half-${rating}`} style={{ color }} />}
 
-      {Array(emptyStars)
-        .fill(0)
-        .map((_, index) => (
-          <FaRegStar key={`empty-${index}`} style={{ color }} />
-        ))}
+      {Array.from({ length: emptyStars }, (_, index) => (
+        <FaRegStar key={`empty-${index}-${rating}`} style={{ color }} />
+      ))}
     </div>
   )
 }
