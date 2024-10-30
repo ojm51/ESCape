@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 import { useAuth } from '@/contexts/AuthProvider'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -44,8 +46,8 @@ export default function KakaoSignupPage() {
   const onSubmit = async (data: NicknameForm) => {
     const token = localStorage.getItem('authCode')
 
+    // alert 제거
     if (!token) {
-      alert('인증 코드가 없습니다. 다시 로그인 해주세요.')
       return
     }
 
@@ -78,7 +80,7 @@ export default function KakaoSignupPage() {
           })
         }
       }
-    } catch (err) {
+    } catch {
       setError('nickname', {
         type: 'server',
         message: '회원가입 중 문제가 발생했습니다. 다시 시도해 주세요.',
@@ -97,7 +99,7 @@ export default function KakaoSignupPage() {
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5">
-          <label className="block pb-1">닉네임</label>
+          <span className="block pb-1">닉네임</span>
           <input
             type="text"
             className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
