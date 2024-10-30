@@ -4,14 +4,14 @@ import { signUp } from '@/libs/axios/auth/auth'
 import { useAuth } from '@/contexts/AuthProvider'
 import Link from 'next/link'
 import Image from 'next/image'
-import Logo from '../../../public/images/logo.svg'
-import EyesShowIcon from '../../../public/icons/icon_eyes_show.svg'
-import EyesHiddenIcon from '../../../public/icons/icon_eyes_hidden.svg'
 import PrimaryButton from '@/components/@shared/ui/CustomButton'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Spinner } from 'flowbite-react'
 import { useToaster } from '@/contexts/ToasterProvider'
 import { postUsers } from '@/libs/axios/board/postUsers'
+import EyesHiddenIcon from '../../../public/icons/icon_eyes_hidden.svg'
+import EyesShowIcon from '../../../public/icons/icon_eyes_show.svg'
+import Logo from '../../../public/images/logo.svg'
 
 interface SignUpFormInputs {
   email: string
@@ -179,7 +179,7 @@ export default function SignupPage() {
           )}
         </div>
         <div className="pt-2">
-          <PrimaryButton style="primary" type="submit" onClick={() => {}} active={true}>
+          <PrimaryButton style="primary" type="submit" onClick={() => {}} active>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '가입하기'}
           </PrimaryButton>
         </div>

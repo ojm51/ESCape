@@ -1,9 +1,9 @@
 import { useAuth } from '@/contexts/AuthProvider'
 import Image from 'next/image'
-import GoogleIcon from '../../../public/icons/icon_google.svg'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useToaster } from '@/contexts/ToasterProvider'
+import GoogleIcon from '../../../public/icons/icon_google.svg'
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''
 const GOOGLE_CLIENT_SECRET = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET || ''

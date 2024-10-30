@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss'
-
-const flowbite = require('flowbite-react/tailwind')
+import flowbite from 'flowbite-react/tailwind'
+import tailwindScrollbarHide from 'tailwind-scrollbar-hide'
 
 const config: Config = {
   content: [
@@ -135,7 +135,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwind-scrollbar-hide'), flowbite.plugin()],
+  plugins: [tailwindScrollbarHide, flowbite.plugin()],
 }
 
 export default config

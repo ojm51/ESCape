@@ -10,7 +10,7 @@ interface CustomButtonProps {
   secondaryBg?: string
 }
 
-/**active에 boolean값을 넣어주세요
+/** active에 boolean값을 넣어주세요
  *기본 style은 "primary"
  */
 export default function CustomButton({

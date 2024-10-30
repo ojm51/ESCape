@@ -1,6 +1,5 @@
-import { ProductDetailTypes, DescriptionTypes } from '@/dtos/ProductDto'
+import { ProductDetailTypes, DescriptionTypes, ResponseProductListTypes } from '@/dtos/ProductDto'
 import axiosInstance from '../axiosInstance'
-import { ResponseProductListTypes } from '@/dtos/ProductDto'
 
 export interface ProductQueryParams {
   keyword?: string | null
@@ -18,10 +17,10 @@ export const getProduct = async ({
   try {
     const res = await axiosInstance.get('products', {
       params: {
-        keyword: keyword,
+        keyword,
         category: categoryId,
-        order: order,
-        cursor: cursor,
+        order,
+        cursor,
       },
     })
     return res.data

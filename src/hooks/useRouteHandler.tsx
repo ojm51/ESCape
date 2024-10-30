@@ -4,11 +4,11 @@ const useRouteHandler = () => {
   const router = useRouter()
   const { category, keyword, order } = router.query
   const handleKeyword = (keyword: string) => {
-    router.push({ pathname: '/product', query: { ...(category && { category: category }), keyword: keyword } })
+    router.push({ pathname: '/product', query: { ...(category && { category }), keyword } })
   }
 
   const handleCategory = (category: number) => {
-    router.push({ pathname: '/product', query: { ...(keyword && { keyword: keyword }), category: category } })
+    router.push({ pathname: '/product', query: { ...(keyword && { keyword }), category } })
   }
 
   const handleQueryReset = () => {
@@ -17,7 +17,7 @@ const useRouteHandler = () => {
   const handleOrder = (order: 'recent' | 'rating' | 'reviewCount') => {
     router.push({
       pathname: 'product',
-      query: { ...(keyword && { keyword: keyword }), ...(category && { category: category }), order: order },
+      query: { ...(keyword && { keyword }), ...(category && { category }), order },
     })
   }
 

@@ -4,8 +4,8 @@ import { fetchProductDetails } from '@/libs/axios/product/productApi'
 import starIcon from '@icons/star_icon.svg'
 import commentIcon from '@icons/comment_icon.svg'
 import heartIcon from '@icons/heart_icon.svg'
-import StatisticsDetail from './StatisticsDetail'
 import { ProductDetailTypes } from '@/dtos/ProductDto'
+import StatisticsDetail from './StatisticsDetail'
 
 interface StatisticsProps {
   productId: number
@@ -37,7 +37,7 @@ const ProductStatisticsSection: React.FC<StatisticsProps> = ({ productId }) => {
       difference: parseFloat((rating - categoryMetric.rating).toFixed(2)), // 차이 값 반올림
       description: (
         <>
-          {'같은 카테고리의 제품들보다'}
+          같은 카테고리의 제품들보다
           <br />
           {rating > categoryMetric.rating
             ? `${Math.abs(parseFloat((rating - categoryMetric.rating).toFixed(2)))}점 높아요!`
@@ -52,7 +52,7 @@ const ProductStatisticsSection: React.FC<StatisticsProps> = ({ productId }) => {
       difference: parseFloat((favoriteCount - categoryMetric.favoriteCount).toFixed(0)), // 차이 값 반올림
       description: (
         <>
-          {'같은 카테고리의 제품들보다'}
+          같은 카테고리의 제품들보다
           <br />
           {favoriteCount > categoryMetric.favoriteCount
             ? `${Math.abs(parseFloat((favoriteCount - categoryMetric.favoriteCount).toFixed(0)))}개 더 많아요!`
@@ -67,7 +67,7 @@ const ProductStatisticsSection: React.FC<StatisticsProps> = ({ productId }) => {
       difference: parseFloat((reviewCount - categoryMetric.reviewCount).toFixed(0)), // 차이 값 반올림
       description: (
         <>
-          {'같은 카테고리의 제품들보다'}
+          같은 카테고리의 제품들보다
           <br />
           {reviewCount > categoryMetric.reviewCount
             ? `${Math.abs(parseFloat((reviewCount - categoryMetric.reviewCount).toFixed(0)))}개 더 많아요!`
@@ -78,9 +78,9 @@ const ProductStatisticsSection: React.FC<StatisticsProps> = ({ productId }) => {
   ]
 
   return (
-    <div className={'mx-auto mb-10 max-w-[940px]'}>
-      <h3 className={'mb-[30px] text-lg font-semibold'}>{'상품 통계'}</h3>
-      <div className={'grid grid-cols-3 gap-[10px] xl:gap-5'}>
+    <div className="mx-auto mb-10 max-w-[940px]">
+      <h3 className="mb-[30px] text-lg font-semibold">상품 통계</h3>
+      <div className="grid grid-cols-3 gap-[10px] xl:gap-5">
         {statisticsDetailContents.map((statisticsDetailContent) => (
           <StatisticsDetail
             key={statisticsDetailContent.title}

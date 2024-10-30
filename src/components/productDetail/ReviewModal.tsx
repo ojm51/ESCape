@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Modal from '@/components/@shared/modal/Modal'
 import { FaStar } from 'react-icons/fa'
-import { createReview, updateReview, uploadImage } from '@/libs/axios/product/reviewApi'
+import { createReview, updateReview } from '@/libs/axios/product/reviewApi'
 import DefaultImage from '@images/default-image.png'
 import { IoMdCloseCircle } from 'react-icons/io'
 import { CreateReviewRequestBody, UpdateReviewRequestBody, ReviewImage } from '@/dtos/ReviewDto'
