@@ -11,7 +11,7 @@ export default function PaginationSection({ totalPageCount, currentPage, onPageC
   const renderPagination = () => {
     const pages = []
     const totalCount = Math.ceil((totalPageCount || 1) / 4)
-    for (let i = 1; i <= totalCount; i++) {
+    for (let i = 1; i <= totalCount; i += 1) {
       pages.push(
         <BoardPaginationButton key={i} onClick={() => onPageClick(i)} isActive={currentPage === i}>
           {i}

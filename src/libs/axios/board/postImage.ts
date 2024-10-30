@@ -1,6 +1,6 @@
 import Axios from 'axios'
 
-const Base_URL = process.env.NEXT_PUBLIC_BOARD_API_URL
+const BASE_URL = process.env.NEXT_PUBLIC_BOARD_API_URL
 
 interface postImageProps {
   id: string
@@ -8,7 +8,7 @@ interface postImageProps {
 }
 
 export async function postImage({ id, formData }: postImageProps) {
-  const url = `${Base_URL}/images/${id}`
+  const url = `${BASE_URL}/images/${id}`
   formData.append('file', formData.get('image') as string)
   const response = await Axios.post(url, formData, {
     headers: {

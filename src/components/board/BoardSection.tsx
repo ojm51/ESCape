@@ -34,8 +34,12 @@ export default function BoardSection({ data, selectedOption, setSelectedOption, 
             </div>
           }
         >
-          <button onClick={() => handleOptionChange('최신순')}>최신순</button>
-          <button onClick={() => handleOptionChange('인기순')}>인기순</button>
+          <button type="button" onClick={() => handleOptionChange('최신순')}>
+            최신순
+          </button>
+          <button type="button" onClick={() => handleOptionChange('인기순')}>
+            인기순
+          </button>
         </Dropdown>
       </div>
       <div className="relative grid grid-cols-1 gap-4 py-9 xl:grid-cols-2">

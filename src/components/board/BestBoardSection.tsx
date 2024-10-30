@@ -14,6 +14,7 @@ export default function BestBoardSection({ data, onClick, disabled }: BestBoardS
       <div className="mt-10 flex items-center justify-between">
         <h2 className="text-[20px] font-bold leading-6 text-brand-white">베스트 게시글</h2>
         <button
+          type="button"
           className="text-[14px] font-normal leading-[17px] text-brand-gray-dark"
           onClick={onClick}
           disabled={disabled}

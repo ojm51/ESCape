@@ -33,7 +33,7 @@ export default function CommentDeleteModal({ id, isOpen, onClick, currentPage, d
   }
 
   return (
-    <>
+    <div>
       {isOpen && (
         <Modal onClick={onClick} modalFrameClassNames="">
           <form onSubmit={handleSubmit}>
@@ -47,6 +47,7 @@ export default function CommentDeleteModal({ id, isOpen, onClick, currentPage, d
                   예
                 </button>
                 <button
+                  type="button"
                   onClick={onClick}
                   className="rounded-xl border-[1px] border-solid border-brand-black-light py-4 hover:bg-brand-black-dark"
                 >
@@ -57,6 +58,6 @@ export default function CommentDeleteModal({ id, isOpen, onClick, currentPage, d
           </form>
         </Modal>
       )}
-    </>
+    </div>
   )
 }
