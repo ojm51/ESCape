@@ -58,6 +58,7 @@ export default function Header({ children }: PropsWithChildren) {
       <div className="relative z-10">
         <div className="fixed flex h-[70px] w-full items-center justify-between border-b border-[#252530] bg-body-bg px-5 md:h-[80px] md:px-[30px] xl:h-[100px] xl:px-[120px]">
           <button
+            type="button"
             onClick={() => {
               handleSidebar()
             }}
@@ -117,6 +118,7 @@ export default function Header({ children }: PropsWithChildren) {
               )}
             >
               <button
+                type="button"
                 onClick={toggleSearchInput}
                 className="relative flex h-[18.38px] w-[18.38px] shrink-0 items-center"
               >

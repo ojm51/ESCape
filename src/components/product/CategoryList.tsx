@@ -2,9 +2,7 @@ import useRouteHandler from '@/hooks/useRouteHandler'
 import classNames from 'classnames'
 import { CATEGORY_DATA } from '@/libs/constants/category'
 
-interface CategoryListProps {}
-
-export default function CategoryList({}: CategoryListProps) {
+export default function CategoryList() {
   const { handleCategory, handleQueryReset, category } = useRouteHandler()
 
   return (

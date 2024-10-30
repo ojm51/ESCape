@@ -109,10 +109,10 @@ const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) =>
         </div>
 
         <div className="flex space-x-4">
-          <CustomButton active onClick={handleReviewClick} style="primary">
+          <CustomButton active onClick={handleReviewClick} styleType="primary">
             리뷰 작성하기
           </CustomButton>
-          <CustomButton active onClick={handleReservationClick} style="secondary">
+          <CustomButton active onClick={handleReservationClick} styleType="secondary">
             예약하기
           </CustomButton>
         </div>

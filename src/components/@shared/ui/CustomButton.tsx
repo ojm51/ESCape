@@ -6,7 +6,7 @@ interface CustomButtonProps {
   active: boolean
   onClick?: () => void
   type?: 'button' | 'submit' | 'reset' // 버튼 타입 정의
-  style?: 'primary' | 'secondary' | 'tertiary'
+  styleType?: 'primary' | 'secondary' | 'tertiary'
   secondaryBg?: string
 }
 
@@ -16,13 +16,13 @@ interface CustomButtonProps {
 export default function CustomButton({
   children,
   active,
-  onClick,
+  onClick = () => {},
   type = 'button',
-  style = 'primary',
+  styleType = 'primary',
   secondaryBg = 'bg-body-bg',
 }: PropsWithChildren<CustomButtonProps>) {
   const btnClass = () =>
-    match({ style, active })
+    match({ style: styleType, active })
       .with({ style: 'primary', active: true }, () => 'bg-gradation text-white')
       .with({ style: 'primary', active: false }, () => 'bg-unactive text-brand-gray-dark')
       .with({ style: 'secondary', active: true }, () => 'bg-gradation')
@@ -41,7 +41,7 @@ export default function CustomButton({
         btnClass(),
       )}
     >
-      {style === 'secondary' && active ? (
+      {styleType === 'secondary' && active ? (
         <span
           className={classNames(
             secondaryBg,
@@ -51,7 +51,7 @@ export default function CustomButton({
           <span className="bg-gradation bg-clip-text text-transparent">{children}</span>
         </span>
       ) : (
-        <>{children}</>
+        children
       )}
     </button>
   )

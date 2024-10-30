@@ -2,14 +2,14 @@ import { CustomFlowbiteTheme, Dropdown, Flowbite } from 'flowbite-react'
 import { useState } from 'react'
 import { RxTriangleDown } from 'react-icons/rx'
 
-interface DropDownValues {
+interface DropDownValues<T> {
   label: string
-  value: any
+  value: T
 }
 
-interface CustomDropDown {
-  dropDownValues: DropDownValues[]
-  onClick: (value: any) => void
+interface CustomDropDown<T> {
+  dropDownValues: DropDownValues<T>[]
+  onClick: (value: T) => void
 }
 
 const customTheme: CustomFlowbiteTheme = {
@@ -29,9 +29,9 @@ const customTheme: CustomFlowbiteTheme = {
  * @param dropDownValues 드랍다운 아이템의 label과 value(onClick함수에 인자로 전달될 값)를 객체형태로 배열에 저장하여 props로 전달
  * @param onClick 드랍다운 아이템을 클릭하면실행될 함수 인자로 dropDownValues의 value를 전달받음
  */
-export default function CustomDropDown({ dropDownValues, onClick }: CustomDropDown) {
+export default function CustomDropDown<T>({ dropDownValues, onClick }: CustomDropDown<T>) {
   const [selectedLabel, setSelectedLabel] = useState(dropDownValues[0].label)
-  const handleSelectedLabel = (labelValue: any) => {
+  const handleSelectedLabel = (labelValue: string) => {
     setSelectedLabel(labelValue)
   }
   return (
@@ -44,9 +44,9 @@ export default function CustomDropDown({ dropDownValues, onClick }: CustomDropDo
           </button>
         )}
       >
-        {dropDownValues.map(item => (
+        {dropDownValues.map((item: DropDownValues<T>) => (
           <Dropdown.Item
-            key={item.value}
+            key={item.value as string}
             onClick={() => {
               onClick(item.value)
               handleSelectedLabel(item.label)

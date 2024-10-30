@@ -147,7 +147,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
         </div>
       </section>
 
-      <CustomButton style="primary" active={isFormComplete || isPending} onClick={() => onEdit(formValues)}>
+      <CustomButton styleType="primary" active={isFormComplete || isPending} onClick={() => onEdit(formValues)}>
         {isPending ? <Spinner size="xl" /> : '저장하기'}
       </CustomButton>
     </div>

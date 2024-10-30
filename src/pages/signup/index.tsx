@@ -4,7 +4,7 @@ import { signUp } from '@/libs/axios/auth/auth'
 import { useAuth } from '@/contexts/AuthProvider'
 import Link from 'next/link'
 import Image from 'next/image'
-import PrimaryButton from '@/components/@shared/ui/CustomButton'
+import CustomButton from '@/components/@shared/ui/CustomButton'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Spinner } from 'flowbite-react'
 import { useToaster } from '@/contexts/ToasterProvider'
@@ -179,9 +179,9 @@ export default function SignupPage() {
           )}
         </div>
         <div className="pt-2">
-          <PrimaryButton style="primary" type="submit" onClick={() => {}} active>
+          <CustomButton styleType="primary" type="submit" onClick={() => {}} active>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '가입하기'}
-          </PrimaryButton>
+          </CustomButton>
         </div>
       </form>
 

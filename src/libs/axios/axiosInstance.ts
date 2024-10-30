@@ -6,12 +6,13 @@ const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use(config => {
+  const modifiedConfig = { ...config }
   const accessToken = localStorage.getItem('accessToken')
   if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`
-    console.log('Authorization header:', config.headers.Authorization) // 토큰 확인
+    modifiedConfig.headers.Authorization = `Bearer ${accessToken}`
+    console.log('Authorization header:', modifiedConfig.headers.Authorization) // 토큰 확인
   }
-  return config
+  return modifiedConfig
 })
 
 axiosInstance.interceptors.response.use(
