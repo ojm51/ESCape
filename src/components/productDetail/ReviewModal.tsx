@@ -30,7 +30,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const [reviewText, setReviewText] = useState<string>(initialReviewData.content)
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>(
-    initialReviewData.images.map((image) => image.source).filter((url): url is string => url !== undefined),
+    initialReviewData.images.map(image => image.source).filter((url): url is string => url !== undefined),
   )
   const [existingImages, setExistingImages] = useState<ReviewImage[]>(initialReviewData.images || [])
   const [loading, setLoading] = useState<boolean>(false)
@@ -40,7 +40,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       setRating(initialReviewData.rating)
       setReviewText(initialReviewData.content)
       setUploadedImageUrls(
-        initialReviewData.images.map((image) => image.source).filter((url): url is string => url !== undefined),
+        initialReviewData.images.map(image => image.source).filter((url): url is string => url !== undefined),
       )
       setExistingImages(initialReviewData.images) // 기존 이미지를 상태로 관리
     }
@@ -80,10 +80,10 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const handleSubmit = async () => {
     setLoading(true)
     try {
-      let imagePayload: ReviewImage[] = existingImages.map((image) => ({ id: image.id }))
+      let imagePayload: ReviewImage[] = existingImages.map(image => ({ id: image.id }))
 
       if (uploadedImageUrls.length > 0) {
-        imagePayload = [...imagePayload, ...uploadedImageUrls.map((url) => ({ source: url }))]
+        imagePayload = [...imagePayload, ...uploadedImageUrls.map(url => ({ source: url }))]
       }
 
       if (isEdit && initialReviewData.reviewId) {
@@ -101,9 +101,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
         // 리뷰 생성
         const payload: CreateReviewRequestBody = {
           productId,
-          images: imagePayload
-            .map((img) => img.source || img.id)
-            .filter((url): url is string => typeof url === 'string'),
+          images: imagePayload.map(img => img.source || img.id).filter((url): url is string => typeof url === 'string'),
           content: reviewText,
           rating,
         }
@@ -129,7 +127,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold text-white">{productName}</h2>
         <div className="flex space-x-2">
-          {[1, 2, 3, 4, 5].map((star) => (
+          {[1, 2, 3, 4, 5].map(star => (
             <FaStar
               key={star}
               size={24}

@@ -26,12 +26,12 @@ const ReviewLikeButton: React.FC<ReviewLikeButtonProps> = ({ reviewId, initialIs
     try {
       if (isLiked) {
         await removeReviewLike(reviewId)
-        setLikeCount((prevCount) => prevCount - 1)
+        setLikeCount(prevCount => prevCount - 1)
       } else {
         await addReviewLike(reviewId)
-        setLikeCount((prevCount) => prevCount + 1)
+        setLikeCount(prevCount => prevCount + 1)
       }
-      setIsLiked((prevIsLiked) => !prevIsLiked)
+      setIsLiked(prevIsLiked => !prevIsLiked)
     } catch (error) {
       console.error('좋아요 처리 중 오류가 발생했습니다.', error)
     }

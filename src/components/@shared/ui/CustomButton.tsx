@@ -16,7 +16,7 @@ interface CustomButtonProps {
 export default function CustomButton({
   children,
   active,
-  onClick,
+  onClick = () => {},
   type = 'button',
   style = 'primary',
   secondaryBg = 'bg-body-bg',
@@ -51,7 +51,7 @@ export default function CustomButton({
           <span className="bg-gradation bg-clip-text text-transparent">{children}</span>
         </span>
       ) : (
-        <>{children}</>
+        children
       )}
     </button>
   )

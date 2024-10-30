@@ -37,6 +37,7 @@ const customTheme: CustomFlowbiteTheme = {
     },
   },
 }
+const LogoIcon = () => <Image src={logoBig} alt="로고" width={100} height={22} />
 
 export default function HeaderSidebar({ handleSidebar, isOpen }: HeaderSidebarProps) {
   const { handleCategory, handleQueryReset } = useRouteHandler()
@@ -50,20 +51,20 @@ export default function HeaderSidebar({ handleSidebar, isOpen }: HeaderSidebarPr
         open={isOpen}
         className="bg-body-bg"
       >
-        <Drawer.Header titleIcon={() => <Image src={logoBig} alt="로고" width={100} height={22} />} />
+        <Drawer.Header titleIcon={LogoIcon} />
         <Sidebar>
           <Sidebar.Items>
             <Sidebar.ItemGroup>
               <Sidebar.Item
                 icon={RxDotFilled}
                 onClick={() => {
-                  handleQueryReset
+                  handleQueryReset()
                 }}
               >
                 인기 테마
               </Sidebar.Item>
               {CATEGORY_DATA.map(
-                (menu) =>
+                menu =>
                   menu.name && (
                     <Sidebar.Item
                       icon={RxDotFilled}

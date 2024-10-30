@@ -74,7 +74,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
         <p>{(error as Error).message}</p>
       ) : (
         <ul>
-          {reviews.map((review) => (
+          {reviews.map(review => (
             <li key={review.id} className="relative mb-4 rounded-lg border border-unactive bg-[#252530] p-6">
               <div className="flex justify-between">
                 <div className="flex items-start">
@@ -85,7 +85,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
                       review.user.image ? '' : 'border-2 border-unactive'
                     }`}
                     onClick={() => handleProfileClick(review.user.id)}
-                    onError={(e) => {
+                    onError={e => {
                       e.currentTarget.src = DefaultImage.src
                       e.currentTarget.classList.add('border-2', 'border-unactive')
                     }}
@@ -100,13 +100,13 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
                 <div className="mx-8 flex flex-grow flex-col">
                   <p className="mb-3 text-white">{review.content}</p>
                   <div className="mb-2 flex space-x-2">
-                    {review.reviewImages.map((image) => (
+                    {review.reviewImages.map(image => (
                       <img
                         key={image.id}
                         src={image.source}
                         alt={`Review Image ${image.id}`}
                         className="h-16 w-16 rounded object-cover"
-                        onError={(e) => {
+                        onError={e => {
                           e.currentTarget.src = DefaultImage.src
                         }}
                       />
@@ -157,7 +157,7 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
           initialReviewData={{
             rating: editingReview.rating,
             content: editingReview.content,
-            images: editingReview.reviewImages.map((image) => ({
+            images: editingReview.reviewImages.map(image => ({
               id: image.id,
               source: image.source,
             })),

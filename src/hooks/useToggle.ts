@@ -8,7 +8,7 @@ import { useState } from 'react'
 function useToggle(initialValue: boolean): [boolean, () => void] {
   const [state, setState] = useState(initialValue)
 
-  const toggleState = () => setState((prevState) => !prevState)
+  const toggleState = () => setState(prevState => !prevState)
 
   return [state, toggleState]
 }

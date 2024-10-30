@@ -19,7 +19,7 @@ export default function NicknamePage({ provider }: { provider?: OAuthProviders }
   } = useForm<NicknameFormInputs>()
   const [loading, setLoading] = useState(false)
 
-  const onSubmit: SubmitHandler<NicknameFormInputs> = async (data) => {
+  const onSubmit: SubmitHandler<NicknameFormInputs> = async data => {
     setLoading(true)
     try {
       console.log('닉네임:', data.nickname)

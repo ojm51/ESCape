@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
 
   const handleAuthChange = (key: 'user' | 'isPending', value: UserValue | boolean) => {
-    setAuthState((prev) => ({
+    setAuthState(prev => ({
       ...prev,
       [key]: value,
     }))

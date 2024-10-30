@@ -36,7 +36,7 @@ export default function SignInPage() {
     }
   }, [user, router])
 
-  const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
+  const onSubmit: SubmitHandler<SignInFormInputs> = async data => {
     setLoading(true)
     try {
       const response = await login(data)

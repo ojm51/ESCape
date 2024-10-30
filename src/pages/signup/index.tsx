@@ -44,7 +44,7 @@ export default function SignupPage() {
     }
   }, [isPending, user, router])
 
-  const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
+  const onSubmit: SubmitHandler<SignUpFormInputs> = async data => {
     setLoading(true)
     const { email, password } = data
     const isSignUpSuccess = await signUp(data)
@@ -158,7 +158,7 @@ export default function SignupPage() {
               placeholder="비밀번호를 다시 입력해주세요"
               {...register('passwordConfirmation', {
                 required: '비밀번호 확인을 입력해주세요.',
-                validate: (value) => value === passwordValue || '비밀번호가 일치하지 않습니다.',
+                validate: value => value === passwordValue || '비밀번호가 일치하지 않습니다.',
               })}
             />
             <button
