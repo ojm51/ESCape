@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { IoMdShare } from 'react-icons/io'
 import { fetchProductDetails } from '@/libs/axios/product/productApi'
@@ -12,6 +12,7 @@ import KakaoShareButton from './KakaoShareButton'
 import ReviewModal from '../ReviewModal'
 
 const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) => {
+  const queryClient = useQueryClient()
   const { data, isLoading, error, refetch } = useQuery<ProductDetailTypes>({
     queryKey: ['productDetail', productId],
     queryFn: () => fetchProductDetails(productId),
@@ -119,7 +120,8 @@ const ProductDetailSection: React.FC<{ productId: number }> = ({ productId }) =>
           isOpen={isModalOpen}
           onClose={() => {
             setModalOpen(false)
-            handleRefetch()
+            queryClient.invalidateQueries({ queryKey: ['reviews', productId] })
+            refetch()
           }}
           productName={productDetail.name}
           productId={productId}
