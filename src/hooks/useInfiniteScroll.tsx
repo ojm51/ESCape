@@ -13,7 +13,6 @@ const useInfiniteScroll = ({ loadMore, hasMore }: InfiniteScrollParams) => {
   const targetRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    console.log('실행')
     observerRef.current = new IntersectionObserver(
       entries => {
         entries.forEach(async entry => {
