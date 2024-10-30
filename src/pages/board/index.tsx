@@ -56,7 +56,7 @@ export default function BoardsPage() {
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       const { totalCount } = lastPage
-      const loadedCount = allPages.flatMap((page) => page.articleList).length
+      const loadedCount = allPages.flatMap(page => page.articleList).length
       if (loadedCount < totalCount) {
         return allPages.length + 1
       }
@@ -91,7 +91,7 @@ export default function BoardsPage() {
   if (isError) return <BoardStatusScreen>Error!</BoardStatusScreen>
 
   // 받아온 likeArticlesData 의 pages 가 이중 배열일 수 있기 때문에, 1차원 배열로 변경
-  const likesList = likeArticlesData?.pages?.flatMap((page) => page.articleList)
+  const likesList = likeArticlesData?.pages?.flatMap(page => page.articleList)
 
   return (
     <div className="relative mx-4 py-[100px] md:mx-6 xl:mx-auto xl:w-[1200px]">

@@ -40,7 +40,7 @@ export default function BoardSection({ data, selectedOption, setSelectedOption, 
       </div>
       <div className="relative grid grid-cols-1 gap-4 py-9 xl:grid-cols-2">
         {data && data.length > 0 ? (
-          data?.map((data) => <BoardCard key={data.id} article={data} userId={userId} />)
+          data?.map(data => <BoardCard key={data.id} article={data} userId={userId} />)
         ) : (
           // 임시 예외 처리
           <div className="text-brand-white">내용이 없습니다.</div>

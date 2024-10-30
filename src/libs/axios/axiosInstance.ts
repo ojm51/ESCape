@@ -5,17 +5,18 @@ const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 })
 
-axiosInstance.interceptors.request.use((config) => {
+axiosInstance.interceptors.request.use(config => {
+  const modifiedConfig = { ...config }
   const accessToken = localStorage.getItem('accessToken')
   if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`
-    console.log('Authorization header:', config.headers.Authorization) // 토큰 확인
+    modifiedConfig.headers.Authorization = `Bearer ${accessToken}`
+    console.log('Authorization header:', modifiedConfig.headers.Authorization) // 토큰 확인
   }
-  return config
+  return modifiedConfig
 })
 
 axiosInstance.interceptors.response.use(
-  (res) => res,
+  res => res,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
       removeTokens()

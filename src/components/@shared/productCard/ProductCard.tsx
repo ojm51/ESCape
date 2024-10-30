@@ -41,7 +41,7 @@ export default function ProductCard({ data, productId }: ProductCardProps) {
         <div className="flex flex-col items-start justify-start gap-[5px]">
           <h4 className="text-sm font-medium text-brand-white">{name}</h4>
           <div className="flex items-start justify-start gap-[10px]">
-            {cardDetailContents.map((cardDetailContent) => (
+            {cardDetailContents.map(cardDetailContent => (
               <div key={productId * cardDetailContent.key} className="flex items-center justify-center gap-[5px]">
                 <Image src={cardDetailContent.icon} alt={`${cardDetailContent.alt} 아이콘`} width={12} height={12} />
                 <p className="text-xs font-light text-brand-gray-light">{cardDetailContent.value}</p>

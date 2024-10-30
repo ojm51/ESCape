@@ -5,7 +5,7 @@ export const getUsersRanking = async () => {
   try {
     const response = await axiosInstance.get<UserRanking[]>('users/ranking')
     return response.data
-  } catch (err) {
+  } catch {
     return []
   }
 }

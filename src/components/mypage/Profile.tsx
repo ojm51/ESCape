@@ -224,12 +224,12 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
             <CustomButton active onClick={handleEditProfileButtonClick}>
               프로필 편집
             </CustomButton>
-            <CustomButton style="tertiary" active onClick={handleLogoutButtonClick}>
+            <CustomButton styleType="tertiary" active onClick={handleLogoutButtonClick}>
               로그아웃
             </CustomButton>
           </div>
         ) : isFollowingState ? (
-          <CustomButton style="tertiary" active onClick={handleUnfollowButtonClick}>
+          <CustomButton styleType="tertiary" active onClick={handleUnfollowButtonClick}>
             팔로우 취소
           </CustomButton>
         ) : (

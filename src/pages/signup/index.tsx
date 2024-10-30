@@ -4,7 +4,7 @@ import { signUp } from '@/libs/axios/auth/auth'
 import { useAuth } from '@/contexts/AuthProvider'
 import Link from 'next/link'
 import Image from 'next/image'
-import PrimaryButton from '@/components/@shared/ui/CustomButton'
+import CustomButton from '@/components/@shared/ui/CustomButton'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Spinner } from 'flowbite-react'
 import { useToaster } from '@/contexts/ToasterProvider'
@@ -44,7 +44,7 @@ export default function SignupPage() {
     }
   }, [isPending, user, router])
 
-  const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
+  const onSubmit: SubmitHandler<SignUpFormInputs> = async data => {
     setLoading(true)
     const { email, password } = data
     const isSignUpSuccess = await signUp(data)
@@ -158,7 +158,7 @@ export default function SignupPage() {
               placeholder="비밀번호를 다시 입력해주세요"
               {...register('passwordConfirmation', {
                 required: '비밀번호 확인을 입력해주세요.',
-                validate: (value) => value === passwordValue || '비밀번호가 일치하지 않습니다.',
+                validate: value => value === passwordValue || '비밀번호가 일치하지 않습니다.',
               })}
             />
             <button
@@ -179,9 +179,9 @@ export default function SignupPage() {
           )}
         </div>
         <div className="pt-2">
-          <PrimaryButton style="primary" type="submit" onClick={() => {}} active>
+          <CustomButton styleType="primary" type="submit" onClick={() => {}} active>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '가입하기'}
-          </PrimaryButton>
+          </CustomButton>
         </div>
       </form>
 

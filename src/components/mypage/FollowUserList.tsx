@@ -18,7 +18,7 @@ export default function FollowUserList({ type, name, title, followUserList, next
       </h3>
       {followUserList && followUserList.length > 0 ? (
         <div className="flex flex-col content-center items-start gap-5">
-          {followUserList.map((followUser) => (
+          {followUserList.map(followUser => (
             <FollowUser
               key={followUser.id}
               followUserData={type === 'follower' ? followUser.follower! : followUser.followee!}

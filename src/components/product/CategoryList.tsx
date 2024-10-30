@@ -2,9 +2,7 @@ import useRouteHandler from '@/hooks/useRouteHandler'
 import classNames from 'classnames'
 import { CATEGORY_DATA } from '@/libs/constants/category'
 
-interface CategoryListProps {}
-
-export default function CategoryList({}: CategoryListProps) {
+export default function CategoryList() {
   const { handleCategory, handleQueryReset, category } = useRouteHandler()
 
   return (
@@ -22,7 +20,7 @@ export default function CategoryList({}: CategoryListProps) {
         인기 테마
       </button>
       {CATEGORY_DATA.map(
-        (menu) =>
+        menu =>
           menu.name && (
             <button
               onClick={() => {

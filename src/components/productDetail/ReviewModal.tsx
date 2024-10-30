@@ -30,6 +30,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const [reviewText, setReviewText] = useState<string>(initialReviewData.content)
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>(
+
     initialReviewData.images.filter((image) => !image.id).map((image) => image.source as string),
   )
   const [existingImages, setExistingImages] = useState<ReviewImage[]>(
@@ -43,6 +44,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       setReviewText(initialReviewData.content)
       setUploadedImageUrls(initialReviewData.images.filter((image) => !image.id).map((image) => image.source as string))
       setExistingImages(initialReviewData.images.filter((image) => image.id))
+
     }
   }, [isOpen, isEdit, initialReviewData])
 
@@ -82,12 +84,14 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const handleSubmit = async () => {
     setLoading(true)
     try {
+
       const imagePayload: ReviewImage[] = [
         ...existingImages.map((image) => ({ id: image.id })),
         ...uploadedImageUrls.map((url) => ({ source: url })),
       ]
 
       console.log('이미지 payload:', imagePayload)
+
 
       if (isEdit && initialReviewData.reviewId) {
         const payload: UpdateReviewRequestBody = {
@@ -102,9 +106,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       } else {
         const payload: CreateReviewRequestBody = {
           productId,
-          images: imagePayload
-            .map((img) => img.source || img.id)
-            .filter((url): url is string => typeof url === 'string'),
+          images: imagePayload.map(img => img.source || img.id).filter((url): url is string => typeof url === 'string'),
           content: reviewText,
           rating,
         }
@@ -130,7 +132,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold text-white">{productName}</h2>
         <div className="flex space-x-2">
-          {[1, 2, 3, 4, 5].map((star) => (
+          {[1, 2, 3, 4, 5].map(star => (
             <FaStar
               key={star}
               size={24}
