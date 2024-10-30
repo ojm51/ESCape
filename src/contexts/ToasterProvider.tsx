@@ -59,12 +59,12 @@ function ToasterProvider({ children }: ToasterProviderProps) {
       message,
     }
 
-    setToasts((prevToasts) => [...prevToasts, newToast])
+    setToasts(prevToasts => [...prevToasts, newToast])
     return newToast
   }
 
   function removeToast(id: number) {
-    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id))
+    setToasts(prevToasts => prevToasts.filter(toast => toast.id !== id))
   }
 
   function toaster(type: ToastType, message: string) {
@@ -76,7 +76,7 @@ function ToasterProvider({ children }: ToasterProviderProps) {
     <ToasterContext.Provider value={{ toaster }}>
       {children}
       <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-4">
-        {toasts.map((toast) => (
+        {toasts.map(toast => (
           <ToastComponent
             key={toast.id}
             type={toast.type}

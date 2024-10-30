@@ -81,7 +81,7 @@ const ProductStatisticsSection: React.FC<StatisticsProps> = ({ productId }) => {
     <div className="mx-auto mb-10 max-w-[940px]">
       <h3 className="mb-[30px] text-lg font-semibold">상품 통계</h3>
       <div className="grid grid-cols-3 gap-[10px] xl:gap-5">
-        {statisticsDetailContents.map((statisticsDetailContent) => (
+        {statisticsDetailContents.map(statisticsDetailContent => (
           <StatisticsDetail
             key={statisticsDetailContent.title}
             title={statisticsDetailContent.title}

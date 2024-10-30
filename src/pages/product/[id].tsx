@@ -25,7 +25,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId }) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async context => {
   const { id } = context.query
 
   const productId = parseInt(id as string, 10)

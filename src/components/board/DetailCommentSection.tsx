@@ -13,7 +13,7 @@ export default function DetailCommentSection({ data, currentPage, dataId, userId
     <div className="my-10">
       <div className="flex flex-col gap-4">
         {data && data.length > 0 ? (
-          data?.map((data) => (
+          data?.map(data => (
             <CommentCard key={data.id} data={data} currentPage={currentPage} dataId={dataId} userId={userId} />
           ))
         ) : (

@@ -17,8 +17,8 @@ export interface DetailContentProps {
 export default function DetailContentSection({ data, userId }: DetailContentProps) {
   const [isPatchOpen, setIsPatchOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-  const togglePatchModal = () => setIsPatchOpen((prevState) => !prevState)
-  const toggleDeleteModal = () => setIsDeleteOpen((prevState) => !prevState)
+  const togglePatchModal = () => setIsPatchOpen(prevState => !prevState)
+  const toggleDeleteModal = () => setIsDeleteOpen(prevState => !prevState)
 
   // 상세페이지 게시물 수정하기를 클릭할 시 수정 모달을 열어주는 이벤트 핸들러
   const handlePatchModal = () => {

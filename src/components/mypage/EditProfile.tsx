@@ -30,7 +30,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
 
   const isFormComplete = useMemo(() => {
     const { image, ...restValues } = formValues
-    const isAllInputFilled = Object.values(restValues).every((inputValue) => inputValue !== '') && image !== null
+    const isAllInputFilled = Object.values(restValues).every(inputValue => inputValue !== '') && image !== null
     return isAllInputFilled
   }, [formValues])
 
@@ -45,7 +45,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
 
     const nextImage = URL.createObjectURL(selectedImageFile)
     setPreviewImage(nextImage)
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       image: selectedImageFile,
     }))
@@ -56,7 +56,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
       URL.revokeObjectURL(previewImage)
     }
 
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       image: null,
     }))
@@ -65,7 +65,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value.slice(0, INPUT_MAX_LENGTH)
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       [e.target.name]: inputValue,
     }))
@@ -74,7 +74,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textareaValue = e.target.value.slice(0, TEXTAREA_MAX_LENGTH)
     setInputCount(textareaValue.length)
-    setFormValues((prevValues) => ({
+    setFormValues(prevValues => ({
       ...prevValues,
       [e.target.name]: textareaValue,
     }))
@@ -147,7 +147,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
         </div>
       </section>
 
-      <CustomButton style="primary" active={isFormComplete || isPending} onClick={() => onEdit(formValues)}>
+      <CustomButton styleType="primary" active={isFormComplete || isPending} onClick={() => onEdit(formValues)}>
         {isPending ? <Spinner size="xl" /> : '저장하기'}
       </CustomButton>
     </div>

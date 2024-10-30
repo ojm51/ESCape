@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 import GoogleOauthButton from '@/components/auth/GoogleOauthButton'
 import KakoOauthButton from '@/components/auth/KakoOauthButton'
-import PrimaryButton from '@/components/@shared/ui/CustomButton'
+import CustomButton from '@/components/@shared/ui/CustomButton'
 import { Spinner } from 'flowbite-react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import EyesHiddenIcon from '../../../public/icons/icon_eyes_hidden.svg'
@@ -36,7 +36,7 @@ export default function SignInPage() {
     }
   }, [user, router])
 
-  const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
+  const onSubmit: SubmitHandler<SignInFormInputs> = async data => {
     setLoading(true)
     try {
       const response = await login(data)
@@ -113,9 +113,9 @@ export default function SignInPage() {
           {errors.password && <p className="mt-1 text-red-500">{errors.password.message}</p>}
         </div>
         <div className="pt-2">
-          <PrimaryButton style="primary" type="submit" active>
+          <CustomButton styleType="primary" type="submit" active>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '로그인'}
-          </PrimaryButton>
+          </CustomButton>
         </div>
       </form>
       <div className="mt-10 text-center">

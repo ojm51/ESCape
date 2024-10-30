@@ -45,8 +45,8 @@ export default function Profile({ data: userData }: ProfileProps) {
     description: myInfo?.description ?? '',
   })
 
-  const toggleFollowModal = () => setIsFollowModalOpen((prev) => !prev)
-  const toggleEditProfileModal = () => setEditProfileModalOpen((prev) => !prev)
+  const toggleFollowModal = () => setIsFollowModalOpen(prev => !prev)
+  const toggleEditProfileModal = () => setEditProfileModalOpen(prev => !prev)
 
   /** 페이지를 이동하면 열려 있던 모달을 닫는 함수 */
   useEffect(() => {
@@ -116,7 +116,7 @@ export default function Profile({ data: userData }: ProfileProps) {
 
   const uploadImageFileMutation = useMutation({
     mutationFn: (newImageFile: AddImageFileParams) => addImageFile(newImageFile),
-    onSuccess: (imageUrl) => {
+    onSuccess: imageUrl => {
       uploadNewProfileMutation.mutate({
         image: imageUrl,
         nickname: newProfile?.nickname ?? '',
@@ -214,12 +214,12 @@ export default function Profile({ data: userData }: ProfileProps) {
             <CustomButton active onClick={handleEditProfileButtonClick}>
               프로필 편집
             </CustomButton>
-            <CustomButton style="tertiary" active onClick={handleLogoutButtonClick}>
+            <CustomButton styleType="tertiary" active onClick={handleLogoutButtonClick}>
               로그아웃
             </CustomButton>
           </div>
         ) : isFollowingState ? (
-          <CustomButton style="tertiary" active onClick={handleUnfollowButtonClick}>
+          <CustomButton styleType="tertiary" active onClick={handleUnfollowButtonClick}>
             팔로우 취소
           </CustomButton>
         ) : (

@@ -45,7 +45,7 @@ export default function ProductCardList({ data }: ProductCardListProps) {
   return (
     <section>
       <div className="mb-[30px] flex items-center justify-normal gap-10">
-        {productMenuContents.map((productMenuContent) => (
+        {productMenuContents.map(productMenuContent => (
           <button
             key={productMenuContent.id}
             className={`text-lg xl:text-xl ${activeMenu === productMenuContent.id ? 'font-semibold text-brand-white' : 'font-normal text-brand-gray-dark'}`}
@@ -57,7 +57,7 @@ export default function ProductCardList({ data }: ProductCardListProps) {
       </div>
       {productList && productList.length > 0 ? (
         <div className="grid grid-cols-2 gap-[15px] xl:grid-cols-3 xl:gap-5">
-          {productList.map((product) => (
+          {productList.map(product => (
             <ProductCard key={product.id} productId={product.id} data={product} />
           ))}
         </div>
