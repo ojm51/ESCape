@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-alert
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
@@ -39,8 +40,9 @@ const ProductDetailSection: React.FC<{ productId: number; detailData: ProductDet
 
   const handleReservationClick = () => {
     if (parsedDescription?.url) {
-      const userConfirmed = confirm('예약 페이지로 이동하시겠습니까?')
-      if (userConfirmed) {
+      // eslint-disable-next-line no-alert
+      const confirmed = window.confirm('예약 페이지로 이동하시겠습니까?')
+      if (confirmed) {
         window.location.href = parsedDescription.url
       }
     } else {

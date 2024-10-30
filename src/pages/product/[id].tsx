@@ -7,12 +7,15 @@ import { fetchProductDetails } from '@/libs/axios/product/productApi'
 import { fetchReviews } from '@/libs/axios/product/reviewApi'
 import { ProductDetailTypes, ProductReviewListTypes } from '@/dtos/ProductDto'
 import { Spinner } from 'flowbite-react'
+import { useState } from 'react'
 
 interface ProductDetailPageProps {
   productId: number
 }
 
 const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId }) => {
+  const [sortOption, setSortOption] = useState<string>('recent')
+
   const {
     data: detailData,
     isLoading: isDetailLoading,
@@ -28,9 +31,15 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId }) => {
     error: reviewsError,
     refetch: refetchReviews,
   } = useQuery<ProductReviewListTypes[]>({
-    queryKey: ['reviews', productId, 'recent'],
-    queryFn: () => fetchReviews(productId, 'recent'),
+    queryKey: ['reviews', productId, sortOption],
+    queryFn: () => fetchReviews(productId, sortOption),
   })
+
+  // 정렬 옵션 변경 함수
+  const handleSortChange = (newSortOption: string) => {
+    setSortOption(newSortOption)
+    refetchReviews() // 정렬 옵션이 변경되면 리뷰 데이터 리패치
+  }
 
   if (isDetailLoading || isReviewsLoading) {
     return (
@@ -55,7 +64,13 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId }) => {
       </div>
 
       <div>
-        <ProductReviewSection productId={productId} reviews={reviews} refetchReviews={refetchReviews} />
+        <ProductReviewSection
+          productId={productId}
+          reviews={reviews}
+          refetchReviews={refetchReviews}
+          sortOption={sortOption} // 현재 정렬 옵션을 전달
+          onSortChange={handleSortChange} // 정렬 변경 함수 전달
+        />
       </div>
     </div>
   )

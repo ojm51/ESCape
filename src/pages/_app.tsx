@@ -23,7 +23,7 @@ const queryClient = new QueryClient({
 
 declare global {
   interface Window {
-    Kakao: any
+    Kakao: unknown
   }
 }
 

@@ -15,21 +15,23 @@ interface ProductReviewSectionProps {
   productId: number
   reviews: ProductReviewListTypes[]
   refetchReviews: () => void
+  sortOption: string
+  onSortChange: (newSortOption: string) => void
 }
 
-const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({ productId, reviews, refetchReviews }) => {
+const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({
+  productId,
+  reviews,
+  refetchReviews,
+  sortOption,
+  onSortChange,
+}) => {
   const router = useRouter()
   const toaster = useToaster()
   const { user } = useAuth()
   const queryClient = useQueryClient()
-  const [sortOption, setSortOption] = useState<string>('recent')
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
   const [editingReview, setEditingReview] = useState<ProductReviewListTypes | null>(null)
-
-  const handleSortChange = (newSortOption: string) => {
-    setSortOption(newSortOption)
-    refetchReviews() // 정렬 옵션 변경 시 데이터 다시 가져오기
-  }
 
   const handleProfileClick = (userId: number) => {
     router.push(`/user/${userId}`)
@@ -41,6 +43,7 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({ productId, 
   }
 
   const handleDeleteReview = async (reviewId: number) => {
+    // eslint-disable-next-line no-alert
     const confirmed = window.confirm('리뷰를 삭제하시겠습니까?')
 
     if (confirmed) {
@@ -67,7 +70,7 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({ productId, 
     <div className="relative mx-auto max-w-[940px]">
       <div className="mb-[30px] flex items-center justify-between">
         <h3 className="text-lg font-semibold">상품 리뷰</h3>
-        <SortDropdown order={handleSortChange} />
+        <SortDropdown order={onSortChange} currentSortOption={sortOption} />
       </div>
       {reviews.length === 0 ? (
         <p>리뷰가 없습니다.</p>
