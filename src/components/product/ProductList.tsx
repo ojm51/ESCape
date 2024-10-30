@@ -13,13 +13,7 @@ export default function ProductList({ children, productList = [] }: PropsWithChi
       <div className="grid grid-cols-2 gap-[15px] xl:min-w-[940px] xl:grid-cols-3 xl:gap-5">
         {productList &&
           productList.length > 0 &&
-<<<<<<< HEAD
-          productList.map(product => (
-            <ProductCard key={keyValue ? product.id + keyValue : product.id} data={product} productId={product.id} />
-          ))}
-=======
           productList.map(product => <ProductCard key={product.id} data={product} productId={product.id} />)}
->>>>>>> origin/dev
       </div>
     </section>
   )
