@@ -50,7 +50,7 @@ export default function UserPage() {
   if (isError) return <p>failed..</p>
 
   return (
-    <div className="m-auto mt-[30px] max-w-[335px] md:mt-[40px] md:max-w-[509px] xl:mt-[60px] xl:max-w-[1340px]">
+    <div className="m-auto my-[30px] max-w-[335px] md:my-[40px] md:max-w-[509px] xl:my-[60px] xl:max-w-[1340px]">
       <section className="mb-[60px] xl:float-left xl:mr-[60px]">
         <Profile data={data} refetchUserInfo={refetchUserInfo} />
       </section>

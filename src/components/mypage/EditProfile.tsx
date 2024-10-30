@@ -102,7 +102,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
           {!!previewImage && (
             <div className="relative inline-block">
               <Image
-                className="ml-[10px] inline-block h-[140px] w-[140px] rounded-lg object-cover"
+                className="ml-[10px] inline-block h-[140px] w-[140px] rounded-lg object-cover md:h-[135px] md:w-[135px] xl:h-[160px] xl:w-[160px]"
                 src={typeof previewImage === 'string' ? previewImage : ''}
                 alt="업로드 한 이미지 미리보기"
                 width={140}
@@ -110,7 +110,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
               />
               <button onClick={handleFileInputDelete}>
                 <Image
-                  className="absolute right-2 top-2 rounded-full bg-brand-black-medium p-1"
+                  className="absolute right-2 top-2 rounded-full bg-brand-black-medium p-1 xl:h-[22px] xl:w-[22px]"
                   src={deleteIcon}
                   alt="이미지 삭제 아이콘"
                   width={20}
