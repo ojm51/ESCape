@@ -1,14 +1,14 @@
 import { useAuth } from '@/contexts/AuthProvider'
 import Link from 'next/link'
 import Image from 'next/image'
-import Logo from '../../../public/images/logo.svg'
 import PrimaryButton from '@/components/@shared/ui/CustomButton'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { Spinner } from 'flowbite-react'
 import { useToaster } from '@/contexts/ToasterProvider'
+import Logo from '../../../public/images/logo.svg'
 
 interface NicknameForm {
   nickname: string
@@ -104,7 +104,7 @@ export default function GoogleSignupPage() {
           {errors.nickname && <p className="mt-2 text-sm text-red-500">{errors.nickname.message}</p>}
         </div>
         <div className="pt-2">
-          <PrimaryButton style="primary" type="submit" active={loading ? false : true}>
+          <PrimaryButton style="primary" type="submit" active={!loading}>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '가입하기'}
           </PrimaryButton>
         </div>

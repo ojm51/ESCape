@@ -27,16 +27,14 @@ export default function MyPage() {
   if (isError) return <p>failed..</p>
 
   return (
-    <>
-      <div className="m-auto mt-[30px] max-w-[335px] md:mt-[40px] md:max-w-[509px] xl:mt-[60px] xl:max-w-[1340px]">
-        <section className="mb-[60px] xl:float-left xl:mr-[60px]">
-          <Profile data={data} />
-        </section>
-        <section className="mb-[60px]">
-          <ActivityCardList data={data} />
-        </section>
-        <ProductCardList data={data} />
-      </div>
-    </>
+    <div className="m-auto mt-[30px] max-w-[335px] md:mt-[40px] md:max-w-[509px] xl:mt-[60px] xl:max-w-[1340px]">
+      <section className="mb-[60px] xl:float-left xl:mr-[60px]">
+        <Profile data={data} />
+      </section>
+      <section className="mb-[60px]">
+        <ActivityCardList data={data} />
+      </section>
+      <ProductCardList data={data} />
+    </div>
   )
 }

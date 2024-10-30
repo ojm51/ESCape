@@ -18,9 +18,9 @@ const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({ url, title, descrip
     window.Kakao.Link.sendDefault({
       objectType: 'feed',
       content: {
-        title: title,
-        description: description,
-        imageUrl: imageUrl,
+        title,
+        description,
+        imageUrl,
         link: {
           mobileWebUrl: url,
           webUrl: url,

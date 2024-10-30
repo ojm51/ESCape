@@ -2,8 +2,8 @@ import { useAuth } from '@/contexts/AuthProvider'
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import KakaoIcon from '../../../public/icons/icon_kakao.svg'
 import { useToaster } from '@/contexts/ToasterProvider'
+import KakaoIcon from '../../../public/icons/icon_kakao.svg'
 
 export default function KakaoOauthButton() {
   const { oAuthLogin } = useAuth()
@@ -28,7 +28,6 @@ export default function KakaoOauthButton() {
 
     if (!kakaoWindow) {
       toaster('warn', '팝업을 열 수 없습니다. 팝업 차단이 설정되어 있는지 확인해 주세요.')
-      return
     }
   }
 
@@ -55,15 +54,13 @@ export default function KakaoOauthButton() {
   }, [])
 
   return (
-    <>
-      <button
-        type="button"
-        title="카카오 로그인"
-        className="rounded-full border-solid border-brand-black-light"
-        onClick={handleKakaoClick}
-      >
-        <Image width={56} src={KakaoIcon} alt="카카오 로고" />
-      </button>
-    </>
+    <button
+      type="button"
+      title="카카오 로그인"
+      className="rounded-full border-solid border-brand-black-light"
+      onClick={handleKakaoClick}
+    >
+      <Image width={56} src={KakaoIcon} alt="카카오 로고" />
+    </button>
   )
 }

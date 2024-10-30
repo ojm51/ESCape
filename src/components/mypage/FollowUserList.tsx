@@ -1,6 +1,6 @@
 import React from 'react'
-import FollowUser from './FollowUser'
 import { FollowListTypes } from '@/dtos/UserDto'
+import FollowUser from './FollowUser'
 
 interface FollowUserListProps {
   type: string
