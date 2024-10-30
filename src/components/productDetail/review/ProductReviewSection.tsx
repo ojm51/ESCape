@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
-import SortDropdown from './SortDropdown'
-import StarRating from '../StarRating'
 import { fetchReviews, deleteReview } from '@/libs/axios/product/reviewApi'
 import { ProductReviewListTypes } from '@/dtos/ProductDto'
 import DefaultImage from '@images/default-image.png'
+import { useAuth } from '@/contexts/AuthProvider'
+import SortDropdown from './SortDropdown'
+import StarRating from '../StarRating'
 import ReviewLikeButton from './ReviewLikeButton'
 import ReviewModal from '../ReviewModal'
-import { useAuth } from '@/contexts/AuthProvider'
 
 const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) => {
   const router = useRouter()
@@ -63,9 +63,9 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
   }
 
   return (
-    <div className={'relative mx-auto max-w-[940px]'}>
+    <div className="relative mx-auto max-w-[940px]">
       <div className="mb-[30px] flex items-center justify-between">
-        <h3 className={'text-lg font-semibold'}>{'상품 리뷰'}</h3>
+        <h3 className="text-lg font-semibold">상품 리뷰</h3>
         <SortDropdown productId={productId} order={handleSortChange} />
       </div>
       {isLoading ? (
@@ -151,9 +151,9 @@ const ProductReviewSection: React.FC<{ productId: number }> = ({ productId }) =>
         <ReviewModal
           isOpen={isReviewModalOpen}
           onClose={closeModal}
-          productName={`상품 이름`}
+          productName="상품 이름"
           productId={productId}
-          isEdit={true}
+          isEdit
           initialReviewData={{
             rating: editingReview.rating,
             content: editingReview.content,

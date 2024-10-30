@@ -4,17 +4,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import defaultProfileImage from '@images/user_default.svg'
 import { FollowResponseTypes, UserTypes } from '@/dtos/UserDto'
-import { updateMyInfo } from '@/libs/axios/mypage/apis'
+import { updateMyInfo, addImageFile, getUserFollows } from '@/libs/axios/mypage/apis'
 import { AddImageFileParams, UpdateMyInfoParams } from '@/libs/axios/mypage/types'
-import { addImageFile, getUserFollows } from '@/libs/axios/mypage/apis'
 import { useAuth } from '@/contexts/AuthProvider'
+import { AddFollowParams, DeleteFollowParams } from '@/libs/axios/user/types'
+import { addFollow, deleteFollow } from '@/libs/axios/user/apis'
+import { patchUsers } from '@/libs/axios/board/patchUsers'
 import Modal from '../@shared/modal/Modal'
 import CustomButton from '../@shared/ui/CustomButton'
 import EditProfile from './EditProfile'
 import FollowUserList from './FollowUserList'
-import { AddFollowParams, DeleteFollowParams } from '@/libs/axios/user/types'
-import { addFollow, deleteFollow } from '@/libs/axios/user/apis'
-import { patchUsers } from '@/libs/axios/board/patchUsers'
 
 type ProfileContentsTypes = {
   image: string | File | null
@@ -212,19 +211,19 @@ export default function Profile({ data: userData }: ProfileProps) {
 
         {!!myInfo && myInfo.id === userData.id ? (
           <div className="flex w-full flex-col gap-[10px]">
-            <CustomButton active={true} onClick={handleEditProfileButtonClick}>
+            <CustomButton active onClick={handleEditProfileButtonClick}>
               프로필 편집
             </CustomButton>
-            <CustomButton style="tertiary" active={true} onClick={handleLogoutButtonClick}>
+            <CustomButton style="tertiary" active onClick={handleLogoutButtonClick}>
               로그아웃
             </CustomButton>
           </div>
         ) : isFollowingState ? (
-          <CustomButton style="tertiary" active={true} onClick={handleUnfollowButtonClick}>
+          <CustomButton style="tertiary" active onClick={handleUnfollowButtonClick}>
             팔로우 취소
           </CustomButton>
         ) : (
-          <CustomButton active={true} onClick={handleFollowButtonClick}>
+          <CustomButton active onClick={handleFollowButtonClick}>
             팔로우
           </CustomButton>
         )}
@@ -250,7 +249,7 @@ export default function Profile({ data: userData }: ProfileProps) {
           modalFrameClassNames="max-h-[550px] w-[335px] overflow-auto scrollbar-hide md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
         >
           <EditProfile
-            image={image ? image : null}
+            image={image || null}
             nickname={nickname ?? ''}
             description={description ?? ''}
             onEdit={handleUpdateProfileButtonClick}

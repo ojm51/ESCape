@@ -43,7 +43,8 @@ export default function CommentPatchModal({
     if (!comment) {
       setCommentError('댓글을 입력해주세요.')
       return false
-    } else if (comment.length > 300) {
+    }
+    if (comment.length > 300) {
       setCommentError('댓글은 300자 미만이어야 합니다.')
       return false
     }

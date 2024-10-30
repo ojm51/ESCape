@@ -1,6 +1,6 @@
-import axiosInstance from '../axiosInstance'
 import { ProductReviewListTypes } from '@/dtos/ProductDto'
 import { CreateReviewRequestBody, UpdateReviewRequestBody } from '@/dtos/ReviewDto'
+import axiosInstance from '../axiosInstance'
 
 export const fetchReviews = async (productId: number, sortOption: string): Promise<ProductReviewListTypes[]> => {
   const response = await axiosInstance.get(`/products/${productId}/reviews`, {

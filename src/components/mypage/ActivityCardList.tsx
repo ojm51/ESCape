@@ -1,9 +1,9 @@
 import React from 'react'
-import ActivityCard from './ActivityCard'
 import starIcon from '@icons/star_icon.svg'
 import commentIcon from '@icons/comment_icon.svg'
 import { UserTypes } from '@/dtos/UserDto'
 import { CATEGORY_DATA } from '@/libs/constants/category'
+import ActivityCard from './ActivityCard'
 
 interface ActivityCardListProps {
   data: UserTypes
@@ -32,7 +32,7 @@ export default function ActivityCardList({ data }: ActivityCardListProps) {
     {
       title: '관심 지역',
       icon: '',
-      value: !!favoriteCategory ? favoriteCategory.name : '-',
+      value: favoriteCategory ? favoriteCategory.name : '-',
       isCategory: true,
     },
   ]
