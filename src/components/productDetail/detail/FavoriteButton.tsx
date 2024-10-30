@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FaHeart, FaRegHeart } from 'react-icons/fa'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/contexts/AuthProvider'
+import { useToaster } from '@/contexts/ToasterProvider'
 import { addFavorite, removeFavorite } from '@/libs/axios/product/productApi'
 
 interface FavoriteButtonProps {
@@ -13,11 +14,12 @@ interface FavoriteButtonProps {
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ productId, isFavorite: initialIsFavorite, onRefetch }) => {
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite)
   const { user, isPending } = useAuth()
+  const toaster = useToaster()
   const router = useRouter()
 
   const handleFavoriteToggle = async () => {
     if (!user && !isPending) {
-      alert('로그인이 필요합니다.')
+      toaster('fail', '로그인이 필요합니다.')
       router.push('/signin')
       return
     }
@@ -37,6 +39,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ productId, isFavorite: 
 
   return (
     <button
+      type="button"
       onClick={handleFavoriteToggle}
       className="ml-4 flex items-center justify-center rounded-lg text-red-500 hover:text-red-600"
     >

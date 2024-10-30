@@ -7,35 +7,24 @@ interface StarRatingProps {
 }
 
 const StarRating: React.FC<StarRatingProps> = ({ rating, maxStars = 5, color = '#518CFC' }) => {
-  if (isNaN(rating) || rating < 0) {
-    console.error('Invalid rating value:', rating)
-    rating = 0
-  }
+  const validRating = Number.isNaN(rating) || rating < 0 ? 0 : rating
+  const validMaxStars = Number.isNaN(maxStars) || maxStars <= 0 ? 5 : maxStars
 
-  if (isNaN(maxStars) || maxStars <= 0) {
-    console.error('Invalid maxStars value:', maxStars)
-    maxStars = 5
-  }
-
-  const fullStars = Math.max(0, Math.floor(rating))
-  const halfStar = rating - fullStars >= 0.5 ? 1 : 0
-  const emptyStars = Math.max(0, maxStars - fullStars - halfStar)
+  const fullStars = Math.max(0, Math.floor(validRating))
+  const halfStar = validRating - fullStars >= 0.5 ? 1 : 0
+  const emptyStars = Math.max(0, validMaxStars - fullStars - halfStar)
 
   return (
     <div className="flex">
-      {Array(fullStars)
-        .fill(0)
-        .map((_, index) => (
-          <FaStar key={index} style={{ color }} />
-        ))}
+      {Array.from({ length: fullStars }, (_, index) => (
+        <FaStar key={`full-${index}-${rating}`} style={{ color }} />
+      ))}
 
-      {halfStar === 1 && <FaStarHalfAlt style={{ color }} />}
+      {halfStar === 1 && <FaStarHalfAlt key={`half-${rating}`} style={{ color }} />}
 
-      {Array(emptyStars)
-        .fill(0)
-        .map((_, index) => (
-          <FaRegStar key={index} style={{ color }} />
-        ))}
+      {Array.from({ length: emptyStars }, (_, index) => (
+        <FaRegStar key={`empty-${index}-${rating}`} style={{ color }} />
+      ))}
     </div>
   )
 }

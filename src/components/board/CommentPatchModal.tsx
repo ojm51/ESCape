@@ -72,7 +72,7 @@ export default function CommentPatchModal({
   }
 
   return (
-    <>
+    <div>
       {isOpen && (
         <Modal
           onClick={onClick}
@@ -91,6 +91,6 @@ export default function CommentPatchModal({
           </div>
         </Modal>
       )}
-    </>
+    </div>
   )
 }

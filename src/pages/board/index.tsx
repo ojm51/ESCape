@@ -66,7 +66,7 @@ export default function BoardsPage() {
 
   // 더보기 버튼을 누를 시 데이터를 호출하기 위한 이벤트 핸들러
   const handleLoadMore = () => {
-    fetchNextPage().catch(() => alert('다음 데이터를 가져오는데 오류가 있습니다.'))
+    fetchNextPage().catch()
   }
 
   // 페이지네이션, 검색 및 정렬을 위한 useQuery

@@ -44,8 +44,12 @@ export default function DetailContentSection({ data, userId }: DetailContentProp
             </div>
           }
         >
-          <button onClick={handlePatchModal}>수정하기</button>
-          <button onClick={handleDeleteModal}>삭제하기</button>
+          <button type="button" onClick={handlePatchModal}>
+            수정하기
+          </button>
+          <button type="button" onClick={handleDeleteModal}>
+            삭제하기
+          </button>
         </Dropdown>
       </div>
       <div className="flex items-center justify-between pt-6">

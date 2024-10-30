@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import { BoardData } from '@/dtos/ArticleDto'
 
-const Base_URL = process.env.NEXT_PUBLIC_BOARD_API_URL
+const BASE_URL = process.env.NEXT_PUBLIC_BOARD_API_URL
 
 interface getArticlesParams {
   selectedOption: string
@@ -19,8 +19,8 @@ export async function getArticles({ selectedOption, searchValue, currentPage }: 
     }
 
     const url = searchValue
-      ? `${Base_URL}/articles?page=${currentPage}&pageSize=4&orderBy=${orderBy}&keyword=${searchValue}`
-      : `${Base_URL}/articles?page=${currentPage}&pageSize=4&orderBy=${orderBy}`
+      ? `${BASE_URL}/articles?page=${currentPage}&pageSize=4&orderBy=${orderBy}&keyword=${searchValue}`
+      : `${BASE_URL}/articles?page=${currentPage}&pageSize=4&orderBy=${orderBy}`
 
     const response = await Axios.get(url)
     return response.data as BoardData

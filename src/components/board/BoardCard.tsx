@@ -57,8 +57,12 @@ export default function BoardCard({ article, userId }: BoardCardProps) {
               </div>
             }
           >
-            <button onClick={handlePatchModal}>수정하기</button>
-            <button onClick={handleDeleteModal}>삭제하기</button>
+            <button type="button" onClick={handlePatchModal}>
+              수정하기
+            </button>
+            <button type="button" onClick={handleDeleteModal}>
+              삭제하기
+            </button>
           </Dropdown>
         </div>
         <div className="mt-8 flex items-center justify-between">
