@@ -47,7 +47,6 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
     const nextImage = URL.createObjectURL(selectedImageFile)
     setPreviewImage(nextImage)
     setFormValues(prevValues => ({
-    setFormValues(prevValues => ({
       ...prevValues,
       image: selectedImageFile,
     }))
@@ -59,7 +58,6 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
     }
 
     setFormValues(prevValues => ({
-    setFormValues(prevValues => ({
       ...prevValues,
       image: null,
     }))
@@ -69,7 +67,6 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value.slice(0, INPUT_MAX_LENGTH)
     setFormValues(prevValues => ({
-    setFormValues(prevValues => ({
       ...prevValues,
       [e.target.name]: inputValue,
     }))
@@ -78,7 +75,6 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textareaValue = e.target.value.slice(0, TEXTAREA_MAX_LENGTH)
     setInputCount(textareaValue.length)
-    setFormValues(prevValues => ({
     setFormValues(prevValues => ({
       ...prevValues,
       [e.target.name]: textareaValue,
@@ -92,7 +88,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
     <div className="flex w-full flex-col content-start items-stretch gap-5 md:gap-10">
       <h3 className="text-xl font-semibold leading-7 xl:text-2xl">프로필 편집</h3>
       <section className="flex flex-col items-start justify-start gap-[10px] md:gap-[15px] xl:gap-5">
-        <div className="flex content-start items-center">
+        <div className="relative flex content-start items-center">
           <label
             className="relative inline-block h-[140px] w-[140px] cursor-pointer rounded-lg border border-unactive bg-[#252530] md:h-[135px] md:w-[135px] xl:h-[160px] xl:w-[160px]"
             htmlFor="profileImage"
@@ -100,8 +96,8 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
             <div className="absolute left-1/2 top-1/2 float-left -translate-x-1/2 -translate-y-1/2 transform">
               <Image src={imageIcon} alt="이미지 아이콘" width={24} height={24} />
             </div>
+            <input className="sr-only" id="profileImage" name="image" type="file" onChange={handleFileInputChange} />
           </label>
-          <input className="hidden" id="profileImage" name="image" type="file" onChange={handleFileInputChange} />
 
           {!!previewImage && (
             <div className="relative inline-block">

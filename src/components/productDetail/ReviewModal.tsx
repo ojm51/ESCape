@@ -30,11 +30,10 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const [reviewText, setReviewText] = useState<string>(initialReviewData.content)
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>(
-
-    initialReviewData.images.filter((image) => !image.id).map((image) => image.source as string),
+    initialReviewData.images.filter(image => !image.id).map(image => image.source as string),
   )
   const [existingImages, setExistingImages] = useState<ReviewImage[]>(
-    initialReviewData.images.filter((image) => image.id),
+    initialReviewData.images.filter(image => image.id),
   )
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -42,9 +41,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     if (isOpen && isEdit) {
       setRating(initialReviewData.rating)
       setReviewText(initialReviewData.content)
-      setUploadedImageUrls(initialReviewData.images.filter((image) => !image.id).map((image) => image.source as string))
-      setExistingImages(initialReviewData.images.filter((image) => image.id))
-
+      setUploadedImageUrls(initialReviewData.images.filter(image => !image.id).map(image => image.source as string))
+      setExistingImages(initialReviewData.images.filter(image => image.id))
     }
   }, [isOpen, isEdit, initialReviewData])
 
@@ -63,8 +61,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       if (imageFiles.length + newFiles.length <= MAX_IMAGE_COUNT) {
         setImageFiles([...imageFiles, ...newFiles])
 
-        const uploadedUrls = await Promise.all(newFiles.map((file) => uploadImage(file)))
-        setUploadedImageUrls((prevUrls) => [...prevUrls, ...uploadedUrls])
+        const uploadedUrls = await Promise.all(newFiles.map(file => uploadImage(file)))
+        setUploadedImageUrls(prevUrls => [...prevUrls, ...uploadedUrls])
       } else {
         alert(`이미지는 최대 ${MAX_IMAGE_COUNT}개까지만 업로드할 수 있습니다.`)
       }
@@ -84,14 +82,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const handleSubmit = async () => {
     setLoading(true)
     try {
-
       const imagePayload: ReviewImage[] = [
-        ...existingImages.map((image) => ({ id: image.id })),
-        ...uploadedImageUrls.map((url) => ({ source: url })),
+        ...existingImages.map(image => ({ id: image.id })),
+        ...uploadedImageUrls.map(url => ({ source: url })),
       ]
 
       console.log('이미지 payload:', imagePayload)
-
 
       if (isEdit && initialReviewData.reviewId) {
         const payload: UpdateReviewRequestBody = {

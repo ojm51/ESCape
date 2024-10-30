@@ -22,7 +22,7 @@ export default function UserPage() {
       return
     }
 
-    if (myInfo && myInfo.id == queryId) {
+    if (myInfo && myInfo.id.toString() === queryId) {
       /** @todo 토스트나 모달 띄우기 */
       router.push('/mypage')
     }
@@ -39,6 +39,8 @@ export default function UserPage() {
     enabled: !!queryId,
     refetchOnWindowFocus: true,
   })
+
+  refetchUserInfo()
 
   if (!queryId) {
     return <div>유효하지 않은 유저 ID입니다.</div>

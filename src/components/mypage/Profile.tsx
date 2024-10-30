@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
@@ -7,7 +7,7 @@ import { FollowResponseTypes, UserTypes } from '@/dtos/UserDto'
 import { updateMyInfo, addImageFile, getUserFollows } from '@/libs/axios/mypage/apis'
 import { AddImageFileParams, UpdateMyInfoParams } from '@/libs/axios/mypage/types'
 import { useAuth } from '@/contexts/AuthProvider'
-import { AddFollowParams, DeleteFollowParams } from '@/libs/axios/user/types'
+import { FollowParams } from '@/libs/axios/user/types'
 import { addFollow, deleteFollow } from '@/libs/axios/user/apis'
 import { patchUsers } from '@/libs/axios/board/patchUsers'
 import Modal from '../@shared/modal/Modal'
@@ -47,8 +47,8 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
     description: myInfo?.description ?? '',
   })
 
-  const toggleFollowModal = () => setIsFollowModalOpen(prev => !prev)
-  const toggleEditProfileModal = () => setIsEditProfileModalOpen(prev => !prev)
+  const toggleFollowModal = useCallback(() => setIsFollowModalOpen(prev => !prev), [])
+  const toggleEditProfileModal = useCallback(() => setIsEditProfileModalOpen(prev => !prev), [])
 
   /** 페이지를 이동하면 열려 있던 모달을 닫는 함수 */
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
     return () => {
       router.events.off('routeChangeStart', handleRouteChange)
     }
-  }, [router])
+  }, [router, isFollowModalOpen, isEditProfileModalOpen, toggleFollowModal, toggleEditProfileModal])
 
   const {
     isError: isFollowerError,
@@ -155,7 +155,7 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
   }
 
   const followUserMutation = useMutation({
-    mutationFn: (userId: AddFollowParams) => addFollow(userId),
+    mutationFn: (userId: FollowParams) => addFollow(userId),
     onSuccess: (newUserInfo: UserTypes) => {
       setIsFollowingState(newUserInfo.isFollowing)
       setFollowersCountState(newUserInfo.followersCount)
@@ -173,7 +173,7 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
   }
 
   const unfollowUserMutation = useMutation({
-    mutationFn: (userId: DeleteFollowParams) => deleteFollow(userId),
+    mutationFn: (userId: FollowParams) => deleteFollow(userId),
     onSuccess: (newUserInfo: UserTypes) => {
       setIsFollowingState(newUserInfo.isFollowing)
       setFollowersCountState(newUserInfo.followersCount)
@@ -249,6 +249,7 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
             name={nickname}
             title={`${modalType === 'follower' ? '을 팔로우' : '이 팔로잉'}`}
             followUserList={followData?.list}
+            isError={modalType === 'follower' ? isFollowerError : isFolloweeError}
           />
         </Modal>
       )}

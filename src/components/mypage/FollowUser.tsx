@@ -2,10 +2,10 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import defaultProfileImage from '@images/user_default.svg'
-import { FollowTypes } from '@/dtos/UserDto'
+import { CommonUserTypes } from '@/dtos/UserDto'
 
 interface FollowUserProps {
-  followUserData: FollowTypes
+  followUserData: CommonUserTypes
 }
 
 export default function FollowUser({ followUserData }: FollowUserProps) {
