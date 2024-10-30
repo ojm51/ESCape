@@ -1,7 +1,7 @@
 import { useAuth } from '@/contexts/AuthProvider'
 import Link from 'next/link'
 import Image from 'next/image'
-import PrimaryButton from '@/components/@shared/ui/CustomButton'
+import CustomButton from '@/components/@shared/ui/CustomButton'
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -104,9 +104,9 @@ export default function GoogleSignupPage() {
           {errors.nickname && <p className="mt-2 text-sm text-red-500">{errors.nickname.message}</p>}
         </div>
         <div className="pt-2">
-          <PrimaryButton style="primary" type="submit" active={!loading}>
+          <CustomButton styleType="primary" type="submit" active={!loading}>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '가입하기'}
-          </PrimaryButton>
+          </CustomButton>
         </div>
       </form>
     </div>
