@@ -18,8 +18,8 @@ export interface BoardCardProps {
 export default function BoardCard({ article, userId }: BoardCardProps) {
   const [isPatchOpen, setIsPatchOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-  const togglePatchModal = () => setIsPatchOpen((prevState) => !prevState)
-  const toggleDeleteModal = () => setIsDeleteOpen((prevState) => !prevState)
+  const togglePatchModal = () => setIsPatchOpen(prevState => !prevState)
+  const toggleDeleteModal = () => setIsDeleteOpen(prevState => !prevState)
 
   // 게시물 수정하기를 클릭할 시 수정 모달을 열어주는 이벤트 핸들러
   const handlePatchModal = () => {
@@ -57,8 +57,12 @@ export default function BoardCard({ article, userId }: BoardCardProps) {
               </div>
             }
           >
-            <button onClick={handlePatchModal}>수정하기</button>
-            <button onClick={handleDeleteModal}>삭제하기</button>
+            <button type="button" onClick={handlePatchModal}>
+              수정하기
+            </button>
+            <button type="button" onClick={handleDeleteModal}>
+              삭제하기
+            </button>
           </Dropdown>
         </div>
         <div className="mt-8 flex items-center justify-between">
@@ -85,8 +89,7 @@ export default function BoardCard({ article, userId }: BoardCardProps) {
               </div>
             ) : (
               <div className="flex gap-1">
-                <Image src={HeartIcon} alt="heart" />
-                {'0'}
+                <Image src={HeartIcon} alt="heart" />0
               </div>
             )}
           </div>

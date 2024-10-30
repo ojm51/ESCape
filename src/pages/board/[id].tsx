@@ -32,7 +32,7 @@ export default function BoardDetailPage() {
     if (user) {
       setUserId(user.id)
     }
-  })
+  }, [user])
 
   // 상세 페이지를 보기위한 useQuery
   // useRouter 가 클라이언트 사이드에서만 제대로 작동하기 때문에 준비가 완료되었을 때 호출하기 위해 enabled 사용
@@ -65,6 +65,7 @@ export default function BoardDetailPage() {
     onSuccess: async () => {
       try {
         await queryClient.invalidateQueries({ queryKey: ['articleDetailComments', id, currentPage] })
+        await queryClient.invalidateQueries({ queryKey: ['articleDetail', id] })
       } catch (e) {
         console.error(e)
       }
@@ -76,7 +77,8 @@ export default function BoardDetailPage() {
     if (!comment) {
       setCommentError('댓글을 입력해주세요.')
       return false
-    } else if (comment.length > 300) {
+    }
+    if (comment.length > 300) {
       setCommentError('댓글은 300자 미만이어야 합니다.')
       return false
     }

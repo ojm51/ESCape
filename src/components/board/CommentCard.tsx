@@ -1,6 +1,6 @@
 import { ArticleComment } from '@/dtos/ArticleDto'
-import KebabIcon from '../../../public/icons/kebab_icon.svg'
-import ProfileIcon from '../../../public/icons/profile_icon.svg'
+import KebabIcon from '@icons/kebab_icon.svg'
+import ProfileIcon from '@icons/profile_icon.svg'
 import Image from 'next/image'
 import timeAgo from '@/utils/timeAgo'
 import Dropdown from '@/components/board/DropDown'
@@ -18,8 +18,8 @@ export interface DetailCommentProps {
 export default function CommentCard({ data, currentPage, dataId, userId }: DetailCommentProps) {
   const [isPatchOpen, setIsPatchOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-  const togglePatchModal = () => setIsPatchOpen((prevState) => !prevState)
-  const toggleDeleteModal = () => setIsDeleteOpen((prevState) => !prevState)
+  const togglePatchModal = () => setIsPatchOpen(prevState => !prevState)
+  const toggleDeleteModal = () => setIsDeleteOpen(prevState => !prevState)
 
   // 댓글 수정하기를 클릭할 시 수정 모달을 열어주는 이벤트 핸들러
   const handlePatchModal = () => {
@@ -47,8 +47,12 @@ export default function CommentCard({ data, currentPage, dataId, userId }: Detai
                 </div>
               }
             >
-              <button onClick={handlePatchModal}>수정하기</button>
-              <button onClick={handleDeleteModal}>삭제하기</button>
+              <button type="button" onClick={handlePatchModal}>
+                수정하기
+              </button>
+              <button type="button" onClick={handleDeleteModal}>
+                삭제하기
+              </button>
             </Dropdown>
           </div>
         </div>

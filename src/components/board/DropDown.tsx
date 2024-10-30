@@ -29,7 +29,7 @@ export default function Dropdown({ buttonChildren, children, width, childType = 
     return () => {
       window.removeEventListener('click', handleClickOutside)
     }
-  }, [isVisible])
+  }, [isVisible, setIsVisible])
 
   return (
     <div ref={dropdownRef}>
@@ -45,10 +45,11 @@ export default function Dropdown({ buttonChildren, children, width, childType = 
       {isVisible && (
         <div className="relative">
           <button
+            type="button"
             className={`absolute right-0 top-1.5 z-40 m-0 flex flex-col items-center justify-center rounded-2xl border border-solid border-brand-black-light bg-brand-black-medium px-1 py-1 ${width}`}
             onClick={() => setIsVisible()}
           >
-            {Children.map(children, (child) => {
+            {Children.map(children, child => {
               if (isValidElement(child)) {
                 return cloneElement(child as ReactElement, {
                   className:

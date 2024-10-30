@@ -9,6 +9,7 @@ interface PaginationButtonProps {
 export default function BoardPaginationButton({ children, onClick, isActive }: PaginationButtonProps) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`text-[14px] font-medium leading-[17px] ${isActive ? 'text-brand-white' : 'text-brand-gray-dark'}`}
     >

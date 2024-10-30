@@ -1,6 +1,6 @@
 import Axios from 'axios'
 
-const Base_URL = process.env.NEXT_PUBLIC_BOARD_API_URL
+const BASE_URL = process.env.NEXT_PUBLIC_BOARD_API_URL
 
 interface patchCommentsProps {
   id: number | undefined
@@ -8,7 +8,7 @@ interface patchCommentsProps {
 }
 
 export async function patchComments({ id, content }: patchCommentsProps) {
-  const url = `${Base_URL}/comments/${id}`
+  const url = `${BASE_URL}/comments/${id}`
   const responses = await Axios.patch(url, content, {
     headers: {
       'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import { CommentData } from '@/dtos/ArticleDto'
 
-const Base_URL = process.env.NEXT_PUBLIC_BOARD_API_URL
+const BASE_URL = process.env.NEXT_PUBLIC_BOARD_API_URL
 
 interface getArticleDetailCommentsParams {
   id: string | string[] | undefined
@@ -13,7 +13,7 @@ export async function getArticleDetailComments({
   currentPage,
 }: getArticleDetailCommentsParams): Promise<CommentData> {
   try {
-    const url = `${Base_URL}/articles/${id}/comments?page=${currentPage}&commentSize=4`
+    const url = `${BASE_URL}/articles/${id}/comments?page=${currentPage}&commentSize=4`
 
     const response = await Axios.get(url)
     return response.data

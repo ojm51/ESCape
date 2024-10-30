@@ -55,8 +55,8 @@ export default function BoardsPage() {
     enabled: !!pageLimit,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const totalCount = lastPage.totalCount
-      const loadedCount = allPages.flatMap((page) => page.articleList).length
+      const { totalCount } = lastPage
+      const loadedCount = allPages.flatMap(page => page.articleList).length
       if (loadedCount < totalCount) {
         return allPages.length + 1
       }
@@ -66,7 +66,7 @@ export default function BoardsPage() {
 
   // 더보기 버튼을 누를 시 데이터를 호출하기 위한 이벤트 핸들러
   const handleLoadMore = () => {
-    fetchNextPage().catch(() => alert('다음 데이터를 가져오는데 오류가 있습니다.'))
+    fetchNextPage().catch()
   }
 
   // 페이지네이션, 검색 및 정렬을 위한 useQuery
@@ -91,7 +91,7 @@ export default function BoardsPage() {
   if (isError) return <BoardStatusScreen>Error!</BoardStatusScreen>
 
   // 받아온 likeArticlesData 의 pages 가 이중 배열일 수 있기 때문에, 1차원 배열로 변경
-  const likesList = likeArticlesData?.pages?.flatMap((page) => page.articleList)
+  const likesList = likeArticlesData?.pages?.flatMap(page => page.articleList)
 
   return (
     <div className="relative mx-4 py-[100px] md:mx-6 xl:mx-auto xl:w-[1200px]">

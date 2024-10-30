@@ -42,7 +42,7 @@ export default function BoardPatchModal({ id, isOpen, onClick, value }: BoardPat
       setContent(articleDetailData.content)
       setUserId(user?.id)
     }
-  }, [articleDetailData])
+  }, [articleDetailData, user?.id])
 
   // 제목 유효성 검사
   const validateTitle = (title: string | undefined) => {
@@ -59,7 +59,8 @@ export default function BoardPatchModal({ id, isOpen, onClick, value }: BoardPat
     if (!content) {
       setContentError('내용을 입력해주세요.')
       return false
-    } else if (content.length > 300) {
+    }
+    if (content.length > 300) {
       setContentError('내용은 300자 미만이어야 합니다.')
       return false
     }
@@ -134,7 +135,7 @@ export default function BoardPatchModal({ id, isOpen, onClick, value }: BoardPat
   }
 
   return (
-    <>
+    <div>
       {isOpen && (
         <Modal
           onClick={onClick}
@@ -154,6 +155,6 @@ export default function BoardPatchModal({ id, isOpen, onClick, value }: BoardPat
           </div>
         </Modal>
       )}
-    </>
+    </div>
   )
 }

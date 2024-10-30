@@ -7,11 +7,11 @@ interface PaginationSectionProps {
 }
 
 export default function PaginationSection({ totalPageCount, currentPage, onPageClick }: PaginationSectionProps) {
-  //동적으로 페이지 갯수를 표현하기 위한 함수 (현재는 4개로 고정)
+  // 동적으로 페이지 갯수를 표현하기 위한 함수 (현재는 4개로 고정)
   const renderPagination = () => {
     const pages = []
     const totalCount = Math.ceil((totalPageCount || 1) / 4)
-    for (let i = 1; i <= totalCount; i++) {
+    for (let i = 1; i <= totalCount; i += 1) {
       pages.push(
         <BoardPaginationButton key={i} onClick={() => onPageClick(i)} isActive={currentPage === i}>
           {i}
