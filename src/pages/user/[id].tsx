@@ -28,10 +28,16 @@ export default function UserPage() {
     }
   }, [myInfo, queryId, router])
 
-  const { isPending, isError, data } = useQuery({
+  const {
+    isPending,
+    isError,
+    data,
+    refetch: refetchUserInfo,
+  } = useQuery({
     queryKey: ['userInfo', queryId],
     queryFn: () => getUserInfo({ userId: queryId! }),
     enabled: !!queryId,
+    refetchOnWindowFocus: true,
   })
 
   if (!queryId) {
@@ -44,7 +50,7 @@ export default function UserPage() {
   return (
     <div className="m-auto mt-[30px] max-w-[335px] md:mt-[40px] md:max-w-[509px] xl:mt-[60px] xl:max-w-[1340px]">
       <section className="mb-[60px] xl:float-left xl:mr-[60px]">
-        <Profile data={data} />
+        <Profile data={data} refetchUserInfo={refetchUserInfo} />
       </section>
       <section className="mb-[60px]">
         <ActivityCardList data={data} />

@@ -18,10 +18,19 @@ export default function MyPage() {
     }
   }, [myInfo, router])
 
-  const { isPending, isError, data } = useQuery({
+  const {
+    isPending,
+    isError,
+    data,
+    refetch: refetchMyInfo,
+  } = useQuery({
     queryKey: ['myInfo'],
     queryFn: getMyInfo,
+    enabled: !!myInfo,
+    refetchOnWindowFocus: true,
   })
+
+  refetchMyInfo()
 
   if (isPending) return <Spinner aria-label="로딩 중..." size="xl" />
   if (isError) return <p>failed..</p>
