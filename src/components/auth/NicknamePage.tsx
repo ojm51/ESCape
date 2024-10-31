@@ -1,17 +1,17 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import Link from 'next/link'
 import Image from 'next/image'
-import { OAuthProviders } from '@/dtos/AuthDto'
 import { Spinner } from 'flowbite-react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useState } from 'react'
-import Logo from '../../../public/images/logo.svg'
+import Logo from '@images/logo.svg'
 import CustomButton from '@/components/@shared/ui/CustomButton'
 
 interface NicknameFormInputs {
   nickname: string
 }
 
-export default function NicknamePage({ provider }: { provider?: OAuthProviders }) {
+export default function NicknamePage() {
   const {
     register,
     handleSubmit,
@@ -39,7 +39,7 @@ export default function NicknamePage({ provider }: { provider?: OAuthProviders }
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5">
-          <label className="block pb-1">닉네임</label>
+          <span className="block pb-1">닉네임</span>
           <input
             type="text"
             className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
