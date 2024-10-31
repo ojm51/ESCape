@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface InfiniteScrollParams {
   loadMore: () => void
@@ -8,18 +8,18 @@ interface InfiniteScrollParams {
   인자로 loadMore(실행할 콜백), hasMore이 false가 되면 무한스크롤이 종료됩니다.
 */
 const useInfiniteScroll = ({ loadMore, hasMore }: InfiniteScrollParams) => {
+  const [scrollY, setScrollY] = useState(0)
   const observerRef = useRef<IntersectionObserver | null>(null)
   const targetRef = useRef<HTMLDivElement | null>(null)
-  const scrollYRef = useRef(0)
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(async (entry) => {
+      entries => {
+        entries.forEach(async entry => {
           if (entry.isIntersecting && hasMore) {
             saveScrollPosition()
             await loadMore()
-            window.scrollTo(0, scrollYRef.current)
+            window.scrollTo(0, scrollY)
           }
         })
       },
@@ -38,16 +38,16 @@ const useInfiniteScroll = ({ loadMore, hasMore }: InfiniteScrollParams) => {
       }
       observerRef.current?.disconnect()
     }
-  }, [loadMore, hasMore])
+  }, [loadMore, hasMore, scrollY])
 
   // 데이터 로드 전 스크롤 위치 저장
   const saveScrollPosition = () => {
-    scrollYRef.current = window.scrollY
+    setScrollY(window.scrollY)
   }
 
   useEffect(() => {
     window.scrollTo(0, 0)
-  }, [scrollYRef.current])
+  }, [scrollY])
 
   return { targetRef }
 }

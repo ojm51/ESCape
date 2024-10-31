@@ -13,14 +13,14 @@ export default function ActivityCardList({ data }: ActivityCardListProps) {
   const { averageRating, reviewCount, mostFavoriteCategory } = data
 
   const favoriteCategory = mostFavoriteCategory
-    ? CATEGORY_DATA.find((category) => mostFavoriteCategory.id === category.id)
+    ? CATEGORY_DATA.find(category => mostFavoriteCategory.id === category.id)
     : undefined
 
   const activityCardContents = [
     {
       title: '남긴 별점 평균',
       icon: starIcon,
-      value: averageRating,
+      value: averageRating === 0 ? averageRating : averageRating.toFixed(2),
       isCategory: false,
     },
     {
@@ -41,7 +41,7 @@ export default function ActivityCardList({ data }: ActivityCardListProps) {
     <div className="w-full">
       <h3 className="mb-[30px] text-lg font-semibold text-brand-white xl:text-xl">활동 내역</h3>
       <div className="grid grid-cols-3 gap-[10px] xl:gap-5">
-        {activityCardContents.map((activityCardContent) => (
+        {activityCardContents.map(activityCardContent => (
           <ActivityCard
             key={activityCardContent.title}
             title={activityCardContent.title}

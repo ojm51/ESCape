@@ -6,7 +6,7 @@ import { removeTokens } from '@/utils/authTokenStorage'
 import { useRouter } from 'next/router'
 import getUser from '@/libs/axios/user/getUser'
 import { useToaster } from '@/contexts/ToasterProvider'
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 interface AuthValues {
   user: CommonUserTypes | null
@@ -37,16 +37,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isPending: true,
   })
   const toaster = useToaster()
-  const router = useRouter()
 
   const handleAuthChange = (key: 'user' | 'isPending', value: UserValue | boolean) => {
-    setAuthState((prev) => ({
+    setAuthState(prev => ({
       ...prev,
       [key]: value,
     }))
   }
 
-  const getMe = async () => {
+  const getMe = useCallback(async () => {
     handleAuthChange('isPending', true)
     let nextUser: UserValue
     try {
@@ -58,30 +57,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       handleAuthChange('isPending', false)
     }
-  }
+  }, [])
 
-  const login = async (formData: SignInForm): Promise<boolean | { success: boolean; message: string }> => {
-    const isSignInSuccess = await signIn(formData)
-    if (!isSignInSuccess) {
-      return { success: false, message: '이메일 혹은 비밀번호를 확인해주세요.' }
-    }
-    toaster('success', '로그인에 성공하였습니다.')
-    await getMe()
-    return true
-  }
+  const login = useCallback(
+    async (formData: SignInForm): Promise<boolean | { success: boolean; message: string }> => {
+      const isSignInSuccess = await signIn(formData)
+      if (!isSignInSuccess) {
+        return { success: false, message: '이메일 혹은 비밀번호를 확인해주세요.' }
+      }
+      toaster('success', '로그인에 성공하였습니다.')
+      await getMe()
+      return true
+    },
+    [getMe, toaster],
+  )
 
-  const oAuthLogin = async (formData: OAuthSignInForm, provider: OAuthProviders) => {
-    const user = await oAuthSignIn(formData, provider)
-    if (!user) return user
-    await getMe()
-    return user
-  }
+  const oAuthLogin = useCallback(
+    async (formData: OAuthSignInForm, provider: OAuthProviders) => {
+      const user = await oAuthSignIn(formData, provider)
+      if (!user) return user
+      await getMe()
+      return user
+    },
+    [getMe],
+  )
 
-  const logout = () => {
+  const logout = useCallback(() => {
     handleAuthChange('user', null)
     removeTokens()
     toaster('success', '로그아웃이 되었습니다.')
-  }
+  }, [toaster])
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken')
@@ -90,7 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } else {
       handleAuthChange('isPending', false)
     }
-  }, [])
+  }, [getMe])
 
   const providerValueProp = useMemo(
     () => ({
@@ -100,7 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       logout,
       oAuthLogin,
     }),
-    [authState.user, authState.isPending],
+    [authState.user, authState.isPending, login, logout, oAuthLogin],
   )
 
   return <AuthContext.Provider value={providerValueProp}>{children}</AuthContext.Provider>

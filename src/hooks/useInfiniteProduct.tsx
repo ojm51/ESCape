@@ -6,6 +6,6 @@ export default function useInfiniteProducts(params: ProductQueryParams) {
     queryKey: ['products', params],
     queryFn: ({ pageParam }: { pageParam: number | null }) => getProduct({ ...params, cursor: pageParam }),
     initialPageParam: null,
-    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    getNextPageParam: lastPage => lastPage.nextCursor ?? undefined,
   })
 }

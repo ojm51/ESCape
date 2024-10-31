@@ -29,23 +29,27 @@ export default function ProductCardList({ data }: ProductCardListProps) {
     isPending,
     isError,
     data: productList,
+    refetch: refetchProductList,
   } = useQuery<ProductTypes[]>({
-    queryKey: ['productType', productMenuContents[activeMenu].type],
+    queryKey: ['productType', data.id, activeMenu],
     queryFn: () => getUserProducts({ userId: data.id, type: productMenuContents[activeMenu].type }),
     enabled: !!data.id,
+    refetchOnWindowFocus: true,
   })
 
   const handleProductMenuClicked = (selectedId: number) => {
     setActiveMenu(selectedId)
   }
 
+  refetchProductList()
+
   if (isPending) return <Spinner aria-label="로딩 중..." size="xl" />
-  // if(isError) return <p>failed..</p>
+  if (isError) return <p>테마 리스트 불러오기에 실패하였습니다. 다시 시도해주세요.</p>
 
   return (
     <section>
       <div className="mb-[30px] flex items-center justify-normal gap-10">
-        {productMenuContents.map((productMenuContent) => (
+        {productMenuContents.map(productMenuContent => (
           <button
             key={productMenuContent.id}
             className={`text-lg xl:text-xl ${activeMenu === productMenuContent.id ? 'font-semibold text-brand-white' : 'font-normal text-brand-gray-dark'}`}
@@ -57,7 +61,7 @@ export default function ProductCardList({ data }: ProductCardListProps) {
       </div>
       {productList && productList.length > 0 ? (
         <div className="grid grid-cols-2 gap-[15px] xl:grid-cols-3 xl:gap-5">
-          {productList.map((product) => (
+          {productList.map(product => (
             <ProductCard key={product.id} productId={product.id} data={product} />
           ))}
         </div>

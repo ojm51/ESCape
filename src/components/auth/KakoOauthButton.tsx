@@ -1,6 +1,6 @@
 import { useAuth } from '@/contexts/AuthProvider'
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useToaster } from '@/contexts/ToasterProvider'
 import KakaoIcon from '../../../public/icons/icon_kakao.svg'
@@ -31,19 +31,22 @@ export default function KakaoOauthButton() {
     }
   }
 
-  const handleSubmit = async (token: string) => {
-    await oAuthLogin({ redirectUri, token }, 'kakao')
-    router.push(`/`)
-  }
+  const handleSubmit = useCallback(
+    async (token: string) => {
+      await oAuthLogin({ redirectUri, token }, 'kakao')
+      router.push(`/`)
+    },
+    [oAuthLogin, redirectUri, router],
+  )
 
-  const handleAuthCode = () => {
+  const handleAuthCode = useCallback(() => {
     const token = localStorage.getItem('authCode')
     if (!token) {
       router.push(`/oauth/kakao`)
       return
     }
     handleSubmit(token)
-  }
+  }, [handleSubmit, router])
 
   useEffect(() => {
     window.addEventListener('storage', handleAuthCode)
@@ -51,7 +54,7 @@ export default function KakaoOauthButton() {
     return () => {
       window.removeEventListener('storage', handleAuthCode)
     }
-  }, [])
+  }, [handleAuthCode])
 
   return (
     <button

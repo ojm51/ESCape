@@ -1,7 +1,8 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { useAuth } from '@/contexts/AuthProvider'
 import Link from 'next/link'
 import Image from 'next/image'
-import PrimaryButton from '@/components/@shared/ui/CustomButton'
+import CustomButton from '@/components/@shared/ui/CustomButton'
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -86,7 +87,7 @@ export default function GoogleSignupPage() {
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5">
-          <label className="block pb-1">닉네임</label>
+          <span className="block pb-1">닉네임</span>
           <input
             type="text"
             className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
@@ -104,9 +105,9 @@ export default function GoogleSignupPage() {
           {errors.nickname && <p className="mt-2 text-sm text-red-500">{errors.nickname.message}</p>}
         </div>
         <div className="pt-2">
-          <PrimaryButton style="primary" type="submit" active={!loading}>
+          <CustomButton styleType="primary" type="submit" active={!loading}>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '가입하기'}
-          </PrimaryButton>
+          </CustomButton>
         </div>
       </form>
     </div>

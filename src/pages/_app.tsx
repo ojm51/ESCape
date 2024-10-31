@@ -20,9 +20,9 @@ const queryClient = new QueryClient({
     },
   },
 })
-
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Kakao: any
   }
 }
@@ -45,7 +45,7 @@ export default function App({ Component, pageProps }: AppProps) {
     if (typeof window !== 'undefined' && window.Kakao) {
       const kakaoApiKey = process.env.NEXT_PUBLIC_KAKAO_API_KEY
       if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(kakaoApiKey)
+        window.Kakao.init(kakaoApiKey as string)
       }
     }
   }, [])

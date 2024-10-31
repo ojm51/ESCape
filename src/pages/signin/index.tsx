@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/contexts/AuthProvider'
@@ -6,7 +8,7 @@ import Image from 'next/image'
 
 import GoogleOauthButton from '@/components/auth/GoogleOauthButton'
 import KakoOauthButton from '@/components/auth/KakoOauthButton'
-import PrimaryButton from '@/components/@shared/ui/CustomButton'
+import CustomButton from '@/components/@shared/ui/CustomButton'
 import { Spinner } from 'flowbite-react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import EyesHiddenIcon from '../../../public/icons/icon_eyes_hidden.svg'
@@ -36,7 +38,7 @@ export default function SignInPage() {
     }
   }, [user, router])
 
-  const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
+  const onSubmit: SubmitHandler<SignInFormInputs> = async data => {
     setLoading(true)
     try {
       const response = await login(data)
@@ -50,7 +52,7 @@ export default function SignInPage() {
           router.push('/product')
         }
       }
-    } catch (error) {
+    } catch {
       setLoginErrorMessage('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.')
     } finally {
       setLoading(false)
@@ -66,7 +68,7 @@ export default function SignInPage() {
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5">
-          <label className="block pb-1">이메일</label>
+          <span className="block pb-1">이메일</span>
           <input
             type="text"
             className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
@@ -85,7 +87,7 @@ export default function SignInPage() {
           {loginErrorMessage && <p className="mt-1 text-red-500">{loginErrorMessage}</p>}
         </div>
         <div className="mb-5">
-          <label className="block pb-1">비밀번호</label>
+          <span className="block pb-1">비밀번호</span>
           <div className="relative">
             <input
               type={showPassword ? 'text' : 'password'}
@@ -113,9 +115,9 @@ export default function SignInPage() {
           {errors.password && <p className="mt-1 text-red-500">{errors.password.message}</p>}
         </div>
         <div className="pt-2">
-          <PrimaryButton style="primary" type="submit" active>
+          <CustomButton styleType="primary" type="submit" active>
             {loading ? <Spinner aria-label="로딩 중..." size="md" /> : '로그인'}
-          </PrimaryButton>
+          </CustomButton>
         </div>
       </form>
       <div className="mt-10 text-center">

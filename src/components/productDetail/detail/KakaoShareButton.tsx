@@ -1,5 +1,6 @@
 import React from 'react'
 import { IoChatbubbleSharp } from 'react-icons/io5'
+import { useToaster } from '@/contexts/ToasterProvider'
 
 interface KakaoShareButtonProps {
   url: string
@@ -9,9 +10,10 @@ interface KakaoShareButtonProps {
 }
 
 const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({ url, title, description, imageUrl }) => {
+  const toaster = useToaster()
   const handleKakaoShare = () => {
     if (!window.Kakao.isInitialized()) {
-      alert('카카오톡 공유 기능이 초기화되지 않았습니다.')
+      toaster('fail', '카카오톡 공유 기능이 초기화되지 않았습니다.')
       return
     }
 
@@ -40,6 +42,7 @@ const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({ url, title, descrip
 
   return (
     <button
+      type="button"
       onClick={handleKakaoShare}
       className="flex items-center justify-center rounded-lg border-unactive bg-[#252530] p-2 text-[#6E6E82] hover:bg-[#252530] hover:text-white"
     >
