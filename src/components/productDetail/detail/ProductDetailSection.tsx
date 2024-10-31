@@ -97,8 +97,8 @@ const ProductDetailSection: React.FC<{ productId: number; detailData: ProductDet
 
         <div className="mb-4 flex flex-wrap gap-2">
           <FeatureTag label="지역" value={parsedDescription.loc} />
-          <FeatureTag label="난이도" value={parsedDescription.lev} isStarRating />
           <FeatureTag label="시간" value={`${parsedDescription.time} min`} />
+          <FeatureTag label="난이도" value={parsedDescription.lev} isStarRating />
           <FeatureTag label="공포도" value={parsedDescription.hor} isStarRating />
           <FeatureTag label="활동성" value={parsedDescription.act} isStarRating />
         </div>
