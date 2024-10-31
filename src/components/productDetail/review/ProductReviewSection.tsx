@@ -13,6 +13,7 @@ import SortDropdown from './SortDropdown'
 import StarRating from '../StarRating'
 import ReviewLikeButton from './ReviewLikeButton'
 import ReviewModal from '../ReviewModal'
+import ConfirmModal from '../ConfirmModal' // Import ConfirmModal here
 
 interface ProductReviewSectionProps {
   productId: number
@@ -27,9 +28,13 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({ productId, 
   const queryClient = useQueryClient()
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
   const [editingReview, setEditingReview] = useState<ProductReviewListTypes | null>(null)
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false)
+  const [reviewIdToDelete, setReviewIdToDelete] = useState<number | null>(null)
 
   // useInfiniteReviews 훅으로 무한 스크롤 데이터 로드
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteReviews(productId, { order: sortOption })
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteReviews(productId, {
+    order: sortOption,
+  })
 
   // SortDropdown에 전달하기 전에 기본값 설정
   const validSortOption = sortOption ?? 'recent'
@@ -49,20 +54,32 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({ productId, 
     setIsReviewModalOpen(true)
   }
 
-  const handleDeleteReview = async (reviewId: number) => {
-    const confirmed = window.confirm('리뷰를 삭제하시겠습니까?')
+  const handleDeleteReview = (reviewId: number) => {
+    setReviewIdToDelete(reviewId)
+    setShowConfirmModal(true) // ConfirmModal 표시
+  }
 
-    if (confirmed) {
+  const confirmDelete = async () => {
+    if (reviewIdToDelete !== null) {
       try {
-        await deleteReview(reviewId)
+        await deleteReview(reviewIdToDelete)
         toaster('success', '리뷰가 성공적으로 삭제되었습니다.')
-        queryClient.invalidateQueries({ queryKey: ['reviews', productId, sortOption] })
-        queryClient.invalidateQueries({ queryKey: ['productDetail', productId] })
+        await queryClient.invalidateQueries({ queryKey: ['reviews', productId, sortOption] })
+        await queryClient.invalidateQueries({ queryKey: ['productDetail', productId] })
+        refetch() // 서버에서 데이터 즉각적으로 다시 불러오기
       } catch (error) {
         console.error('리뷰 삭제 실패:', error)
         toaster('fail', '리뷰 삭제에 실패했습니다.')
+      } finally {
+        setShowConfirmModal(false)
+        setReviewIdToDelete(null)
       }
     }
+  }
+
+  const cancelDelete = () => {
+    setShowConfirmModal(false)
+    setReviewIdToDelete(null)
   }
 
   const closeModal = () => {
@@ -70,6 +87,7 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({ productId, 
     setEditingReview(null)
     queryClient.invalidateQueries({ queryKey: ['reviews', productId, sortOption] })
     queryClient.invalidateQueries({ queryKey: ['productDetail', productId] })
+    refetch()
   }
 
   return (
@@ -195,6 +213,16 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({ productId, 
             })),
             reviewId: editingReview.id,
           }}
+        />
+      )}
+
+      {/* ConfirmModal 표시 */}
+      {showConfirmModal && (
+        <ConfirmModal
+          title="리뷰 삭제"
+          description="리뷰를 삭제하시겠습니까?"
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
         />
       )}
     </div>

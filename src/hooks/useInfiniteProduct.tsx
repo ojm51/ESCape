@@ -1,11 +1,10 @@
-import { fetchReviews, ReviewsQueryParams } from '@/libs/axios/product/reviewApi'
+import { getProduct, ProductQueryParams } from '@/libs/axios/product/productApi'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { ProductReviewsResponseTypes } from '@/dtos/ProductDto'
 
-export default function useInfiniteReviews(productId: number, params: ReviewsQueryParams) {
-  return useInfiniteQuery<ProductReviewsResponseTypes, Error>({
-    queryKey: ['reviews', productId, params],
-    queryFn: ({ pageParam }: { pageParam: number | null }) => fetchReviews(productId, { ...params, cursor: pageParam }),
+export default function useInfiniteProducts(params: ProductQueryParams) {
+  return useInfiniteQuery({
+    queryKey: ['products', params],
+    queryFn: ({ pageParam }: { pageParam: number | null }) => getProduct({ ...params, cursor: pageParam }),
     initialPageParam: null,
     getNextPageParam: lastPage => lastPage.nextCursor ?? undefined,
   })
