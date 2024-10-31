@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '@/contexts/AuthProvider'
@@ -50,7 +52,7 @@ export default function SignInPage() {
           router.push('/product')
         }
       }
-    } catch (error) {
+    } catch {
       setLoginErrorMessage('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.')
     } finally {
       setLoading(false)
@@ -66,7 +68,7 @@ export default function SignInPage() {
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5">
-          <label className="block pb-1">이메일</label>
+          <span className="block pb-1">이메일</span>
           <input
             type="text"
             className={`w-full rounded-xl border-solid border-brand-black-light bg-brand-black-medium px-6 py-4 text-brand-gray-dark focus:outline-blue-gradation ${
@@ -85,7 +87,7 @@ export default function SignInPage() {
           {loginErrorMessage && <p className="mt-1 text-red-500">{loginErrorMessage}</p>}
         </div>
         <div className="mb-5">
-          <label className="block pb-1">비밀번호</label>
+          <span className="block pb-1">비밀번호</span>
           <div className="relative">
             <input
               type={showPassword ? 'text' : 'password'}

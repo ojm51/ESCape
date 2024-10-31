@@ -1,7 +1,7 @@
 import { useAuth } from '@/contexts/AuthProvider'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useToaster } from '@/contexts/ToasterProvider'
 import GoogleIcon from '../../../public/icons/icon_google.svg'
 
@@ -37,72 +37,73 @@ export default function GoogleOauthButton() {
     }
 
     const checkPopup = setInterval(() => {
-      try {
-        if (googleWindow.closed) {
-          clearInterval(checkPopup)
-        } else {
-          const popupUrl = googleWindow.location.href
-          if (popupUrl.includes('code=')) {
-            const urlParams = new URL(popupUrl)
-            const codeParam = urlParams.searchParams.get('code')
+      if (googleWindow.closed) {
+        clearInterval(checkPopup)
+      } else {
+        const popupUrl = googleWindow.location.href
+        if (popupUrl.includes('code=')) {
+          const urlParams = new URL(popupUrl)
+          const codeParam = urlParams.searchParams.get('code')
 
-            if (codeParam) {
-              googleWindow.close()
-              clearInterval(checkPopup)
-              setCode(codeParam)
-            }
+          if (codeParam) {
+            googleWindow.close()
+            clearInterval(checkPopup)
+            setCode(codeParam)
           }
         }
-      } catch (e) {}
+      }
     }, 1000)
   }
 
-  const fetchTokens = async (authCode: string) => {
-    const data = {
-      code: authCode,
-      client_id: GOOGLE_CLIENT_ID,
-      client_secret: GOOGLE_CLIENT_SECRET,
-      redirect_uri: REDIRECT_URI,
-      grant_type: 'authorization_code',
-    }
+  const fetchTokens = useCallback(
+    async (authCode: string) => {
+      const data = {
+        code: authCode,
+        client_id: GOOGLE_CLIENT_ID,
+        client_secret: GOOGLE_CLIENT_SECRET,
+        redirect_uri: REDIRECT_URI,
+        grant_type: 'authorization_code',
+      }
 
-    const response = await fetch('https://oauth2.googleapis.com/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams(data as Record<string, string>),
-    })
+      const response = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(data as Record<string, string>),
+      })
 
-    const tokenData = await response.json()
+      const tokenData = await response.json()
 
-    if (tokenData.id_token) {
-      localStorage.setItem('authCode', tokenData.id_token)
-      try {
-        const isSignInSuccess = await oAuthLogin({ redirectUri: REDIRECT_URI, token: tokenData.id_token }, 'google')
-        if (isSignInSuccess?.accessToken) {
-          toaster('success', '로그인이 성공하였습니다.')
-          localStorage.removeItem('authCode')
-          router.push('/')
-        } else {
+      if (tokenData.id_token) {
+        localStorage.setItem('authCode', tokenData.id_token)
+        try {
+          const isSignInSuccess = await oAuthLogin({ redirectUri: REDIRECT_URI, token: tokenData.id_token }, 'google')
+          if (isSignInSuccess?.accessToken) {
+            toaster('success', '로그인이 성공하였습니다.')
+            localStorage.removeItem('authCode')
+            router.push('/')
+          } else {
+            router.push('/oauth/google')
+          }
+        } catch (error) {
+          console.error('로그인 실패:', error)
+          toaster('fail', '로그인에 실패했습니다. 다시 시도해 주세요.')
           router.push('/oauth/google')
         }
-      } catch (error) {
-        console.error('로그인 실패:', error)
-        toaster('fail', '로그인에 실패했습니다. 다시 시도해 주세요.')
-        router.push('/oauth/google')
+      } else {
+        console.error('ID 토큰을 가져오는 데 실패했습니다:', tokenData)
+        toaster('fail', 'ID 토큰을 가져오지 못했습니다.')
       }
-    } else {
-      console.error('ID 토큰을 가져오는 데 실패했습니다:', tokenData)
-      toaster('fail', 'ID 토큰을 가져오지 못했습니다.')
-    }
-  }
+    },
+    [oAuthLogin, router, toaster],
+  )
 
   useEffect(() => {
     if (code) {
       fetchTokens(code)
     }
-  }, [code])
+  }, [code, fetchTokens])
 
   return (
     <button

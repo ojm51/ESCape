@@ -44,8 +44,6 @@ export interface UserRanking {
  * ProductDto.ts 파일에 있는 ProductTypes, ProductListTypes와 같음
  */
 
-export interface FollowTypes extends CommonUserTypes {}
-
 export interface FollowListTypes {
   follower?: CommonUserTypes
   followee?: CommonUserTypes
