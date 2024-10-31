@@ -34,7 +34,6 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
   const { id, image, nickname, description, followersCount, followeesCount, isFollowing } = userData
   const profileImage = typeof image === 'string' ? image : image ? URL.createObjectURL(image) : defaultProfileImage
 
-  const [followData, setFollowData] = useState<FollowResponseTypes>()
   const [isFollowingState, setIsFollowingState] = useState<boolean>(isFollowing)
   const [followersCountState, setFollowersCountState] = useState<number>(followersCount)
 
@@ -89,10 +88,9 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
   })
 
   const handleFollowListClick = (type: string) => {
+    setModalType(type)
     refetchUserFollowers()
     refetchUserFollowees()
-    setModalType(type)
-    setFollowData(type === 'follower' ? followerList : followeeList)
     toggleFollowModal()
   }
 
@@ -141,12 +139,12 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
       description,
     })
 
-    /** 새로운 이미지를 선택한 경우(type File) -> 이미지를 먼저 업로드 한 뒤에 프로필 업데이트 */
+    /** i) 새로운 이미지를 선택한 경우(type File) -> 이미지를 먼저 업로드 한 뒤에 프로필 업데이트 */
     if (image instanceof File) {
       uploadImageFileMutation.mutate({ image })
       return
     }
-    /** 기존 이미지와 동일한 경우(type string) -> 바로 프로필 업데이트 */
+    /** ii) 기존 이미지와 동일한 경우(type string) -> 바로 프로필 업데이트 */
     uploadNewProfileMutation.mutate({
       image: typeof image === 'string' ? image : '',
       nickname: nickname ?? '',
@@ -248,7 +246,7 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
             type={modalType}
             name={nickname}
             title={`${modalType === 'follower' ? '을 팔로우' : '이 팔로잉'}`}
-            followUserList={followData?.list}
+            followUserList={modalType === 'follower' ? followerList?.list : followeeList?.list}
             isError={modalType === 'follower' ? isFollowerError : isFolloweeError}
           />
         </Modal>
