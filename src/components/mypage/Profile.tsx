@@ -231,7 +231,7 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
             팔로우 취소
           </CustomButton>
         ) : (
-          <CustomButton active onClick={handleFollowButtonClick}>
+          <CustomButton active={!!myInfo} onClick={handleFollowButtonClick}>
             팔로우
           </CustomButton>
         )}
