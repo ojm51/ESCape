@@ -6,6 +6,7 @@ import DefaultImage from '@images/default-image.png'
 import { IoMdCloseCircle } from 'react-icons/io'
 import { CreateReviewRequestBody, UpdateReviewRequestBody, ReviewImage } from '@/dtos/ReviewDto'
 import { useToaster } from '@/contexts/ToasterProvider'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface ReviewModalProps {
   isOpen: boolean
@@ -38,6 +39,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   )
   const [loading, setLoading] = useState<boolean>(false)
   const toaster = useToaster()
+  const queryClient = useQueryClient() // queryClient 추가
 
   useEffect(() => {
     if (isOpen && isEdit) {
@@ -126,6 +128,10 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
         await createReview(payload)
         toaster('success', '리뷰가 성공적으로 등록되었습니다.')
       }
+
+      // 리뷰 생성 및 수정 시 데이터 새로고침
+      queryClient.invalidateQueries({ queryKey: ['productDetail', productId] })
+      queryClient.invalidateQueries({ queryKey: ['productStatistics', productId] }) // statsic refetch
 
       onClose()
     } catch (error) {

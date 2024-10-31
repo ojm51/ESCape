@@ -40,11 +40,7 @@ const ProductDetailSection: React.FC<{ productId: number; detailData: ProductDet
 
   const handleReservationClick = () => {
     if (parsedDescription?.url) {
-      // eslint-disable-next-line no-alert
-      const confirmed = window.confirm('예약 페이지로 이동하시겠습니까?')
-      if (confirmed) {
-        window.location.href = parsedDescription.url
-      }
+      window.location.href = parsedDescription.url
     } else {
       toaster('fail', '예약 URL을 찾을 수 없습니다.')
     }
