@@ -1,6 +1,4 @@
 import React from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { fetchProductDetails } from '@/libs/axios/product/productApi'
 import starIcon from '@icons/star_icon.svg'
 import commentIcon from '@icons/comment_icon.svg'
 import heartIcon from '@icons/heart_icon.svg'
@@ -8,24 +6,10 @@ import { ProductDetailTypes } from '@/dtos/ProductDto'
 import StatisticsDetail from './StatisticsDetail'
 
 interface StatisticsProps {
-  productId: number
+  productData: ProductDetailTypes
 }
 
-const ProductStatisticsSection: React.FC<StatisticsProps> = ({ productId }) => {
-  const {
-    data: productData,
-    isLoading,
-    error,
-  } = useQuery<ProductDetailTypes>({
-    queryKey: ['productDetail', productId],
-    queryFn: () => fetchProductDetails(productId),
-  })
-
-  if (isLoading) return <div>로딩 중...</div>
-  if (error) return <div>상품 데이터를 가져오는 중 오류 발생: {(error as Error).message}</div>
-
-  if (!productData) return null
-
+const ProductStatisticsSection: React.FC<StatisticsProps> = ({ productData }) => {
   const { rating, favoriteCount, reviewCount, categoryMetric } = productData
 
   const statisticsDetailContents = [
