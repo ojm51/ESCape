@@ -1,5 +1,3 @@
-export interface AddFollowParams {
+export interface FollowParams {
   userId: string | number
 }
-
-export interface DeleteFollowParams extends AddFollowParams {}

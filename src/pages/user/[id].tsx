@@ -22,17 +22,25 @@ export default function UserPage() {
       return
     }
 
-    if (myInfo && myInfo.id == queryId) {
+    if (myInfo && myInfo.id.toString() === queryId) {
       /** @todo 토스트나 모달 띄우기 */
       router.push('/mypage')
     }
   }, [myInfo, queryId, router])
 
-  const { isPending, isError, data } = useQuery({
+  const {
+    isPending,
+    isError,
+    data,
+    refetch: refetchUserInfo,
+  } = useQuery({
     queryKey: ['userInfo', queryId],
     queryFn: () => getUserInfo({ userId: queryId! }),
     enabled: !!queryId,
+    refetchOnWindowFocus: true,
   })
+
+  refetchUserInfo()
 
   if (!queryId) {
     return <div>유효하지 않은 유저 ID입니다.</div>
@@ -42,9 +50,9 @@ export default function UserPage() {
   if (isError) return <p>failed..</p>
 
   return (
-    <div className="m-auto mt-[30px] max-w-[335px] md:mt-[40px] md:max-w-[509px] xl:mt-[60px] xl:max-w-[1340px]">
+    <div className="m-auto my-[30px] max-w-[335px] md:my-[40px] md:max-w-[509px] xl:my-[60px] xl:max-w-[1340px]">
       <section className="mb-[60px] xl:float-left xl:mr-[60px]">
-        <Profile data={data} />
+        <Profile data={data} refetchUserInfo={refetchUserInfo} />
       </section>
       <section className="mb-[60px]">
         <ActivityCardList data={data} />

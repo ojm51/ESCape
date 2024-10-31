@@ -29,18 +29,22 @@ export default function ProductCardList({ data }: ProductCardListProps) {
     isPending,
     isError,
     data: productList,
+    refetch: refetchProductList,
   } = useQuery<ProductTypes[]>({
-    queryKey: ['productType', productMenuContents[activeMenu].type],
+    queryKey: ['productType', data.id, activeMenu],
     queryFn: () => getUserProducts({ userId: data.id, type: productMenuContents[activeMenu].type }),
     enabled: !!data.id,
+    refetchOnWindowFocus: true,
   })
 
   const handleProductMenuClicked = (selectedId: number) => {
     setActiveMenu(selectedId)
   }
 
+  refetchProductList()
+
   if (isPending) return <Spinner aria-label="로딩 중..." size="xl" />
-  // if(isError) return <p>failed..</p>
+  if (isError) return <p>테마 리스트 불러오기에 실패하였습니다. 다시 시도해주세요.</p>
 
   return (
     <section>

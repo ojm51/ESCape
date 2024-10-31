@@ -30,7 +30,7 @@ export default function ProductCard({ data, productId }: ProductCardProps) {
       key: 3,
       icon: starIcon,
       alt: '별점',
-      value: rating,
+      value: rating === 0 ? rating : rating.toFixed(2),
     },
   ]
 
