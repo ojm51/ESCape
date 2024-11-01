@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { getUserProducts } from '@/libs/axios/mypage/apis'
-import { ProductTypes } from '@/dtos/ProductDto'
 import { UserTypes } from '@/dtos/UserDto'
 import { Spinner } from 'flowbite-react'
+import useInfiniteScroll from '@/hooks/useInfiniteScroll'
 import ProductCard from '../@shared/productCard/ProductCard'
 
 interface ProductCardListProps {
@@ -29,13 +29,24 @@ export default function ProductCardList({ data }: ProductCardListProps) {
     isPending,
     isError,
     data: productList,
+    fetchNextPage,
     refetch: refetchProductList,
-  } = useQuery<ProductTypes[]>({
+  } = useInfiniteQuery({
     queryKey: ['productType', data.id, activeMenu],
-    queryFn: () => getUserProducts({ userId: data.id, type: productMenuContents[activeMenu].type }),
-    enabled: !!data.id,
-    refetchOnWindowFocus: true,
+    queryFn: ({ pageParam }: { pageParam: number | null }) =>
+      getUserProducts({ userId: data.id, type: productMenuContents[activeMenu].type, cursor: pageParam }),
+    initialPageParam: null,
+    getNextPageParam: lastPage => lastPage.nextCursor ?? undefined,
   })
+
+  const { targetRef } = useInfiniteScroll({
+    loadMore: () => {
+      fetchNextPage()
+    },
+    hasMore: !!productList?.pageParams,
+  })
+
+  const allProducts = productList?.pages.flatMap(page => page.list)
 
   const handleProductMenuClicked = (selectedId: number) => {
     setActiveMenu(selectedId)
@@ -59,12 +70,15 @@ export default function ProductCardList({ data }: ProductCardListProps) {
           </button>
         ))}
       </div>
-      {productList && productList.length > 0 ? (
-        <div className="grid grid-cols-2 gap-[15px] xl:grid-cols-3 xl:gap-5">
-          {productList.map(product => (
-            <ProductCard key={product.id} productId={product.id} data={product} />
-          ))}
-        </div>
+      {allProducts && allProducts.length > 0 ? (
+        <>
+          <div className="grid grid-cols-2 gap-[15px] xl:grid-cols-3 xl:gap-5">
+            {allProducts.map(product => (
+              <ProductCard key={product.id} productId={product.id} data={product} />
+            ))}
+          </div>
+          <div ref={targetRef} className="mb-4" />
+        </>
       ) : (
         <p className="font-normal text-brand-gray-dark">아직 {productMenuContents[activeMenu].title}가 없습니다</p>
       )}
