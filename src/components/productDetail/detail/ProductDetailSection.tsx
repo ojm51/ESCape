@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-alert
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
