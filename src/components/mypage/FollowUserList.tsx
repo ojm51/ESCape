@@ -42,7 +42,7 @@ export default function FollowUserList({ type, userId, name, title }: FollowUser
       {!isError ? (
         allFollowUsers && allFollowUsers.length > 0 ? (
           <>
-            <div className="flex flex-col content-center items-start gap-5 overflow-hidden scrollbar-hide">
+            <div className="flex max-h-[456px] flex-col content-center items-start gap-5 overflow-auto scrollbar-hide">
               {allFollowUsers.map(followUser => (
                 <FollowUser
                   key={followUser.id}
