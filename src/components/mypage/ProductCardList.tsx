@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { Spinner } from 'flowbite-react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { getUserProducts } from '@/libs/axios/mypage/apis'
 import { UserTypes } from '@/dtos/UserDto'
-import { Spinner } from 'flowbite-react'
 import useInfiniteScroll from '@/hooks/useInfiniteScroll'
 import ProductCard from '../@shared/productCard/ProductCard'
 

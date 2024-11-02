@@ -17,6 +17,7 @@ export interface GetUserProductsParams {
 export interface GetUserFollowsParams {
   userId: string | number
   type: string
+  cursor?: number | null
 }
 
 export interface AddImageFileParams {

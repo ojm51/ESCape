@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import defaultProfileImage from '@images/user_default.svg'
 import { UserTypes } from '@/dtos/UserDto'
-import { updateMyInfo, addImageFile, getUserFollows } from '@/libs/axios/mypage/apis'
+import { updateMyInfo, addImageFile } from '@/libs/axios/mypage/apis'
 import { AddImageFileParams, UpdateMyInfoParams } from '@/libs/axios/mypage/types'
 import { useAuth } from '@/contexts/AuthProvider'
 import { FollowParams } from '@/libs/axios/user/types'
@@ -67,30 +67,8 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
     }
   }, [router, isFollowModalOpen, isEditProfileModalOpen, toggleFollowModal, toggleEditProfileModal])
 
-  const {
-    isError: isFollowerError,
-    data: followerList,
-    refetch: refetchUserFollowers,
-  } = useQuery({
-    queryKey: ['userFollowers', id],
-    queryFn: () => getUserFollows({ userId: id, type: 'follower' }),
-    enabled: !!id,
-  })
-
-  const {
-    isError: isFolloweeError,
-    data: followeeList,
-    refetch: refetchUserFollowees,
-  } = useQuery({
-    queryKey: ['userFollowees', id],
-    queryFn: () => getUserFollows({ userId: id, type: 'followee' }),
-    enabled: !!id,
-  })
-
   const handleFollowListClick = (type: string) => {
     setModalType(type)
-    refetchUserFollowers()
-    refetchUserFollowees()
     toggleFollowModal()
   }
 
@@ -240,14 +218,13 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
       {isFollowModalOpen && (
         <Modal
           onClick={toggleFollowModal}
-          modalFrameClassNames="max-h-[550px] w-[335px] overflow-auto scrollbar-hide md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
+          modalFrameClassNames="max-h-[550px] w-[335px] md:max-h-[600px] md:w-[500px] xl:max-h-[660px]"
         >
           <FollowUserList
             type={modalType}
+            userId={id}
             name={nickname}
             title={`${modalType === 'follower' ? '을 팔로우' : '이 팔로잉'}`}
-            followUserList={modalType === 'follower' ? followerList?.list : followeeList?.list}
-            isError={modalType === 'follower' ? isFollowerError : isFolloweeError}
           />
         </Modal>
       )}
