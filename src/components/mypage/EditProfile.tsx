@@ -3,10 +3,12 @@ import Image from 'next/image'
 import imageIcon from '@icons/image_icon.svg'
 import deleteIcon from '@icons/close_icon.svg'
 import { Spinner } from 'flowbite-react'
+import useEditProfile from '@/hooks/user/useEditProfile'
 import CustomButton from '../@shared/ui/CustomButton'
 
 const INPUT_MAX_LENGTH = 10
 const TEXTAREA_MAX_LENGTH = 300
+
 const NICKNAME_CHECK = [
   {
     errorId: 0,
@@ -17,6 +19,9 @@ const NICKNAME_CHECK = [
     message: '닉네임은 최대 10자까지 가능합니다.',
   },
 ]
+
+const inputClassNames =
+  'w-full rounded-lg border border-brand-gray-dark bg-[#252530] p-5 placeholder:text-sm placeholder:font-normal placeholder:text-brand-gray-dark md:py-[23px]'
 
 type ProfileContentsTypes = {
   image: string | File | null
@@ -30,15 +35,17 @@ interface EditProfileProps extends ProfileContentsTypes {
 }
 
 export default function EditProfile({ image, nickname, description, onEdit, isPending }: EditProfileProps) {
-  const [formValues, setFormValues] = useState({
-    image,
-    nickname,
-    description,
-  })
-  const [previewImage, setPreviewImage] = useState<string | File | null>(image ?? null)
-  const [textareaCount, setTextareaCount] = useState<number>(description.length)
-  const [isNicknameValid, setIsNicknameValid] = useState<number | null>(null)
+  const {
+    formValues,
+    previewImage,
+    textareaCount,
+    handleFileInputChange,
+    handleFileInputDelete,
+    handleInputChange,
+    handleTextAreaChange,
+  } = useEditProfile({ image, nickname, description, TEXTAREA_MAX_LENGTH })
 
+  const [isNicknameValid, setIsNicknameValid] = useState<number | null>(null)
   const isFormComplete = useMemo(() => {
     const { image, nickname } = formValues
 
@@ -54,55 +61,6 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
 
     return nickname !== '' && image !== null
   }, [formValues])
-
-  /** @todo 파일 이름 한글인지 체크 */
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return
-
-    if (previewImage && typeof previewImage === 'string') {
-      URL.revokeObjectURL(previewImage)
-    }
-
-    const selectedImageFile = e.target.files[0]
-    const nextImage = URL.createObjectURL(selectedImageFile)
-    setPreviewImage(nextImage)
-    setFormValues(prevValues => ({
-      ...prevValues,
-      image: selectedImageFile,
-    }))
-  }
-
-  const handleFileInputDelete = () => {
-    if (previewImage && typeof previewImage === 'string') {
-      URL.revokeObjectURL(previewImage)
-    }
-
-    setFormValues(prevValues => ({
-      ...prevValues,
-      image: null,
-    }))
-    setPreviewImage(null)
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value
-    setFormValues(prevValues => ({
-      ...prevValues,
-      [e.target.name]: inputValue,
-    }))
-  }
-
-  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textareaValue = e.target.value.slice(0, TEXTAREA_MAX_LENGTH)
-    setTextareaCount(textareaValue.length)
-    setFormValues(prevValues => ({
-      ...prevValues,
-      [e.target.name]: textareaValue,
-    }))
-  }
-
-  const inputClassNames =
-    'w-full rounded-lg border border-brand-gray-dark bg-[#252530] p-5 placeholder:text-sm placeholder:font-normal placeholder:text-brand-gray-dark md:py-[23px]'
 
   return (
     <div className="flex w-full flex-col content-start items-stretch gap-5 md:gap-10">

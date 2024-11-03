@@ -1,5 +1,5 @@
 import useInfiniteScroll from '@/hooks/useInfiniteScroll'
-import useInfiniteFollowUser from '@/hooks/useInfiniteFollowUser'
+import useInfiniteFollowUser from '@/hooks/user/useInfiniteFollowUser'
 import FollowUser from './FollowUser'
 
 interface FollowUserListProps {
