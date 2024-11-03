@@ -60,8 +60,10 @@ export default function GoogleOauth() {
               const postSignInGoogleResponse = await oAuthLogin({ redirectUri, token }, provider)
               const { accessToken, user } = postSignInGoogleResponse
 
+              const { nickname } = user
+
               saveTokens({ accessToken })
-              updateMe({ user })
+              updateMe({ nickname })
               /**
                * 간편 로그인 api 호출 응답에 신규 사용자 구분이 없기 때문에
                * 닉네임 길이로 신규 사용자인지 아닌지 분별

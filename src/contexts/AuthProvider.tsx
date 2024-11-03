@@ -94,7 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function updateMe(user: CommonUserTypes) {
     try {
-      const res = await axios.patch('/users/me', user.nickname)
+      const res = await axios.patch('/users/me', user)
       const nextUser = res.data
       handleAuthChange('user', nextUser)
     } catch (error) {

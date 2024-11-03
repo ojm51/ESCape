@@ -14,8 +14,7 @@ import useRouteHandler from '@/hooks/useRouteHandler'
 import HeaderSidebar from './HeaderSidebar'
 
 export default function Header({ children }: PropsWithChildren) {
-  const [isLogin, setIsLogin] = useState<boolean>(false)
-  const { user, isPending } = useAuth()
+  const { user } = useAuth()
   const [searchInputValue, setSearchInputValue] = useState('')
   const [isOpenSearchInput, setIsOpenSearchInput] = useState(false)
   const { handleKeyword } = useRouteHandler()
@@ -52,21 +51,6 @@ export default function Header({ children }: PropsWithChildren) {
     }
     handleKeyword(searchInputValue)
     setSearchInputValue('')
-  }
-
-  // accessToken에 따라서 user profile을 띄워줄 지 로그인/회원가입 버튼을 띄워줄지 결정
-  useEffect(() => {
-    if (localStorage.getItem('accessToken')) {
-      setIsLogin(true)
-    } else {
-      setIsLogin(false)
-    }
-  }, [isLogin, user])
-
-  const userApiPendingCheck = (components: ReactElement) => {
-    if (isPending) return null
-
-    return components
   }
 
   return (
@@ -112,25 +96,23 @@ export default function Header({ children }: PropsWithChildren) {
                   <input value={searchInputValue} onChange={handleSearchInput} placeholder="테마를 검색해 보세요" />
                 </form>
               </div>
-              {userApiPendingCheck(
-                isLogin ? (
-                  <Link href="/mypage" className="flex items-center gap-3">
-                    <div className="relative h-[42px] w-[42px] overflow-hidden rounded-full bg-brand-black-light">
-                      <Image
-                        className="object-cover"
-                        fill
-                        src={user?.image || defaultProfileImage}
-                        alt="프로필 이미지"
-                        onError={handleImageError}
-                      />
-                    </div>
-                  </Link>
-                ) : (
-                  <>
-                    <Link href="/signin">로그인</Link>
-                    <Link href="/signup">회원가입</Link>
-                  </>
-                ),
+              {user ? (
+                <Link href="/mypage" className="flex items-center gap-3">
+                  <div className="relative h-[42px] w-[42px] overflow-hidden rounded-full bg-brand-black-light">
+                    <Image
+                      className="object-cover"
+                      fill
+                      src={user?.image || defaultProfileImage}
+                      alt="프로필 이미지"
+                      onError={handleImageError}
+                    />
+                  </div>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/signin">로그인</Link>
+                  <Link href="/signup">회원가입</Link>
+                </>
               )}
             </div>
             <div className="flex items-center gap-5 md:hidden">
@@ -152,24 +134,22 @@ export default function Header({ children }: PropsWithChildren) {
                   <input value={searchInputValue} onChange={handleSearchInput} placeholder="테마를 검색해 보세요" />
                 </form>
               </div>
-              {userApiPendingCheck(
-                isLogin ? (
-                  <Link href="/mypage" className="flex items-center gap-3">
-                    <div className="relative h-[42px] w-[42px] overflow-hidden rounded-full bg-brand-black-light">
-                      <Image
-                        className="object-cover"
-                        fill
-                        src={user?.image || defaultProfileImage}
-                        alt="프로필 이미지"
-                        onError={handleImageError}
-                      />
-                    </div>
-                  </Link>
-                ) : (
-                  <Link href="/signin" className="relative h-[18.38px] w-[18.38px]">
-                    <Image src={iconSignin} alt="로그인" fill />
-                  </Link>
-                ),
+              {user ? (
+                <Link href="/mypage" className="flex items-center gap-3">
+                  <div className="relative h-[42px] w-[42px] overflow-hidden rounded-full bg-brand-black-light">
+                    <Image
+                      className="object-cover"
+                      fill
+                      src={user?.image || defaultProfileImage}
+                      alt="프로필 이미지"
+                      onError={handleImageError}
+                    />
+                  </div>
+                </Link>
+              ) : (
+                <Link href="/signin" className="relative h-[18.38px] w-[18.38px]">
+                  <Image src={iconSignin} alt="로그인" fill />
+                </Link>
               )}
             </div>
           </div>
