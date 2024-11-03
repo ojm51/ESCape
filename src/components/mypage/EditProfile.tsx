@@ -3,7 +3,7 @@ import Image from 'next/image'
 import imageIcon from '@icons/image_icon.svg'
 import deleteIcon from '@icons/close_icon.svg'
 import { Spinner } from 'flowbite-react'
-import useEditProfile from '@/hooks/user/useEditProfile'
+import useEditProfile from '@/hooks/user/useHandleEditProfile'
 import CustomButton from '../@shared/ui/CustomButton'
 
 const INPUT_MAX_LENGTH = 10
