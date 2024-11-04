@@ -7,6 +7,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(config => {
   const modifiedConfig = { ...config }
+
   // SSR 사용을 위해 window가 undefined가 아닐때만 실행
   if (typeof window !== 'undefined') {
     const accessToken = localStorage.getItem('accessToken')
