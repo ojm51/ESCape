@@ -1,10 +1,22 @@
 import { useState } from 'react'
 import { Spinner } from 'flowbite-react'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { getUserProducts } from '@/libs/axios/mypage/apis'
 import { UserTypes } from '@/dtos/UserDto'
+import useInfiniteUserProduct from '@/hooks/user/useInfiniteUserProduct'
 import useInfiniteScroll from '@/hooks/useInfiniteScroll'
 import ProductCard from '../@shared/productCard/ProductCard'
+
+const productMenuContents = [
+  {
+    id: 0,
+    title: '리뷰 남긴 테마',
+    type: 'reviewed',
+  },
+  {
+    id: 1,
+    title: '좋아요 누른 테마',
+    type: 'favorite',
+  },
+]
 
 interface ProductCardListProps {
   data: UserTypes
@@ -12,32 +24,13 @@ interface ProductCardListProps {
 
 export default function ProductCardList({ data }: ProductCardListProps) {
   const [activeMenu, setActiveMenu] = useState<number>(0)
-  const productMenuContents = [
-    {
-      id: 0,
-      title: '리뷰 남긴 테마',
-      type: 'reviewed',
-    },
-    {
-      id: 1,
-      title: '좋아요 누른 테마',
-      type: 'favorite',
-    },
-  ]
-
   const {
     isPending,
     isError,
     data: productList,
     fetchNextPage,
     refetch: refetchProductList,
-  } = useInfiniteQuery({
-    queryKey: ['productType', data.id, activeMenu],
-    queryFn: ({ pageParam }: { pageParam: number | null }) =>
-      getUserProducts({ userId: data.id, type: productMenuContents[activeMenu].type, cursor: pageParam }),
-    initialPageParam: null,
-    getNextPageParam: lastPage => lastPage.nextCursor ?? undefined,
-  })
+  } = useInfiniteUserProduct({ userId: data.id, type: productMenuContents[activeMenu].type })
 
   const { targetRef } = useInfiniteScroll({
     loadMore: () => {

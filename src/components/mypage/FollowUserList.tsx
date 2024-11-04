@@ -1,5 +1,5 @@
 import useInfiniteScroll from '@/hooks/useInfiniteScroll'
-import useInfiniteFollowUser from '@/hooks/useInfiniteFollowUser'
+import useInfiniteFollowUser from '@/hooks/user/useInfiniteFollowUser'
 import FollowUser from './FollowUser'
 
 interface FollowUserListProps {
@@ -19,6 +19,13 @@ export default function FollowUserList({ type, userId, name, title }: FollowUser
     type,
   })
 
+  const { targetRef } = useInfiniteScroll({
+    loadMore: () => {
+      fetchNextPage()
+    },
+    hasMore: !!followUserList?.pageParams,
+  })
+
   const allFollowUsers = followUserList?.pages
     .flatMap(page => page.list)
     .map(item => ({
@@ -26,13 +33,6 @@ export default function FollowUserList({ type, userId, name, title }: FollowUser
       follower: type === 'follower' ? item.follower : undefined,
       followee: type === 'followee' ? item.followee : undefined,
     }))
-
-  const { targetRef } = useInfiniteScroll({
-    loadMore: () => {
-      fetchNextPage()
-    },
-    hasMore: !!followUserList?.pageParams,
-  })
 
   return (
     <div className="flex h-full flex-col">
