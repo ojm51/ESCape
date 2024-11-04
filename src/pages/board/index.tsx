@@ -9,14 +9,32 @@ import React, { useEffect, useState } from 'react'
 import BoardStatusScreen from '@/components/board/BoardStatusScreen'
 import PaginationSection from '@/components/board/PaginationSection'
 import { useAuth } from '@/contexts/AuthProvider'
+import { useRouter } from 'next/router'
+import { postUsers } from '@/libs/axios/board/postUsers'
 
 export default function BoardsPage() {
   const [selectedOption, setSelectedOption] = useState('최신순')
   const [searchValue, setSearchValue] = useState('')
   const [pageLimit, setPageLimit] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
+  const router = useRouter()
   const { user } = useAuth()
   const queryClient = useQueryClient()
+
+  // 유저 정보 없이 접근할 경우 로그인으로 리디렉션 하는 useEffect
+  // boardPage 에 접속시, user 정보를 한 번더 최신화
+  useEffect(() => {
+    if (!user) {
+      router.push('/signin')
+    } else {
+      postUsers({
+        id: Number(user.id),
+        description: user.description,
+        image: String(user.image),
+        nickname: user.nickname,
+      })
+    }
+  }, [user, router])
 
   // 받아온 검색 내용을 반영하기 위한 이벤트 핸들러
   const handleSearchChange = (value: string) => {
