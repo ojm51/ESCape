@@ -30,7 +30,7 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
   const router = useRouter()
   const queryClient = useQueryClient()
 
-  const { user: myInfo, logout } = useAuth()
+  const { user: myInfo, logout, updateMe } = useAuth()
   const { id, image, nickname, description, followersCount, followeesCount, isFollowing } = userData
   const profileImage = typeof image === 'string' ? image : image ? URL.createObjectURL(image) : defaultProfileImage
 
@@ -93,7 +93,8 @@ export default function Profile({ data: userData, refetchUserInfo = () => {} }: 
         }),
       ])
     },
-    onSuccess: () => {
+    onSuccess: data => {
+      updateMe(data)
       queryClient.invalidateQueries({ queryKey: ['myInfo'] })
       toggleEditProfileModal()
     },
