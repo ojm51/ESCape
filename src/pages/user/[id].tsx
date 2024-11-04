@@ -37,7 +37,6 @@ export default function UserPage() {
     queryKey: ['userInfo', queryId],
     queryFn: () => getUserInfo({ userId: queryId! }),
     enabled: !!queryId,
-    refetchOnWindowFocus: true,
   })
 
   refetchUserInfo()

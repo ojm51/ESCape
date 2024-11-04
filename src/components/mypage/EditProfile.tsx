@@ -7,6 +7,16 @@ import CustomButton from '../@shared/ui/CustomButton'
 
 const INPUT_MAX_LENGTH = 10
 const TEXTAREA_MAX_LENGTH = 300
+const NICKNAME_CHECK = [
+  {
+    errorId: 0,
+    message: '닉네임은 필수 입력입니다.',
+  },
+  {
+    errorId: 1,
+    message: '닉네임은 최대 10자까지 가능합니다.',
+  },
+]
 
 type ProfileContentsTypes = {
   image: string | File | null
@@ -26,24 +36,34 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
     description,
   })
   const [previewImage, setPreviewImage] = useState<string | File | null>(image ?? null)
-  const [inputCount, setInputCount] = useState<number>(description.length)
+  const [textareaCount, setTextareaCount] = useState<number>(description.length)
+  const [isNicknameValid, setIsNicknameValid] = useState<number | null>(null)
 
   const isFormComplete = useMemo(() => {
     const { image, nickname } = formValues
-    const isAllInputFilled = nickname !== '' && image !== null
-    return isAllInputFilled
+
+    if (nickname.length < 1) {
+      setIsNicknameValid(NICKNAME_CHECK[0].errorId)
+      return false
+    }
+    if (nickname.length > INPUT_MAX_LENGTH) {
+      setIsNicknameValid(NICKNAME_CHECK[1].errorId)
+      return false
+    }
+    setIsNicknameValid(null)
+
+    return nickname !== '' && image !== null
   }, [formValues])
 
   /** @todo 파일 이름 한글인지 체크 */
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
 
-    const selectedImageFile = e.target.files[0]
-
     if (previewImage && typeof previewImage === 'string') {
       URL.revokeObjectURL(previewImage)
     }
 
+    const selectedImageFile = e.target.files[0]
     const nextImage = URL.createObjectURL(selectedImageFile)
     setPreviewImage(nextImage)
     setFormValues(prevValues => ({
@@ -65,7 +85,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value.slice(0, INPUT_MAX_LENGTH)
+    const inputValue = e.target.value
     setFormValues(prevValues => ({
       ...prevValues,
       [e.target.name]: inputValue,
@@ -74,7 +94,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
 
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textareaValue = e.target.value.slice(0, TEXTAREA_MAX_LENGTH)
-    setInputCount(textareaValue.length)
+    setTextareaCount(textareaValue.length)
     setFormValues(prevValues => ({
       ...prevValues,
       [e.target.name]: textareaValue,
@@ -121,16 +141,20 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
           )}
         </div>
 
-        <input
-          className={inputClassNames}
-          value={formValues.nickname}
-          id="nickname"
-          name="nickname"
-          type="text"
-          placeholder="닉네임을 입력해주세요"
-          maxLength={INPUT_MAX_LENGTH}
-          onChange={handleInputChange}
-        />
+        <div className="relative w-full">
+          <input
+            className={`${inputClassNames} ${isNicknameValid !== null ? 'border-solid border-brand-red' : ''}`}
+            value={formValues.nickname}
+            id="nickname"
+            name="nickname"
+            type="text"
+            placeholder="닉네임을 입력해주세요"
+            onChange={handleInputChange}
+          />
+          {isNicknameValid !== null && (
+            <p className="mt-2 text-sm text-brand-red">{NICKNAME_CHECK[isNicknameValid].message}</p>
+          )}
+        </div>
 
         <div className="relative w-full">
           <textarea
@@ -143,7 +167,7 @@ export default function EditProfile({ image, nickname, description, onEdit, isPe
             onChange={handleTextAreaChange}
           />
           <p className="absolute bottom-5 right-5 text-right text-sm font-normal text-brand-gray-dark">
-            <span>{inputCount}</span>/{TEXTAREA_MAX_LENGTH}
+            <span>{textareaCount}</span>/{TEXTAREA_MAX_LENGTH}
           </p>
         </div>
       </section>
