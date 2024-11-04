@@ -1,5 +1,6 @@
 import React from 'react'
 import Modal from '../@shared/modal/Modal'
+import CustomButton from '../@shared/ui/CustomButton'
 
 interface ConfirmModalProps {
   title: string
@@ -12,24 +13,15 @@ export default function ConfirmModal({ title, description, onConfirm, onCancel }
   return (
     <Modal onClick={onCancel} modalFrameClassNames="w-[40%] max-w-md">
       <div className="text-center">
-        <h2 className="text-lg font-semibold text-white">{title}</h2>
-        <p className="mt-4 text-sm text-gray-300">{description}</p>
-
+        <h2 className="text-2xl font-semibold text-white">{title}</h2>
+        <p className="mt-4 text-lg text-gray-300">{description}</p>
         <div className="mt-6 flex items-center justify-center gap-4">
-          <button
-            type="button"
-            className="rounded-lg bg-green-500 px-6 py-2 text-white hover:bg-green-600 focus:outline-none"
-            onClick={onConfirm}
-          >
+          <CustomButton type="button" active styleType="primary" onClick={onConfirm}>
             확인
-          </button>
-          <button
-            type="button"
-            className="rounded-lg bg-red-500 px-6 py-2 text-white hover:bg-red-600 focus:outline-none"
-            onClick={onCancel}
-          >
+          </CustomButton>
+          <CustomButton type="button" active styleType="secondary" onClick={onCancel}>
             취소
-          </button>
+          </CustomButton>
         </div>
       </div>
     </Modal>

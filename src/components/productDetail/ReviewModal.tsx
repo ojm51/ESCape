@@ -50,6 +50,18 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     }
   }, [isOpen, isEdit, initialReviewData])
 
+  const validateForm = () => {
+    if (rating === 0) {
+      toaster('warn', '별점을 선택해 주세요.')
+      return false
+    }
+    if (reviewText.trim() === '') {
+      toaster('warn', '리뷰 내용을 입력해 주세요.')
+      return false
+    }
+    return true
+  }
+
   const handleRatingClick = (value: number) => setRating(value)
 
   const handleReviewTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -75,7 +87,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
   const handleImageRemove = (identifier: number | string | undefined) => {
     if (identifier !== undefined) {
-      // undefined가 아닌 경우에만 동작
       if (typeof identifier === 'number') {
         setExistingImages(existingImages.filter(image => image.id !== identifier))
       } else {
@@ -87,15 +98,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   }
 
   const handleSubmit = async () => {
-    if (rating === 0) {
-      toaster('warn', '별점을 선택해 주세요.')
-      return
-    }
-
-    if (reviewText.trim() === '') {
-      toaster('warn', '리뷰 내용을 입력해 주세요.')
-      return
-    }
+    // 유효성 검사를 먼저 실행
+    if (!validateForm()) return
 
     setLoading(true)
     try {
@@ -103,8 +107,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
         ...existingImages.map(image => ({ id: image.id })),
         ...uploadedImageUrls.map(url => ({ source: url })),
       ]
-
-      console.log('이미지 payload:', imagePayload)
 
       if (isEdit && initialReviewData.reviewId) {
         const payload: UpdateReviewRequestBody = {
