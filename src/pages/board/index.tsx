@@ -71,7 +71,7 @@ export default function BoardsPage() {
   } = useInfiniteQuery({
     queryKey: ['likes', pageLimit, user?.id],
     queryFn: ({ pageParam }) => getArticlesByLike(pageParam, pageLimit, String(user?.id)),
-    enabled: !!pageLimit,
+    enabled: !!pageLimit && !!user?.id,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       const { totalCount } = lastPage
