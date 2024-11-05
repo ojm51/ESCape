@@ -59,6 +59,7 @@ export default function HeaderSidebar({ handleSidebar, isOpen }: HeaderSidebarPr
                 icon={RxDotFilled}
                 onClick={() => {
                   handleQueryReset()
+                  handleSidebar()
                 }}
               >
                 인기 테마
