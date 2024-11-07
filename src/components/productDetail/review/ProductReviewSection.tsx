@@ -93,7 +93,7 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({ productId, 
         <SortDropdown order={onSortChange} currentSortOption={sortOption} />
       </div>
 
-      {data?.pages && data.pages.length === 0 ? (
+      {data?.pages && data.pages[0].list.length === 0 ? (
         <p>리뷰가 없습니다.</p>
       ) : (
         <ul>
