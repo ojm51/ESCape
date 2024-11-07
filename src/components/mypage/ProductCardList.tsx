@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Spinner } from 'flowbite-react'
 import { UserTypes } from '@/dtos/UserDto'
 import useInfiniteUserProduct from '@/hooks/user/useInfiniteUserProduct'
@@ -41,11 +41,13 @@ export default function ProductCardList({ data }: ProductCardListProps) {
 
   const allProducts = productList?.pages.flatMap(page => page.list)
 
-  const handleProductMenuClicked = (selectedId: number) => {
+  const handleProductMenuClicked = useCallback((selectedId: number) => {
     setActiveMenu(selectedId)
-  }
+  }, [])
 
-  refetchProductList()
+  useEffect(() => {
+    refetchProductList()
+  }, [activeMenu, refetchProductList])
 
   if (isPending) return <Spinner aria-label="로딩 중..." size="xl" />
   if (isError) return <p>테마 리스트 불러오기에 실패하였습니다. 다시 시도해주세요.</p>
