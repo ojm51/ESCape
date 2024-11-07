@@ -2,6 +2,7 @@ import { useAuth } from '@/contexts/AuthProvider'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { saveTokens } from '@/utils/authTokenStorage'
+import { Spinner } from 'flowbite-react'
 
 export default function KakaoSignupPage() {
   const router = useRouter()
@@ -13,12 +14,6 @@ export default function KakaoSignupPage() {
   useEffect(() => {
     const handleOauthCallback = async () => {
       const { code } = router.query
-
-      // 코드가 존재하지 않으면 에러 페이지로 리다이렉트
-      if (!code) {
-        router.push('/error')
-        return
-      }
 
       if (typeof code === 'string') {
         try {
@@ -67,7 +62,11 @@ export default function KakaoSignupPage() {
 
   return (
     <div>
-      {loading && <div className="text-status-danger mt-10 text-center">카카오 인증 중</div>}
+      {loading && (
+        <div className="text-status-danger mt-20 text-center">
+          <Spinner aria-label="로딩 중..." size="lg" />
+        </div>
+      )}
       {errorMessage && <div className="text-status-danger mt-10 text-center">{errorMessage}</div>}
     </div>
   )
