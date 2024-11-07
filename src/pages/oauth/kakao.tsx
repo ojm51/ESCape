@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { saveTokens } from '@/utils/authTokenStorage'
 import { Spinner } from 'flowbite-react'
+import { AxiosError } from 'axios'
 
 export default function KakaoSignupPage() {
   const router = useRouter()
@@ -30,20 +31,29 @@ export default function KakaoSignupPage() {
               /**
                * 간편 로그인 api 호출 응답에 신규 사용자 구분이 없기 때문에
                * 닉네임 길이로 신규 사용자인지 아닌지 분별
-               * 처음 간편 로그인 시 구글에서 주는 닉네임이 10자 이상의 숫자값이기 때문
                */
 
               if (user.nickname.length > 10) {
                 router.push({
-                  pathname: '/oauth/signup/google',
+                  pathname: '/oauth/signup/kakao',
                   query: { token: code, provider },
                 })
               } else {
                 router.push('/product')
               }
-            } catch (signInError) {
-              console.error('카카오 간편 로그인 API 호출 에러:', signInError)
-              setErrorMessage('카카오 간편 로그인 중 오류가 발생했습니다.')
+            } catch (signInError: unknown) {
+              if (signInError instanceof AxiosError && signInError.response && signInError.response.data) {
+                const errorMessage = signInError.response.data.message
+                if (errorMessage === '등록되지 않은 사용자입니다.') {
+                  router.push({
+                    pathname: '/oauth/signup/kakao',
+                    query: { token, provider },
+                  })
+                }
+              } else {
+                console.error('카카오 간편 로그인 API 호출 에러:', signInError)
+                setErrorMessage('카카오 간편 로그인 중 오류가 발생했습니다.')
+              }
             }
           }
 

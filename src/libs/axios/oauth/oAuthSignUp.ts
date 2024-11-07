@@ -4,6 +4,7 @@ import axios from '../axiosInstance'
 
 export default async function oAuthSignUp(formData: OAuthSignUpForm, provider: OAuthProviders) {
   const path = `/auth/signUp/${provider}`
+  console.log(formData, 'dd')
   try {
     await axios.post(path, formData)
   } catch (error: unknown) {
