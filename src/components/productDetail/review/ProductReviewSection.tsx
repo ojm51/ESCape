@@ -94,7 +94,7 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({ productId, 
       </div>
 
       {data?.pages && data.pages[0].list.length === 0 ? (
-        <p>리뷰가 없습니다.</p>
+        <p className="font-normal text-brand-gray-dark">리뷰가 없습니다.</p>
       ) : (
         <ul>
           {data?.pages.map(page =>
