@@ -52,7 +52,6 @@ export default function NicknamePage() {
         }
 
         const response = await oAuthLogin(loginData, provider as 'google' | 'kakao')
-        console.log(response)
         const { accessToken, user } = response
         const { nickname } = user
 
