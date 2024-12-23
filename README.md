@@ -2,8 +2,8 @@
 
 # 방탈출 리뷰 서비스 ESCape
 
-> #### 🔗 [배포 사이트](https://es-cape-codeit.vercel.app/)
-> 테스트 계정(아이디/비밀번호) : 0855@test.com / 0855test!
+> ### 🔗 [배포 사이트](https://es-cape-codeit.vercel.app/)
+> ### 테스트 계정(아이디/비밀번호) : 0855@test.com / 0855test!
 
 <br>
 
@@ -28,7 +28,7 @@
       <td style="text-align: center;"> <img src="./public/readme/profile_sjh.png" alt="서지훈 프로필 사진" > </td>
     </tr>
     <tr>
-      <td style="text-align: center;">CSS / Tailwind 설정<br>데이터 수집<br> 마이 / 유저 페이지</td>
+      <td style="text-align: center;">[팀장]<br>CSS / Tailwind 설정<br>데이터 수집<br> 마이 / 유저 페이지</td>
       <td style="text-align: center;">공용 컴포넌트 설계<br>데이터 수집 / 가공<br>상품 / 랜딩 페이지</td>
       <td style="text-align: center;">레포지토리 설정<br>데이터 수집<br>자유게시판 페이지</td>
       <td style="text-align: center;">유저 플로우 설계<br>데이터 수집<br>로고 디자인<br> 회원가입 / 로그인 페이지</td>
@@ -57,11 +57,11 @@
 ## 📐 설계
 
 
-### ▪️ user Flow
+### 🔘 유저 플로우
 
 ![user flow](./public/readme/user_flow.png)
 
-### ▪️ Directory
+### 🔘 폴더 구조
 
 ```
 ESCape
